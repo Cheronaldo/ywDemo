@@ -1,5 +1,7 @@
 package com.cherry.form;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 用户注册表单验证
  * Created by Administrator on 2017/11/07.
@@ -7,6 +9,7 @@ package com.cherry.form;
 public class UserInfoForm {
 
     /**  用户名 */
+    @NotEmpty(message = "用户名必填")
     private String userName;
     /**  用户密码 */
     private String userPassword;

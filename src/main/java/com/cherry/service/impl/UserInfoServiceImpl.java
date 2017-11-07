@@ -22,6 +22,7 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(userInfoForm, userInfo);
+        //TODO 注意将用户类型转换为对应的 类型码再储存
         UserInfo result = repository.save(userInfo);
         if(result == null){
             return 1;
