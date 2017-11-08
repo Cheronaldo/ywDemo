@@ -89,9 +89,9 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findOneByUserName(userName);
         //TODO 这里还有一个密码解码过程 是否有必要能够让用户看到密码明文？
         if(userInfo == null){
-            return ResultVOUtil.error(1,"用户信息获取失败");
+            return ResultVOUtil.error(1,UserEnum.USER_GET_FAIL.getMessage());
         }
-        return ResultVOUtil.success("获取用户信息成功",userInfo);
+        return ResultVOUtil.success(UserEnum.USER_GET_SUCCESS.getMessage(),userInfo);
     }
 
     /**
@@ -108,7 +108,7 @@ public class UserInfoController {
             throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
         int result = userInfoService.saveUser(form);
-        return ResultVOUtil.success("修改成功");
+        return ResultVOUtil.success(UserEnum.USER_UPDATE_SUCCESS.getMessage());
     }
 
 
@@ -124,14 +124,14 @@ public class UserInfoController {
         request.getSession().removeAttribute("userName");
         request.getSession().removeAttribute("userPassword");
         log.info((String)request.getSession().getAttribute("userName"));
-        return ResultVOUtil.success("注销成功");
+        return ResultVOUtil.success(UserEnum.USER_LOGOUT_SUCCESS.getMessage());
 
     }
 
     @PostMapping("/send")
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
         //TODO 向用户和页面发送 短信校验码
-        return ResultVOUtil.success("短信验证码发送成功");
+        return ResultVOUtil.success(UserEnum.SEND_CODE_SUCCESS.getMessage());
 
     }
 

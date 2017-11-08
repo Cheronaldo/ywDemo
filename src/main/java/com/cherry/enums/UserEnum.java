@@ -13,6 +13,11 @@ public enum UserEnum {
     USER_LOGIN_SUCCESS(6,"登录成功"),
     USER_GET_FAIL(7,"用户信息获取失败"),
     USER_GET_SUCCESS(8,"用户信息获取成功"),
+    USER_UPDATE_SUCCESS(9,"修改成功"),
+    USER_LOGOUT_SUCCESS(10,"注销成功"),
+    SEND_CODE_SUCCESS(11,"验证码发送成功"),
+    SEND_CODE_FAIL(12,"验证码发送失败"),
+
 
     ;
 
