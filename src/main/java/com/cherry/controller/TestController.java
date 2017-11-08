@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/test")
 public class TestController {
 
+
     @GetMapping("/run")
     public String test(){
-        return  "test";
+        return "test";
     }
 
 
