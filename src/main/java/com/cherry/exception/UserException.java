@@ -1,6 +1,6 @@
 package com.cherry.exception;
 
-import com.cherry.enums.ResultEnum;
+import com.cherry.enums.UserEnum;
 
 /**
  * 用户异常类
@@ -10,9 +10,9 @@ public class UserException extends RuntimeException{
 
     private Integer code;
 
-    public UserException(ResultEnum resultEnum){
-        super(resultEnum.getMessage());
-        this.code = resultEnum.getCode();
+    public UserException(UserEnum userEnum){
+        super(userEnum.getMessage());
+        this.code = userEnum.getCode();
     }
 
     public UserException(Integer code, String message){

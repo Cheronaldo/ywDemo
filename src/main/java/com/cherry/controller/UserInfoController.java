@@ -1,7 +1,7 @@
 package com.cherry.controller;
 
 import com.cherry.dataobject.UserInfo;
-import com.cherry.enums.ResultEnum;
+import com.cherry.enums.UserEnum;
 import com.cherry.exception.UserException;
 import com.cherry.form.UserInfoForm;
 import com.cherry.service.UserInfoService;
@@ -38,10 +38,10 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findOneByUserName(userName);
         if(userInfo != null){
             log.error("用户名已存在");
-            throw new UserException(ResultEnum.USER_ALREADY_EXIST);
+            throw new UserException(UserEnum.USER_ALREADY_EXIST);
             //异常捕获处理 已完成
         }
-        return ResultVOUtil.success("此用户名符合要求",0);
+        return ResultVOUtil.success(UserEnum.USER_VALID.getMessage());
     }
 
     /**
@@ -50,15 +50,15 @@ public class UserInfoController {
      * @param bindingResult
      * @return
      */
-    @PostMapping("/save")
+    @PostMapping("/register")
     public ResultVO userRegister(@Valid UserInfoForm form,
                                  BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             log.error("用户信息填写错误");
-            throw  new UserException((ResultEnum.USER_INFORMATION_ERROR));
+            throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
         int result = userInfoService.saveUser(form);
-        return ResultVOUtil.success("操作成功",0);
+        return ResultVOUtil.success(UserEnum.USER_REGISTER_SUCCESS.getMessage());
 
     }
 
@@ -68,15 +68,15 @@ public class UserInfoController {
         String userPassword = request.getParameter("userPassword");
         int result = userInfoService.userLogin(userName, userPassword);
         if(result == 1){
-            return ResultVOUtil.error(1,"登录失败",1);
+            return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
         }
-
+        //TODO 后期做ip检测 防止异地登录
         request.getSession().setAttribute("userName", userName);
         request.getSession().setAttribute("userPassword", userPassword);
 
         log.info((String)request.getSession().getAttribute("userName"));
 
-        return ResultVOUtil.success("登录成功",0);
+        return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage());
     }
 
     /**
@@ -89,10 +89,28 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findOneByUserName(userName);
         //TODO 这里还有一个密码解码过程 是否有必要能够让用户看到密码明文？
         if(userInfo == null){
-            return ResultVOUtil.error(1,"用户信息获取失败",1);
+            return ResultVOUtil.error(1,"用户信息获取失败");
         }
-        return ResultVOUtil.success("成功获取用户信息",userInfo);
+        return ResultVOUtil.success("获取用户信息成功",userInfo);
     }
+
+    /**
+     * 用户信息修改
+     * @param form
+     * @param bindingResult
+     * @return
+     */
+    @PostMapping("/update")
+    public ResultVO userUpdate(@Valid UserInfoForm form,
+                               BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            log.error("用户信息填写错误");
+            throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
+        }
+        int result = userInfoService.saveUser(form);
+        return ResultVOUtil.success("修改成功");
+    }
+
 
     /**
      * 用户注销
@@ -106,14 +124,14 @@ public class UserInfoController {
         request.getSession().removeAttribute("userName");
         request.getSession().removeAttribute("userPassword");
         log.info((String)request.getSession().getAttribute("userName"));
-        return ResultVOUtil.success("注销成功",0);
+        return ResultVOUtil.success("注销成功");
 
     }
 
     @PostMapping("/send")
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
         //TODO 向用户和页面发送 短信校验码
-        return ResultVOUtil.success();
+        return ResultVOUtil.success("短信验证码发送成功");
 
     }
 

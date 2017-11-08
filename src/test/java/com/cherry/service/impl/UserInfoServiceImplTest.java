@@ -29,7 +29,7 @@ public class UserInfoServiceImplTest {
 //        userInfo.setUserName(userName);
         userInfoForm.setUserName("张三");
         userInfoForm.setUserPassword("abc123456");
-        userInfoForm.setUserClass(1);
+        userInfoForm.setUserClass("经销商用户");
         userInfoForm.setUserPost("经理");
         userInfoForm.setUserMail("123@qq.com");
         userInfoForm.setUserCompany("深圳亿维自动化");

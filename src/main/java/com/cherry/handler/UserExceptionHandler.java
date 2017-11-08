@@ -21,7 +21,7 @@ public class UserExceptionHandler {
     @ExceptionHandler(value = UserException.class)
     @ResponseBody
     public ResultVO handlerUserException(UserException e){
-        return ResultVOUtil.error(1,e.getMessage(),1);
+        return ResultVOUtil.error(1,e.getMessage());
     }
 
 }

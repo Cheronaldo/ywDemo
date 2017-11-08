@@ -14,8 +14,8 @@ public class UserInfoForm {
     /**  用户密码 */
     private String userPassword;
     /**  用户类型 */
-    private Integer userClass;
-    /**  用户职务 */
+    private String userClass;
+    /**  用户职务 前端是字符串 后台转化为code*/
     private String userPost;
     /**  用户邮箱 */
     private String userMail;
@@ -40,11 +40,11 @@ public class UserInfoForm {
         this.userPassword = userPassword;
     }
 
-    public Integer getUserClass() {
+    public String getUserClass() {
         return userClass;
     }
 
-    public void setUserClass(Integer userClass) {
+    public void setUserClass(String userClass) {
         this.userClass = userClass;
     }
 

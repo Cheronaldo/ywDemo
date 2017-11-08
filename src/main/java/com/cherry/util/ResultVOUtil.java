@@ -25,19 +25,21 @@ public class ResultVOUtil {
      * 成功 但无返回数据对象
      * @return
      */
-    public static ResultVO success(){return success("成功",null);}
+    public static ResultVO success(String msg){return success(msg,null);}
+
+
+
 
     /**
-     * 返回失败结果 有返回结果
+     * 返回失败结果 无返回结果
      * @param code
      * @param msg
      * @return
      */
-    public static ResultVO error(Integer code, String msg, Object object){
+    public static ResultVO error(Integer code, String msg){
         ResultVO resultVO = new ResultVO();
         resultVO.setCode(code);
         resultVO.setMsg(msg);
-        resultVO.setData(object);
         return resultVO;
     }
 
