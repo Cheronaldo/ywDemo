@@ -6,6 +6,7 @@ import com.cherry.exception.UserException;
 import com.cherry.form.UserInfoForm;
 import com.cherry.service.UserInfoService;
 import com.cherry.util.ResultVOUtil;
+import com.cherry.util.ShortMessagingServiceUtil;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,10 +129,14 @@ public class UserInfoController {
 
     }
 
-    @PostMapping("/send")
+    @PostMapping("/askCode")
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
         //TODO 向用户和页面发送 短信校验码
-        return ResultVOUtil.success(UserEnum.SEND_CODE_SUCCESS.getMessage());
+
+        ShortMessagingServiceUtil messagingServiceUtil = new ShortMessagingServiceUtil();
+        int code = messagingServiceUtil.sendsms(userTelephone);
+
+        return ResultVOUtil.success(UserEnum.SEND_CODE_SUCCESS.getMessage(),code);
 
 
     }

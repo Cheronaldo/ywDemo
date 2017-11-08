@@ -17,6 +17,10 @@ public class TestController {
         return "test";
     }
 
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
 
 
 }

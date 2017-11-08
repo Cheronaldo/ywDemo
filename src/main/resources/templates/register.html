@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
+    <script src="../static/assets/js/jQuery.md5.js" th:src="@{/assets/js/jQuery.md5.js}"></script>
+    <title>注册</title>
+    <style>
+        body {
+            background-image:url('../static/assets/images/1.png');
+            /*background:url(../static/assets/images/1.png);*/
+            background-repeat: repeat;
+            background-position:center;
+        }
+        .login {
+            width: 1000px;
+            height: 500px;
+            margin: 50px auto;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .login {
+            position: relative;
+        }
+        .login h1 ,label{
+            color: white;
+        }
+        .form_content {
+            margin-top: 20px;
+        }
+        .input_control {
+            width: 150px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 14px
+        }
+        .confirm {
+            width: 50px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 14px
+        }
+        .register {
+            width: 150px;
+            height: 30px;
+            background: #15d6ba;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        span {
+            color: white;
+        }
+        .userReminder {
+            color: #e0e0e0;
+            font-size: 12px;
+            height: 12px;
+            line-height: 12px;
+        }
+        .register:hover {
+            background: #a8362a;
+            outline: 0;
+            cursor: pointer;
+        }
+        .getCode:hover {
+            background: #60a855;
+            outline: 0;
+            cursor: pointer;
+        }
+        .eyes {
+            width: 15px;
+            height: 10px;
+            right: 0px;
+        }
+        .nameReminder {
+            position: absolute;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var usernameFlag = false;
+        var passwordFlag = false;
+        var mailFlag = false;
+        var telFlag = false;
+        var testCode = 0;
+        var codeFlag = false;
+        var nameOK = false;
+        var count = 30;
+        var timer = null; // 定时器的名字
+        $(function() {
+            $("#getCode").click(function(){
+                checkInputRight();
+                clearInterval(timer);  // 先清除掉原来的定时器
+                this.disabled = true;
+                timer = setInterval(timerTick,1000);  // 开启定时器
+                askCode();
+            });
+
+            $("#register").click(function() {
+                checkInputRight();
+                var idCode = $('#idCode').val();
+                if (idCode === testCode) codeFlag = true;
+                //else codeFlag = false;
+                if (nameOK) {
+                    if (usernameFlag) {
+                        if (passwordFlag) {
+                            if (mailFlag) {
+                                if (telFlag) {
+                                    if (codeFlag) {
+                                        register();
+                                    }
+                                    //codeFlag = false
+                                    else {
+                                        alert("验证码输入有误");
+                                        $('#idcode').val("");
+                                    }
+                                }
+                                //telFlag = false
+                                else {
+                                    alert("联系电话输入有误，请重新输入!");
+                                    $('#tel').val("");
+                                }
+                            }
+                            //mailFlag = false
+                            else {
+                                alert("邮箱输入有误，请重新输入");
+                                $('#mail').val("");
+                            }
+                        }
+                        //passwordFlag = false
+                        else {
+                            alert("密码不一致，请重新输入");
+                            $('#passwd').val("");
+                            $('#passwd_again').val("");
+                        }
+                    }
+                    else {
+                        alert("用户名输入不合法，请重新输入");
+                        $('#username').val("");
+                    }
+                }
+                else {
+                    alert("用户名重复，请更改用户名");
+                }
+            });
+            $("#username").change(function(){
+                checkUsername();
+                if (nameOK) {}
+                else{}
+            });
+        });
+
+        function checkInputRight(){
+            var userName = $('#username').val();
+            var reg = /^[\w]{6,12}$/;
+            if(userName.match(reg)){usernameFlag = true;}
+            else {
+                usernameFlag = false;
+            }
+            var password1 = $('#passwd').val();
+            var password2 = $('#passwd_again').val();
+            if (password1 == password2){
+                passwordFlag = true;
+            }
+            var mail = $('#mail').val();
+            mailFlag = mail.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) != -1;
+            var tel = $('#tel').val();
+            var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+            telFlag = myreg.test(tel);
+        }
+
+
+        function register(){
+            var user_class = $('#user_class').val();
+            var username = $('#username').val();
+            var passwd = $('#passwd').val();
+            passwd = $.md5(passwd);
+            var post = $('#post').val();
+            var mail = $('#mail').val();
+            var companyname = $('#companyname').val();
+            var tel = $('#tel').val();
+            $.ajax({
+                url: "/user/register",//-----
+                cache: false,
+                dataType:'json',
+                data : {
+                    "userClass":user_class,
+                    "userName":username,///----
+                    "userPassword":passwd,
+                    "userPost": post,
+                    "userMail":mail,
+                    "userCompany":companyname,
+                    "userTelephone":tel
+                },
+                type : 'post',
+                beforeSend: function () {
+                    // 禁用按钮防止重复提交
+                    $('#register').attr({ disabled: "disabled"});
+                },
+                success: function(result){
+                    if(result.code == 0){
+                        alert(result.msg);
+                        //------------------
+                        window.href = "/login";
+                    }else{
+
+                    }
+                },
+                complete: function () {
+                    $('#register').removeAttr("disabled");
+                },
+                error: function (data) {
+                    console.info("error: " + data.responseText);
+                }
+            });
+        }
+
+        function timerTick(){
+            count--;
+            var that = document.getElementById('getCode');
+            if(count >= 0 )
+            {
+                that.innerHTML =  "还剩余"+count+"秒";
+                that.disabled = true;
+            }
+            else
+            {
+                that.innerHTML = "重新发送短信";
+                that.disabled = false;
+                clearInterval(timer);  // 清除定时器
+                count = 30;
+            }
+        }
+
+        function askCode(){
+            var tel = $('#tel').val();
+            $.ajax({
+                url: "/user/askCode",
+                cache: false,
+                dataType:'json',
+                data : {
+                    "userTelephone":tel
+                },
+                type : 'post',
+                beforeSend: function () {
+                    // 禁用按钮防止重复提交
+                    $('#getCode').attr({ disabled: "disabled"});
+                },
+                success: function(result){
+                    if(result.code == 0){
+                        testCode = result.data;
+                        testCode = testCode.toString();
+                        console.log(testCode);
+                    }else{
+                        alert("发送短信失败！");
+                    }
+                },
+                complete: function () {
+                    $('#getCode').removeAttr("disabled");
+                },
+                error: function (data) {
+                    console.info("error: " + data.responseText);
+                }
+            });
+        }
+
+        function hideShowPsw1(){
+            var img1 = document.getElementById("eyes1");
+            var passwd1Input = document.getElementById("passwd");
+            if (passwd1Input.type == "password") {
+                passwd1Input.type = "text";
+                img1.setAttribute("th:src","@{/assets/images/invisible.png}");
+                img1.setAttribute("src","/assets/images/invisible.png");
+            }else {
+                passwd1Input.type = "password";
+                img1.setAttribute("th:src","@{/assets/images/visible.png}");
+                img1.setAttribute("src","/assets/images/visible.png");
+            }
+        }
+        function hideShowPsw2(){
+            var img2 = document.getElementById("eyes2");
+            var passwd2Input = document.getElementById("passwd_again");
+            if (passwd2Input.type == "password") {
+                passwd2Input.type = "text";
+                img2.setAttribute("th:src","@{/assets/images/invisible.png}");
+                img2.setAttribute("src","/assets/images/invisible.png");
+            }else {
+                passwd2Input.type = "password";
+                img2.setAttribute("th:src","@{/assets/images/visible.png}");
+                img2.setAttribute("src","/assets/images/visible.png");
+            }
+        }
+        function checkUsername(){
+            var username = $('#username').val();
+            $.ajax({
+                url: "/user/check",
+                cache: false,
+                dataType:'json',
+                data : {
+                    "userName":username
+                },
+                type : 'post',
+                success: function(result){
+                    if(result.code == 0){
+                        nameOK = true;
+                        $('#nameReminder').html("√用户名可用");
+                        $('#nameReminder').css("color","#0cdc27");
+                        console.log("用户名可以");
+                    }else{
+                        nameOK = false;
+                        console.log("用户名不可以");
+                        $('#nameReminder').html("×用户名已被注册");
+                        $('#nameReminder').css("color","red");
+                    }
+                },
+                error: function (data) {
+                    console.log("error: " + data.responseText);
+                }
+            });
+        }
+    </script>
+</head>
+<!--<body th:background="@{/assets/images/1.png}">-->
+<body >
+<div class="login">
+    <h1>欢迎来到亿维智能云平台</h1>
+    <div class="form_content">
+        <label class="user_class">用户类别：</label>
+        <select id="user_class" class="input_control" placeholder="经销商" >
+            <option value="(空)">(空)</option>
+            <option value="经销商">经销商</option>
+            <option value="现场用户">现场用户</option>
+        </select>
+    </div>
+    <div class="form_content">
+        <label for="username">用&nbsp;&nbsp;户&nbsp;&nbsp;名：</label>
+        <input id="username" type="text" class="input_control" placeholder="必填" />
+        <span class="nameReminder" id="nameReminder"></span>
+    </div>
+    <div>
+        <span class="userReminder">(用户名为6-12长度的字母和数字组合)</span>
+    </div>
+    <div class="form_content">
+        <label for="passwd">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+        <input id="passwd" type="password" class="input_control" placeholder="必填" />
+        <img class="eyes" id="eyes1" onclick="hideShowPsw1()" th:src="@{/assets/images/visible.png}" />
+    </div>
+    <div class="form_content">
+        <label for="passwd_again">确认密码：</label>
+        <input id="passwd_again" type="password" class="input_control" placeholder="必填" />
+        <img class="eyes" id="eyes2" onclick="hideShowPsw2()" th:src="@{/assets/images/visible.png}" />
+    </div>
+    <div class="form_content">
+        <label class="post">职务（选填）：</label>
+        <select id="post" class="input_control" placeholder="经理" >
+            <option value="(空)">(空)</option>
+            <option value="经理">经理</option>
+            <option value="副经理">副经理</option>
+            <option value="工程师">工程师</option>
+        </select>
+    </div>
+    <div class="form_content">
+        <label for="mail">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+        <input id="mail" type="text" class="input_control" placeholder="必填" />
+    </div>
+    <div class="form_content">
+        <label for="companyname">公司名称：</label>
+        <input id="companyname" type="text" class="input_control" placeholder="必填" />
+    </div>
+    <div class="form_content">
+        <label for="tel">联系方式：</label>
+        <input id="tel" type="text" class="input_control" placeholder="必填" />
+    </div>
+    <div class="form_content">
+        <label for="idCode">验 证 码：</label>
+        <input id="idCode" type="text" class="confirm" />
+        <button class="getCode" id="getCode">获取手机验证码</button>
+    </div>
+    <button id="register" class="register">注&nbsp;&nbsp;册</button>
+
+</div>
+</body>
+</html>
