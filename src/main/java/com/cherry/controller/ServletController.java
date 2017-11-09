@@ -27,6 +27,10 @@ public class ServletController {
         return "register";
     }
 
+    /**
+     * 首页跳转
+     * @return
+     */
     @GetMapping("/index")
     public String index(){
         return "test";

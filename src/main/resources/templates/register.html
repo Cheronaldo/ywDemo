@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
     <script src="../static/assets/js/jQuery.md5.js" th:src="@{/assets/js/jQuery.md5.js}"></script>
-    <title>注册</title>
+    <title>亿维智能云平台注册页面</title>
     <style>
         body {
-            background-image:url('../static/assets/images/1.png');
-            /*background:url(../static/assets/images/1.png);*/
-            background-repeat: repeat;
-            background-position:center;
+            background-repeat: no-repeat;
+            background-position: top center;
+            background-size:cover;
+            text-align:center;
         }
         .login {
             width: 1000px;
@@ -322,7 +322,7 @@
     </script>
 </head>
 <!--<body th:background="@{/assets/images/1.png}">-->
-<body >
+<body th:background="@{/assets/images/1.png}">
 <div class="login">
     <h1>欢迎来到亿维智能云平台</h1>
     <div class="form_content">
