@@ -3,6 +3,7 @@ package com.cherry.service.impl;
 import com.cherry.dataobject.UserInfo;
 import com.cherry.form.UserInfoForm;
 import com.cherry.repository.UserInfoRepository;
+import com.cherry.repository.UserLevelRepository;
 import com.cherry.service.UserInfoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,18 @@ public class UserInfoServiceImpl implements UserInfoService{
     @Autowired
     private UserInfoRepository repository;
 
+    @Autowired
+    private UserLevelRepository levelRepository;
+
     @Override
     public Integer saveUser(UserInfoForm userInfoForm) {
 
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(userInfoForm, userInfo);
+        //注意将用户类型转换为对应的 类型码再储存 否则userInfo中 userClass为 null
+        int userClass = levelRepository.findByClassInfo(userInfoForm.getUserClass()).getUserClass();
+        userInfo.setUserClass(userClass);
 
-        userInfo.setUserClass(1);
-        //TODO 注意将用户类型转换为对应的 类型码再储存 否则userInfo中 userClass为 null
         UserInfo result = repository.save(userInfo);
         if(result == null){
             return 1;

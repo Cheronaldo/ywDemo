@@ -10,7 +10,6 @@ import com.cherry.util.ShortMessagingServiceUtil;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,25 +58,39 @@ public class UserInfoController {
             throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
         int result = userInfoService.saveUser(form);
+        if(result == 1){
+            return ResultVOUtil.error(1,UserEnum.USER_REGISTER_FAIL.getMessage());
+        }
+
         return ResultVOUtil.success(UserEnum.USER_REGISTER_SUCCESS.getMessage());
 
     }
 
     @PostMapping("/login")
     public ResultVO userLogin(HttpServletRequest request, HttpServletResponse response){
+        //1.验证是否是否有效
         String userName = request.getParameter("userName");
         String userPassword = request.getParameter("userPassword");
         int result = userInfoService.userLogin(userName, userPassword);
         if(result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
         }
+        //2.验证IP，是否异地登录
         //TODO 后期做ip检测 防止异地登录
+
+
+        //3.将用户信息添加至 session
+        //TODO 后期使用 redis
         request.getSession().setAttribute("userName", userName);
         request.getSession().setAttribute("userPassword", userPassword);
 
         log.info((String)request.getSession().getAttribute("userName"));
 
-        return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage());
+        //4.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
+        int userClass = userInfoService.findOneByUserName(userName).getUserClass();
+
+        //5.返回结果
+        return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage(),userClass);
     }
 
     /**
@@ -88,7 +101,8 @@ public class UserInfoController {
     @PostMapping("/getUser")
     public ResultVO getUser(@RequestParam("userName") String userName){
         UserInfo userInfo = userInfoService.findOneByUserName(userName);
-        //TODO 这里还有一个密码解码过程 是否有必要能够让用户看到密码明文？
+        //密码直接上传，解码过程在前端页面
+        //目的：这样数据传输过程中即使数据被截获，也不会看到密码明文
         if(userInfo == null){
             return ResultVOUtil.error(1,UserEnum.USER_GET_FAIL.getMessage());
         }
@@ -109,6 +123,11 @@ public class UserInfoController {
             throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
         int result = userInfoService.saveUser(form);
+
+        if(result == 1){
+            return ResultVOUtil.error(1,UserEnum.USER_UPDATE_FAIL.getMessage());
+        }
+
         return ResultVOUtil.success(UserEnum.USER_UPDATE_SUCCESS.getMessage());
     }
 
@@ -131,7 +150,7 @@ public class UserInfoController {
 
     @PostMapping("/askCode")
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
-        //TODO 向用户和页面发送 短信校验码
+        //TODO 向用户和页面发送 短信校验码 修改返回参数（因为会对应多种情况 如：多次注册）
 
         ShortMessagingServiceUtil messagingServiceUtil = new ShortMessagingServiceUtil();
         int code = messagingServiceUtil.sendsms(userTelephone);

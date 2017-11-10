@@ -17,7 +17,8 @@ public enum UserEnum {
     USER_LOGOUT_SUCCESS(10,"注销成功"),
     SEND_CODE_SUCCESS(11,"验证码发送成功"),
     SEND_CODE_FAIL(12,"验证码发送失败"),
-
+    USER_REGISTER_FAIL(13,"注册失败"),
+    USER_UPDATE_FAIL(14,"修改失败"),
 
     ;
 
