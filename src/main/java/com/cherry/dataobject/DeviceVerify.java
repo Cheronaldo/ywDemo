@@ -16,6 +16,7 @@ import java.util.Date;
 @DynamicUpdate
 public class DeviceVerify {
 
+    /**  自增ID */
     @Id
     private String id;
     /**  设备SN码 */

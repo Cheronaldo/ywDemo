@@ -42,13 +42,13 @@ public class DeviceInfoRepositoryTest {
 
     @Test
     public void findOneBySnCode(){
-        DeviceInfo result = repository.findOne("1510296594045254239");
+        DeviceInfo result = repository.findOne("1510311999826615905");
         Assert.assertNotNull(result);
     }
 
     @Test
     public void findBySnCodeIn() throws Exception {
-        List<String> list = Arrays.asList("1510296594045254239","1510296725578902963");
+        List<String> list = Arrays.asList("1510311999826615905","1510312472692722083");
         List<DeviceInfo> result = repository.findBySnCodeIn(list);
 
         Assert.assertNotEquals(0,result.size());
