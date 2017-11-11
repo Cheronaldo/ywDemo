@@ -1,5 +1,6 @@
 package com.cherry.service.impl;
 
+import com.cherry.dataobject.DeviceInfo;
 import com.cherry.form.SiteDeviceForm;
 import com.cherry.util.KeyUtil;
 import org.junit.Assert;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.awt.image.Kernel;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -99,16 +101,8 @@ public class DeviceServiceImplTest {
     @Test
     public void findListByUser() throws Exception {
 
-        Map<String,Object> map = new HashMap<String,Object>();
-
-        map = service.findListByUser("abc1234567");
-
-        int code = Integer.parseInt(String.valueOf(map.get("code")));
-        String msg = (String)map.get("msg");
-        Object data = map.get("data");
-
-
-        Assert.assertNotNull(msg);
+        List<DeviceInfo> result = service.findListByUser("abc1234567");
+        Assert.assertNotEquals(0,result.size());
 
     }
 

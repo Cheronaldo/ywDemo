@@ -27,7 +27,22 @@ public class ResultVOUtil {
      */
     public static ResultVO success(String msg){return success(msg,null);}
 
+    /**
+     * 返回自定义 操作码 提示内容 数据内容
+     * @param code
+     * @param msg
+     * @param object
+     * @return
+     */
+    public static ResultVO result(Integer code, String msg ,Object object){
 
+        ResultVO resultVO = new ResultVO();
+        resultVO.setCode(code);
+        resultVO.setMsg(msg);
+        resultVO.setData(object);
+        return resultVO;
+
+    }
 
 
     /**

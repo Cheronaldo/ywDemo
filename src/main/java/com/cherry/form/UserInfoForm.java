@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class UserInfoForm {
 
     /**  用户名 */
-    @NotEmpty(message = "用户名必填")
+    @NotEmpty(message = "用户名必传")
     private String userName;
     /**  用户密码 */
     private String userPassword;

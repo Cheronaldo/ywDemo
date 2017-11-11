@@ -4,6 +4,7 @@ import com.cherry.dataobject.DeviceInfo;
 import com.cherry.form.SiteDeviceForm;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,7 +64,7 @@ public interface DeviceService {
      * @param userName
      * @return
      */
-    Map<String,Object> findListByUser(String userName);
+    List<DeviceInfo> findListByUser(String userName);
 
     /**
      * 通过SN码 获取设备状态

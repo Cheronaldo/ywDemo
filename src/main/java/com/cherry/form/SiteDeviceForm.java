@@ -9,9 +9,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class SiteDeviceForm {
 
     /**  用户名 */
-    @NotEmpty(message = "用户名必填")
+    @NotEmpty(message = "用户名必传")
     private String userName;
     /**  设备SN码 */
+    @NotEmpty(message = "SN码必传")
     private String snCode;
     /** 设备部署地址  */
     private String deviceAddress;

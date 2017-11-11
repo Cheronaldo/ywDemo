@@ -175,9 +175,8 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public Map<String, Object> findListByUser(String userName) {
+    public List<DeviceInfo> findListByUser(String userName) {
 
-        Map<String,Object> map = new HashMap<String,Object>();
 
         //1.通过 用户名 和已启用 获取用户设备启用关系列表
         List<UserDeviceRelationship> userDeviceRelationshipList = userDeviceRelationshipRepository.findByIsUsedAndUserName(1,userName);
@@ -188,22 +187,7 @@ public class DeviceServiceImpl implements DeviceService{
                 .collect(Collectors.toList());
 
         //3.通过SN码查询列表获取设备基本信息列表
-        List<DeviceInfo> deviceInfoList = deviceInfoRepository.findBySnCodeIn(snCodeList);
-
-        //4.判断是否查询到结果
-        if(deviceInfoList.size() > 0){
-            //4.1 查询到设备列表
-            map.put("code", 0);
-            map.put("msg", DeviceHandleEnum.FIND_DEVICE_LIST_SUCCESS.getMessage());
-            map.put("data", deviceInfoList);
-            return map;
-        }
-
-        //4.2 未查询到设备信息
-        map.put("code", 1);
-        map.put("msg", DeviceHandleEnum.FIND_DEVICE_LIST_FAIL.getMessage());
-
-        return map;
+        return  deviceInfoRepository.findBySnCodeIn(snCodeList);
 
         //5.有查询结果时 再转化为对应的DTO对象 并获取状态 信息  Controller层
     }

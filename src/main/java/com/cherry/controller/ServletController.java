@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
+ * 页面跳转API层
  * Created by Administrator on 2017/11/08.
  */
 @Controller

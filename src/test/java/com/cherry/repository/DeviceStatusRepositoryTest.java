@@ -28,8 +28,8 @@ public class DeviceStatusRepositoryTest {
     @Test
     public void addStatus(){
         DeviceStatus deviceStatus = new DeviceStatus();
-        deviceStatus.setSnCode("1510312472692722083");
-        deviceStatus.setIsOnline(1);
+        deviceStatus.setSnCode("1510386214378293527");
+        deviceStatus.setIsOnline(0);
         deviceStatus.setHeartTime(DateUtil.getDate());
 
         DeviceStatus result = repository.save(deviceStatus);
