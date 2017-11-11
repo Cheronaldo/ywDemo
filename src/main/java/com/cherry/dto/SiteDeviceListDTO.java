@@ -6,7 +6,7 @@ package com.cherry.dto;
  */
 public class SiteDeviceListDTO {
 
-    //TODO 具体内容待定 参考 EMPC
+
     /**  设备SN码 */
     private String snCode;
     /** 设备部署地址  */
@@ -17,6 +17,8 @@ public class SiteDeviceListDTO {
     private String siteName;
     /**  设备类型(注意将类型码转换为 字符串传给前端)*/
     private String deviceType;
+    /**  设备型号 */
+    private String deviceModel;
     /** 现场图标  */
     private String siteIcon;
 

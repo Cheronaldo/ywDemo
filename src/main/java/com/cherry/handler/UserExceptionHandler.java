@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 用户异常捕获
  * Created by Administrator on 2017/11/07.
  */
 @ControllerAdvice

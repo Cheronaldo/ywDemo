@@ -13,12 +13,16 @@ import com.cherry.repository.DeviceVerifyRepository;
 import com.cherry.repository.UserDeviceRelationshipRepository;
 import com.cherry.service.DeviceService;
 import com.cherry.util.DateUtil;
+import com.cherry.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 设备service实现层
@@ -48,7 +52,8 @@ public class DeviceServiceImpl implements DeviceService{
 
         //1.SN码是否有对应的校验码
         DeviceVerify deviceVerify = deviceVerifyRepository.findBySnCode(snCode);
-        if(deviceVerify == null){
+        boolean isChecked = (deviceVerify == null) || (!checkCode.equals(deviceVerify.getCheckCode()));
+        if(isChecked){
             //SN码或校验码错误
             map.put("code", 3);
             map.put("msg",DeviceHandleEnum.SN_OR_CHECK_CODE_ERROR.getMessage());
@@ -64,8 +69,15 @@ public class DeviceServiceImpl implements DeviceService{
             return map;
         }
 
-        //3.是否为现场首次注册
+        //3.经销商是否已注册该设备
         DeviceInfo deviceInfo = deviceInfoRepository.findOne(snCode);
+        if(deviceInfo == null){
+            //经销商未注册
+            map.put("code",5);
+            map.put("msg",DeviceHandleEnum.REGISTER_ENABLE.getMessage());
+            return map;
+        }
+        //4.是否为现场首次注册
         SiteDeviceInfoDTO siteDeviceInfoDTO = DeviceInfo2SiteDeviceInfoDTOConverter.convert(deviceInfo);
         if(siteDeviceInfoDTO.getDeviceAddress() == null){
             //设备部署地址为空 则为首次注册
@@ -74,10 +86,11 @@ public class DeviceServiceImpl implements DeviceService{
             return map;
         }
 
-        //4.是否为该用户注册
-        //5.该用户是否已启用该设备
+        //5.是否为该用户注册
+        //6.该用户是否已启用该设备
         UserDeviceRelationship userDeviceRelationship = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
-        if((userDeviceRelationship == null) || (userDeviceRelationship.getIsUsed() == 0) ){
+        boolean isUsed = (userDeviceRelationship == null) || (userDeviceRelationship.getIsUsed() == 0);
+        if( isUsed){
             //追加注册 将查询到的注册信息回传 (用户为注册 或 之前注册 目前已注销)
             map.put("code", 1);
             map.put("msg",DeviceHandleEnum.ADD_REGISTER.getMessage());
@@ -96,17 +109,64 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public Map<String, Object> siteUserSaveDeviceInfo(SiteDeviceForm siteDeviceForm) {
-        return null;
+
+        Map<String,Object> map = new HashMap<String,Object>();
+
+        //1.查询设备信息记录
+        DeviceInfo deviceInfo =deviceInfoRepository.findOne(siteDeviceForm.getSnCode());
+
+        //2.将form对象属性赋给设备信息对象
+        BeanUtils.copyProperties(siteDeviceForm, deviceInfo);
+        deviceInfoRepository.save(deviceInfo);
+        map.put("code",0);
+        map.put("msg",DeviceHandleEnum.SAVE_SUCCESS.getMessage());
+
+        return map;
     }
 
     @Override
     public Map<String, Object> userDeviceRelationshipHandle(String snCode, String userName) {
-        return null;
+
+        Map<String,Object> map = new HashMap<String,Object>();
+
+        //1.查询用户是否已注册过该设备
+        UserDeviceRelationship userDeviceRelationship = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
+        if(userDeviceRelationship == null){
+            //2.没有 则添加用户 设备关系记录
+            UserDeviceRelationship relationship = new UserDeviceRelationship();
+            relationship.setId(KeyUtil.genUniqueKey());
+            relationship.setSnCode(snCode);
+            relationship.setUserName(userName);
+            relationship.setRegisterTime(DateUtil.getDate());
+            relationship.setIsUsed(1);
+
+            userDeviceRelationshipRepository.save(relationship);
+
+        }else {
+            //3.已注册 则修改注册时间 修改启用标志
+            userDeviceRelationship.setRegisterTime(DateUtil.getDate());
+            userDeviceRelationship.setIsUsed(1);
+            userDeviceRelationshipRepository.save(userDeviceRelationship);
+        }
+
+        map.put("code", 0);
+        map.put("msg", DeviceHandleEnum.USER_DEVICE_RELATIONSHIP_HANDLE_SUCCESS.getMessage());
+        return map;
     }
 
     @Override
     public Map<String, Object> userDeviceUnbind(String snCode, String userName) {
-        return null;
+        Map<String,Object> map = new HashMap<String,Object>();
+        //1.查询记录
+        UserDeviceRelationship userDeviceRelationship = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
+        //2.修改启用标志 为 未启用
+        userDeviceRelationship.setIsUsed(0);
+
+        userDeviceRelationshipRepository.save(userDeviceRelationship);
+
+        map.put("code", 0);
+        map.put("msg", DeviceHandleEnum.DEVICE_UNBIND_SUCCESS.getMessage());
+        return map;
     }
 
     @Override
@@ -116,11 +176,41 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public Map<String, Object> findListByUser(String userName) {
-        return null;
+
+        Map<String,Object> map = new HashMap<String,Object>();
+
+        //1.通过 用户名 和已启用 获取用户设备启用关系列表
+        List<UserDeviceRelationship> userDeviceRelationshipList = userDeviceRelationshipRepository.findByIsUsedAndUserName(1,userName);
+
+        //2.获取SN码查询列表
+        List<String> snCodeList = userDeviceRelationshipList.stream()
+                .map(e -> e.getSnCode())
+                .collect(Collectors.toList());
+
+        //3.通过SN码查询列表获取设备基本信息列表
+        List<DeviceInfo> deviceInfoList = deviceInfoRepository.findBySnCodeIn(snCodeList);
+
+        //4.判断是否查询到结果
+        if(deviceInfoList.size() > 0){
+            //4.1 查询到设备列表
+            map.put("code", 0);
+            map.put("msg", DeviceHandleEnum.FIND_DEVICE_LIST_SUCCESS.getMessage());
+            map.put("data", deviceInfoList);
+            return map;
+        }
+
+        //4.2 未查询到设备信息
+        map.put("code", 1);
+        map.put("msg", DeviceHandleEnum.FIND_DEVICE_LIST_FAIL.getMessage());
+
+        return map;
+
+        //5.有查询结果时 再转化为对应的DTO对象 并获取状态 信息  Controller层
     }
 
     @Override
-    public Map<String, Object> findMapByUser(String userName) {
-        return null;
+    public Integer findStatusBySnCode(String snCode) {
+
+        return deviceStatusRepository.findOne(snCode).getIsOnline();
     }
 }

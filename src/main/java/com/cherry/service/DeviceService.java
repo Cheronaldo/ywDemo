@@ -59,18 +59,18 @@ public interface DeviceService {
 
     /**
      * 通过用户名查询 该用户启用是所有设备
-     * 用于主页面列表显示
+     * 用于主页面列表及地图查询列表显示
      * @param userName
      * @return
      */
     Map<String,Object> findListByUser(String userName);
 
     /**
-     * 通过用户名查询 该用户启用是所有设备
-     * 用于地图查询列表显示
-     * @param userName
+     * 通过SN码 获取设备状态
+     * 用于主页面列表及地图查询列表 获取设备状态
+     * @param snCode
      * @return
      */
-    Map<String,Object> findMapByUser(String userName);
+    Integer findStatusBySnCode(String snCode);
 
 }
