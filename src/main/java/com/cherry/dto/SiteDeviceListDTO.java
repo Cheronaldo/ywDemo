@@ -80,4 +80,18 @@ public class SiteDeviceListDTO {
     public void setSiteIcon(String siteIcon) {
         this.siteIcon = siteIcon;
     }
+
+
+    @Override
+    public String toString() {
+        return "SiteDeviceListDTO{" +
+                "snCode='" + snCode + '\'' +
+                ", deviceAddress='" + deviceAddress + '\'' +
+                ", isOnline=" + isOnline +
+                ", siteName='" + siteName + '\'' +
+                ", deviceType='" + deviceType + '\'' +
+                ", deviceModel='" + deviceModel + '\'' +
+                ", siteIcon='" + siteIcon + '\'' +
+                '}';
+    }
 }

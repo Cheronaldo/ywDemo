@@ -40,7 +40,7 @@ public class DeviceServiceImplTest {
     }
 
     @Test
-    public void siteUserSaveDeviceInfo() throws Exception {
+    public void saveSiteUserDeviceInfo() throws Exception {
 
         Map<String,Object> map = new HashMap<String,Object>();
 
@@ -54,7 +54,7 @@ public class DeviceServiceImplTest {
         siteDeviceForm.setSiteName("车间搅拌线");
         siteDeviceForm.setSiteIcon("/12345");
 
-        map = service.siteUserSaveDeviceInfo(siteDeviceForm);
+        map = service.saveSiteUserDeviceInfo(siteDeviceForm);
         int code = Integer.parseInt(String.valueOf(map.get("code")));
         String msg = (String)map.get("msg");
 
@@ -64,11 +64,11 @@ public class DeviceServiceImplTest {
     }
 
     @Test
-    public void userDeviceRelationshipHandle() throws Exception {
+    public void saveUserDeviceRelationshipHandle() throws Exception {
 
         Map<String,Object> map = new HashMap<String,Object>();
 
-        map = service.userDeviceRelationshipHandle(KeyUtil.genUniqueKey(),"abc1234");
+        map = service.saveUserDeviceRelationshipHandle(KeyUtil.genUniqueKey(),"abc1234");
 
         int code = Integer.parseInt(String.valueOf(map.get("code")));
         String msg = (String)map.get("msg");
@@ -95,21 +95,17 @@ public class DeviceServiceImplTest {
     }
 
     @Test
-    public void findOneBySnCode() throws Exception {
-    }
+    public void listFindByUser() throws Exception {
 
-    @Test
-    public void findListByUser() throws Exception {
-
-        List<DeviceInfo> result = service.findListByUser("abc1234567");
+        List<DeviceInfo> result = service.listFindByUser("abc1234567");
         Assert.assertNotEquals(0,result.size());
 
     }
 
     @Test
-    public void findStatusBySnCode() throws Exception {
+    public void getStatusBySnCode() throws Exception {
 
-        int result = service.findStatusBySnCode("1510312472692722083");
+        int result = service.getStatusBySnCode("1510312472692722083");
 
         Assert.assertEquals(1,result);
 

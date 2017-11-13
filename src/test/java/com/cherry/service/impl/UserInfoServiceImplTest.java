@@ -47,8 +47,8 @@ public class UserInfoServiceImplTest {
 
 
     @Test
-    public void findOneByUserName() throws Exception {
-        UserInfo result = userInfoService.findOneByUserName("张三");
+    public void getUserByUserName() throws Exception {
+        UserInfo result = userInfoService.getUserByUserName("张三");
         Assert.assertNotNull(result);
 
     }

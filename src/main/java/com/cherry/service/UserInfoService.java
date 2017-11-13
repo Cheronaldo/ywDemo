@@ -31,6 +31,6 @@ public interface UserInfoService {
      * @param userName
      * @return
      */
-    UserInfo findOneByUserName(String userName);
+    UserInfo getUserByUserName(String userName);
 
 }

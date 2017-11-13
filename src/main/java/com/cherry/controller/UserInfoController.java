@@ -36,11 +36,11 @@ public class UserInfoController {
      */
     @PostMapping("/check")
     public ResultVO userCheck(@RequestParam("userName") String userName){
-        UserInfo userInfo = userInfoService.findOneByUserName(userName);
-        if(userInfo != null){
+        UserInfo userInfo = userInfoService.getUserByUserName(userName);
+        if (userInfo != null){
             log.error("用户名已存在");
             throw new UserException(UserEnum.USER_ALREADY_EXIST);
-            //异常捕获处理 已完成
+            // 异常捕获处理 已完成
         }
         return ResultVOUtil.success(UserEnum.USER_VALID.getMessage());
     }
@@ -54,12 +54,12 @@ public class UserInfoController {
     @PostMapping("/register")
     public ResultVO userRegister(@Valid UserInfoForm form,
                                  BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()){
             log.error("用户信息填写错误");
             throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
         int result = userInfoService.saveUser(form);
-        if(result == 1){
+        if (result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_REGISTER_FAIL.getMessage());
         }
 
@@ -69,28 +69,28 @@ public class UserInfoController {
 
     @PostMapping("/login")
     public ResultVO userLogin(HttpServletRequest request, HttpServletResponse response){
-        //1.验证是否是否有效
+        // 1.验证是否是否有效
         String userName = request.getParameter("userName");
         String userPassword = request.getParameter("userPassword");
         int result = userInfoService.userLogin(userName, userPassword);
-        if(result == 1){
+        if (result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
         }
-        //2.验证IP，是否异地登录
+        // 2.验证IP，是否异地登录
         //TODO 后期做ip检测 防止异地登录
 
 
-        //3.将用户信息添加至 session
+        // 3.将用户信息添加至 session
         //TODO 后期使用 redis
         request.getSession().setAttribute("userName", userName);
         request.getSession().setAttribute("userPassword", userPassword);
 
         log.info((String)request.getSession().getAttribute("userName"));
 
-        //4.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
-        int userClass = userInfoService.findOneByUserName(userName).getUserClass();
+        // 4.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
+        int userClass = userInfoService.getUserByUserName(userName).getUserClass();
 
-        //5.返回结果
+        // 5.返回结果
         return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage(),userClass);
     }
 
@@ -101,10 +101,10 @@ public class UserInfoController {
      */
     @PostMapping("/getUser")
     public ResultVO getUser(@RequestParam("userName") String userName){
-        UserInfo userInfo = userInfoService.findOneByUserName(userName);
-        //密码直接上传，解码过程在前端页面
-        //目的：这样数据传输过程中即使数据被截获，也不会看到密码明文
-        if(userInfo == null){
+        UserInfo userInfo = userInfoService.getUserByUserName(userName);
+        // 密码直接上传，解码过程在前端页面
+        // 目的：这样数据传输过程中即使数据被截获，也不会看到密码明文
+        if (userInfo == null){
             return ResultVOUtil.error(1,UserEnum.USER_GET_FAIL.getMessage());
         }
         return ResultVOUtil.success(UserEnum.USER_GET_SUCCESS.getMessage(),userInfo);
@@ -119,13 +119,13 @@ public class UserInfoController {
     @PostMapping("/update")
     public ResultVO userUpdate(@Valid UserInfoForm form,
                                BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()){
             log.error("用户信息填写错误");
             throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
         int result = userInfoService.saveUser(form);
 
-        if(result == 1){
+        if (result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_UPDATE_FAIL.getMessage());
         }
 

@@ -31,7 +31,7 @@ public class DeviceVerifyRepositoryTest {
 
         DeviceVerify deviceVerify = new DeviceVerify();
         deviceVerify.setId(KeyUtil.genUniqueKey());
-        deviceVerify.setSnCode("1510386214378293527");
+        deviceVerify.setSnCode(KeyUtil.genUniqueKey());
         deviceVerify.setCheckCode("34fr6t");
         deviceVerify.setGenerateTime(DateUtil.getDate());
 

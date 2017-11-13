@@ -59,4 +59,15 @@ public class DeviceVerify {
     public void setGenerateTime(Date generateTime) {
         this.generateTime = generateTime;
     }
+
+
+    @Override
+    public String toString() {
+        return "DeviceVerify{" +
+                "id='" + id + '\'' +
+                ", snCode='" + snCode + '\'' +
+                ", checkCode='" + checkCode + '\'' +
+                ", generateTime=" + generateTime +
+                '}';
+    }
 }

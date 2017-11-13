@@ -49,4 +49,13 @@ public class DeviceStatus {
     public void setHeartTime(Date heartTime) {
         this.heartTime = heartTime;
     }
+
+    @Override
+    public String toString() {
+        return "DeviceStatus{" +
+                "snCode='" + snCode + '\'' +
+                ", isOnline=" + isOnline +
+                ", heartTime=" + heartTime +
+                '}';
+    }
 }

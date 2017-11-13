@@ -70,16 +70,16 @@ public class DeviceController {
     @PostMapping("/site/register")
     public ResultVO siteSaveDeviceInfo(@Valid SiteDeviceForm form,
                                        BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()){
             log.error("设备信息填写错误");
             throw  new DeviceException((DeviceHandleEnum.DEVICE_INFO_ERROR));
         }
         try {
-            //1.设备信息储存
-            deviceService.siteUserSaveDeviceInfo(form);
+            // 1.设备信息储存
+            deviceService.saveSiteUserDeviceInfo(form);
 
-            //2.设备信息储存成功，修改用户 设备关系记录
-            deviceService.userDeviceRelationshipHandle(form.getSnCode(), form.getUserName());
+            // 2.设备信息储存成功，修改用户 设备关系记录
+            deviceService.saveUserDeviceRelationshipHandle(form.getSnCode(), form.getUserName());
         }catch (DeviceException e){
             log.error("注册失败");
             throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
@@ -97,13 +97,13 @@ public class DeviceController {
     @PostMapping("/site/update")
     public ResultVO siteUpdateDeviceInfo(@Valid SiteDeviceForm form,
                                          BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()){
             log.error("设备信息填写错误");
             throw  new DeviceException((DeviceHandleEnum.DEVICE_INFO_ERROR));
         }
         try {
-            //1.设备信息储存
-            deviceService.siteUserSaveDeviceInfo(form);
+            // 1.设备信息储存
+            deviceService.saveSiteUserDeviceInfo(form);
         }catch (DeviceException e){
             log.error("修改失败");
             throw new DeviceException(DeviceHandleEnum.UPDATE_FAIL);
@@ -124,7 +124,7 @@ public class DeviceController {
                                      @RequestParam("snCode") String snCode){
 
         try {
-            //修改用户 设备 关系记录
+            // 修改用户 设备 关系记录
             deviceService.userDeviceUnbind(snCode, userName);
         }catch (DeviceException e){
             log.error("注销失败");
@@ -143,26 +143,26 @@ public class DeviceController {
     @PostMapping("/site/deviceList")
     public ResultVO querySiteDeviceList(@RequestParam("userName") String userName){
 
-        //1.查询设备列表
+        // 1.查询设备列表
        List<DeviceInfo> deviceInfoList = new ArrayList<DeviceInfo>();
         try {
-            deviceInfoList = deviceService.findListByUser(userName);
+            deviceInfoList = deviceService.listFindByUser(userName);
         }catch (DeviceException e){
             log.error("查询失败");
             throw new DeviceException(DeviceHandleEnum.FIND_DEVICE_LIST_FAIL);
         }
 
-        if(deviceInfoList.size() == 0){
-            //未查询到设备信息
+        if (deviceInfoList.size() == 0){
+            // 未查询到设备信息
             return ResultVOUtil.error(1,DeviceHandleEnum.FIND_NO_DEVICE.getMessage());
         }
 
-        //2.转换为现场用户 设备信息DTO列表
+        // 2.转换为现场用户 设备信息DTO列表
         List<SiteDeviceListDTO> siteDeviceListDTOList = DeviceInfo2SiteDeviceListDTOConverter.convert(deviceInfoList);
 
-        //3.将设备状态信息 写入设备信息DTO列表
+        // 3.将设备状态信息 写入设备信息DTO列表
         for (SiteDeviceListDTO siteDeviceListDTO : siteDeviceListDTOList){
-            siteDeviceListDTO.setIsOnline(deviceService.findStatusBySnCode(siteDeviceListDTO.getSnCode()));
+            siteDeviceListDTO.setIsOnline(deviceService.getStatusBySnCode(siteDeviceListDTO.getSnCode()));
             //TODO 若需要返回给前端 设备类型 则也在此处进行转换 取值
         }
 
@@ -183,23 +183,23 @@ public class DeviceController {
         //1.查询设备列表
         List<DeviceInfo> deviceInfoList = new ArrayList<DeviceInfo>();
         try {
-            deviceInfoList = deviceService.findListByUser(userName);
+            deviceInfoList = deviceService.listFindByUser(userName);
         }catch (DeviceException e){
             log.error("查询失败");
             throw new DeviceException(DeviceHandleEnum.FIND_DEVICE_LIST_FAIL);
         }
 
-        if(deviceInfoList.size() == 0){
-            //未查询到设备信息
+        if (deviceInfoList.size() == 0){
+            // 未查询到设备信息
             return ResultVOUtil.error(1,DeviceHandleEnum.FIND_NO_DEVICE.getMessage());
         }
 
-        //2.转换为现场用户 设备信息DTO列表
+        // 2.转换为现场用户 设备信息DTO列表
         List<SiteDeviceMapDTO> siteDeviceMapDTOList = DeviceInfo2SiteDeviceMapDTOConverter.convert(deviceInfoList);
 
-        //3.将设备状态信息 写入设备信息DTO列表
+        // 3.将设备状态信息 写入设备信息DTO列表
         for (SiteDeviceMapDTO siteDeviceMapDTO : siteDeviceMapDTOList){
-            siteDeviceMapDTO.setIsOnline(deviceService.findStatusBySnCode(siteDeviceMapDTO.getSnCode()));
+            siteDeviceMapDTO.setIsOnline(deviceService.getStatusBySnCode(siteDeviceMapDTO.getSnCode()));
             //TODO 若需要返回给前端 设备类型 则也在此处进行转换 取值
         }
 

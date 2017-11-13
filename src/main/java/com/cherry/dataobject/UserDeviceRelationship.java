@@ -68,4 +68,15 @@ public class UserDeviceRelationship {
     public void setIsUsed(Integer isUsed) {
         this.isUsed = isUsed;
     }
+
+    @Override
+    public String toString() {
+        return "UserDeviceRelationship{" +
+                "id='" + id + '\'' +
+                ", snCode='" + snCode + '\'' +
+                ", userName='" + userName + '\'' +
+                ", registerTime=" + registerTime +
+                ", isUsed=" + isUsed +
+                '}';
+    }
 }

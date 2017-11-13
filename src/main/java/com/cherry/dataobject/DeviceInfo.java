@@ -131,4 +131,23 @@ public class DeviceInfo {
     public void setSiteIcon(String siteIcon) {
         this.siteIcon = siteIcon;
     }
+
+
+    @Override
+    public String toString() {
+        return "DeviceInfo{" +
+                "snCode='" + snCode + '\'' +
+                ", deviceMac='" + deviceMac + '\'' +
+                ", deviceType=" + deviceType +
+                ", deviceModel='" + deviceModel + '\'' +
+                ", shipmentNumber='" + shipmentNumber + '\'' +
+                ", researchUnit='" + researchUnit + '\'' +
+                ", deviceAddress='" + deviceAddress + '\'' +
+                ", deviceLongitude='" + deviceLongitude + '\'' +
+                ", deviceLatitude='" + deviceLatitude + '\'' +
+                ", siteName='" + siteName + '\'' +
+                ", siteType='" + siteType + '\'' +
+                ", siteIcon='" + siteIcon + '\'' +
+                '}';
+    }
 }

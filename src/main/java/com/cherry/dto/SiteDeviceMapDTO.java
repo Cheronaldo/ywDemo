@@ -88,4 +88,18 @@ public class SiteDeviceMapDTO {
     public void setSiteIcon(String siteIcon) {
         this.siteIcon = siteIcon;
     }
+
+    @Override
+    public String toString() {
+        return "SiteDeviceMapDTO{" +
+                "snCode='" + snCode + '\'' +
+                ", deviceType='" + deviceType + '\'' +
+                ", deviceModel='" + deviceModel + '\'' +
+                ", isOnline=" + isOnline +
+                ", deviceAddress='" + deviceAddress + '\'' +
+                ", deviceLongitude='" + deviceLongitude + '\'' +
+                ", deviceLatitude='" + deviceLatitude + '\'' +
+                ", siteIcon='" + siteIcon + '\'' +
+                '}';
+    }
 }

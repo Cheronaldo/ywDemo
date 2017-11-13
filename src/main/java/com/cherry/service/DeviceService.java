@@ -31,7 +31,7 @@ public interface DeviceService {
      * @param siteDeviceForm
      * @return
      */
-    Map<String,Object> siteUserSaveDeviceInfo(SiteDeviceForm siteDeviceForm);
+    Map<String,Object> saveSiteUserDeviceInfo(SiteDeviceForm siteDeviceForm);
 
     /**
      * 操作用户与设备关系
@@ -40,7 +40,7 @@ public interface DeviceService {
      * @param userName
      * @return
      */
-    Map<String,Object> userDeviceRelationshipHandle(String snCode, String userName);
+    Map<String,Object> saveUserDeviceRelationshipHandle(String snCode, String userName);
 
     /**
      * 用户与设备解绑
@@ -52,19 +52,12 @@ public interface DeviceService {
     Map<String,Object> userDeviceUnbind(String snCode, String userName);
 
     /**
-     * 通过SN码查询一条记录
-     * @param snCode
-     * @return
-     */
-    DeviceInfo findOneBySnCode(String snCode);
-
-    /**
      * 通过用户名查询 该用户启用是所有设备
      * 用于主页面列表及地图查询列表显示
      * @param userName
      * @return
      */
-    List<DeviceInfo> findListByUser(String userName);
+    List<DeviceInfo> listFindByUser(String userName);
 
     /**
      * 通过SN码 获取设备状态
@@ -72,6 +65,6 @@ public interface DeviceService {
      * @param snCode
      * @return
      */
-    Integer findStatusBySnCode(String snCode);
+    Integer getStatusBySnCode(String snCode);
 
 }

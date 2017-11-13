@@ -81,4 +81,18 @@ public class UserInfo {
     public void setUserTelephone(String userTelephone) {
         this.userTelephone = userTelephone;
     }
+
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userClass=" + userClass +
+                ", userPost='" + userPost + '\'' +
+                ", userMail='" + userMail + '\'' +
+                ", userCompany='" + userCompany + '\'' +
+                ", userTelephone='" + userTelephone + '\'' +
+                '}';
+    }
 }

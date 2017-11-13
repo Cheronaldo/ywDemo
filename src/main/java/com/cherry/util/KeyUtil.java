@@ -14,7 +14,7 @@ public class KeyUtil {
         Integer number = random.nextInt(900000) + 100000; //生成6位随机数
 
         return System.currentTimeMillis() + String.valueOf(number);
-        //考虑到多线程同步 还需做synchronized处理
+        // 考虑到多线程同步 还需做synchronized处理
     }
 
 

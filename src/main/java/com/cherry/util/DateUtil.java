@@ -21,6 +21,11 @@ public class DateUtil {
         return date;
     }
 
+    /**
+     * 校验设备操作校验码是否有效
+     * @param date
+     * @return
+     */
     public static boolean ifDateValid(Date date){
 
         boolean b = false;

@@ -78,4 +78,18 @@ public class SiteDeviceInfoDTO {
     public void setSiteIcon(String siteIcon) {
         this.siteIcon = siteIcon;
     }
+
+
+    @Override
+    public String toString() {
+        return "SiteDeviceInfoDTO{" +
+                "snCode='" + snCode + '\'' +
+                ", deviceAddress='" + deviceAddress + '\'' +
+                ", deviceLongitude='" + deviceLongitude + '\'' +
+                ", deviceLatitude='" + deviceLatitude + '\'' +
+                ", siteName='" + siteName + '\'' +
+                ", siteType='" + siteType + '\'' +
+                ", siteIcon='" + siteIcon + '\'' +
+                '}';
+    }
 }
