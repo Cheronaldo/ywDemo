@@ -34,6 +34,6 @@ public class ServletController {
      */
     @GetMapping("/index")
     public String index(){
-        return "test";
+        return "index";
     }
 }

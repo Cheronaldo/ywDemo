@@ -16,7 +16,8 @@ public enum UserEnum {
     USER_UPDATE_SUCCESS(9,"修改成功"),
     USER_LOGOUT_SUCCESS(10,"注销成功"),
     SEND_CODE_SUCCESS(11,"验证码发送成功"),
-    SEND_CODE_FAIL(12,"验证码发送失败"),
+    SEND_CODE_FAIL(12,"验证码发送失败,请重试"),
+    REQUEST_TOO_FREQUENT(13,"请求过于频繁，稍后再试"),
     USER_REGISTER_FAIL(13,"注册失败"),
     USER_UPDATE_FAIL(14,"修改失败"),
 

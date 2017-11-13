@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * 用户操作API层
@@ -153,10 +154,24 @@ public class UserInfoController {
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
         //TODO 向用户和页面发送 短信校验码 修改返回参数（因为会对应多种情况 如：多次注册）
 
-        ShortMessagingServiceUtil messagingServiceUtil = new ShortMessagingServiceUtil();
-        int code = messagingServiceUtil.sendsms(userTelephone);
 
-        return ResultVOUtil.success(UserEnum.SEND_CODE_SUCCESS.getMessage(),code);
+
+        ShortMessagingServiceUtil messagingServiceUtil = new ShortMessagingServiceUtil();
+
+        Map<String, Object> map = messagingServiceUtil.sendShortMessage(userTelephone);
+        int code = Integer.parseInt(String.valueOf(map.get("code")));
+
+        Object data = map.get("data");
+
+        if(code == 0){
+            return ResultVOUtil.success(UserEnum.SEND_CODE_SUCCESS.getMessage(),data);
+        }
+
+        if (code == 1){
+            return ResultVOUtil.error(1, UserEnum.REQUEST_TOO_FREQUENT.getMessage());
+        }
+
+       return ResultVOUtil.error(1,UserEnum.SEND_CODE_FAIL.getMessage());
 
 
     }
