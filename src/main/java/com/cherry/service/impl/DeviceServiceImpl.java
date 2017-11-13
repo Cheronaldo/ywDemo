@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +81,7 @@ public class DeviceServiceImpl implements DeviceService{
         // 4.是否为现场首次注册
         SiteDeviceInfoDTO siteDeviceInfoDTO = DeviceInfo2SiteDeviceInfoDTOConverter.convert(deviceInfo);
         if (siteDeviceInfoDTO.getDeviceAddress() == null){
+        //if (StringUtils.isEmpty(siteDeviceInfoDTO.getDeviceAddress())){
             // 设备部署地址为空 则为首次注册
             map.put("code", 0);
             map.put("msg",DeviceHandleEnum.FIRST_REGISTER.getMessage());

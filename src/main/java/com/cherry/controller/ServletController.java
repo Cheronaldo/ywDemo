@@ -36,4 +36,14 @@ public class ServletController {
     public String index(){
         return "index";
     }
+
+    /**
+     * 首页跳转
+     * @return
+     */
+    @GetMapping("/device")
+    public String deviceCheck(){
+        return "device";
+    }
+
 }
