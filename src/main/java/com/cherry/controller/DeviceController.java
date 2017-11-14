@@ -51,7 +51,7 @@ public class DeviceController {
                                         @RequestParam("checkCode") String checkCode,
                                         @RequestParam("userName") String userName){
 
-        Map<String,Object> map =  deviceService.checkSiteDeviceIsOnHand(snCode, checkCode, userName);
+        Map<String,Object> map  =  deviceService.checkSiteDeviceIsOnHand(snCode, checkCode, userName);
         int code = Integer.parseInt(String.valueOf(map.get("code")));
         String msg = (String)map.get("msg");
         Object data = map.get("data");

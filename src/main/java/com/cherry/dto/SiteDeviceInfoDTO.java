@@ -21,6 +21,9 @@ public class SiteDeviceInfoDTO {
     /** 现场图标  */
     private String siteIcon;
 
+    /**  协议版本号 */
+    private String protocolVersion;
+
     public SiteDeviceInfoDTO(){}
 
     public String getSnCode() {
@@ -79,6 +82,13 @@ public class SiteDeviceInfoDTO {
         this.siteIcon = siteIcon;
     }
 
+    public String getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public void setProtocolVersion(String protocolVersion) {
+        this.protocolVersion = protocolVersion;
+    }
 
     @Override
     public String toString() {
@@ -90,6 +100,7 @@ public class SiteDeviceInfoDTO {
                 ", siteName='" + siteName + '\'' +
                 ", siteType='" + siteType + '\'' +
                 ", siteIcon='" + siteIcon + '\'' +
+                ", protocolVersion='" + protocolVersion + '\'' +
                 '}';
     }
 }

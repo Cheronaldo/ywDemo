@@ -25,6 +25,8 @@ public class DeviceVerify {
     private String checkCode;
     /**  校验码生成时间 */
     private Date generateTime;
+    /**  协议版本号 */
+    private String protocolVersion;
 
     public DeviceVerify(){}
 
@@ -60,6 +62,13 @@ public class DeviceVerify {
         this.generateTime = generateTime;
     }
 
+    public String getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public void setProtocolVersion(String protocolVersion) {
+        this.protocolVersion = protocolVersion;
+    }
 
     @Override
     public String toString() {
@@ -68,6 +77,7 @@ public class DeviceVerify {
                 ", snCode='" + snCode + '\'' +
                 ", checkCode='" + checkCode + '\'' +
                 ", generateTime=" + generateTime +
+                ", protocolVersion='" + protocolVersion + '\'' +
                 '}';
     }
 }

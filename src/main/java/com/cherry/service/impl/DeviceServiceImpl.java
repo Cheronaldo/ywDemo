@@ -80,11 +80,14 @@ public class DeviceServiceImpl implements DeviceService{
         }
         // 4.是否为现场首次注册
         SiteDeviceInfoDTO siteDeviceInfoDTO = DeviceInfo2SiteDeviceInfoDTOConverter.convert(deviceInfo);
+        // 从校验表中获取相应版本号
+        siteDeviceInfoDTO.setProtocolVersion(deviceVerify.getProtocolVersion());
         //if (siteDeviceInfoDTO.getDeviceAddress() == null){
         if (StringUtils.isEmpty(siteDeviceInfoDTO.getDeviceAddress())){
             // 设备部署地址为空 则为首次注册
             map.put("code", 0);
             map.put("msg",DeviceHandleEnum.FIRST_REGISTER.getMessage());
+            map.put("data", siteDeviceInfoDTO.getProtocolVersion());
             return map;
         }
 
