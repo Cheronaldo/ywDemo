@@ -51,8 +51,8 @@ public class DeviceServiceImpl implements DeviceService{
 
         Map<String,Object> map = new HashMap<String,Object>();
 
-        // 1.SN码是否有对应的校验码
-        DeviceVerify deviceVerify = deviceVerifyRepository.findBySnCode(snCode);
+        // 1.SN码是否有对应的校验码 查询最新一条校验记录
+        DeviceVerify deviceVerify = deviceVerifyRepository.findLatestOneBySnCode(snCode);
         boolean isChecked = (deviceVerify == null) || (!checkCode.equals(deviceVerify.getCheckCode()));
         if (isChecked){
             // SN码或校验码错误
@@ -117,7 +117,7 @@ public class DeviceServiceImpl implements DeviceService{
 
         Map<String,Object> map = new HashMap<String,Object>();
 
-        // 1.查询设备信息记录
+        // 1.查询设备信息记录  修改记录时 一定要先查 再修改 最后储存修改后的结果
         DeviceInfo deviceInfo =deviceInfoRepository.findOne(siteDeviceForm.getSnCode());
 
         // 2.将form对象属性赋给设备信息对象

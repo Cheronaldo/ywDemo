@@ -16,4 +16,12 @@ public interface UserLevelRepository extends JpaRepository<UserLevel, Integer>{
      * @return
      */
     UserLevel findByClassInfo(String classInfo);
+
+    /**
+     * 通过用户等级码获取用户等级具体内容
+     * 用于用户信息修改时 返回给前端
+     * @param userClass
+     * @return
+     */
+    UserLevel findByUserClass(Integer userClass);
 }

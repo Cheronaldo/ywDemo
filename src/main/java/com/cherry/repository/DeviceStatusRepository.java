@@ -11,10 +11,4 @@ import java.util.List;
  */
 public interface DeviceStatusRepository extends JpaRepository<DeviceStatus,String>{
 
-    /**
-     * 通过SN码列表查询设备状态列表
-     * @param snCodeList
-     * @return
-     */
-    List<DeviceStatus> findBySnCodeIn(List<String> snCodeList);
 }

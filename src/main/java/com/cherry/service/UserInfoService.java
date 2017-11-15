@@ -1,7 +1,9 @@
 package com.cherry.service;
 
 import com.cherry.dataobject.UserInfo;
+import com.cherry.dataobject.UserLevel;
 import com.cherry.form.UserInfoForm;
+import com.cherry.vo.UserInfoVO;
 
 /**
  * 用户信息服务接口
@@ -27,10 +29,17 @@ public interface UserInfoService {
 
     /**
      * 通过用户名查询用户信息
-     * 注册校验  信息修改
+     * 信息修改
      * @param userName
      * @return
      */
-    UserInfo getUserByUserName(String userName);
+    UserInfoVO getUserInfoVOByUserName(String userName);
 
+    /**
+     * 通过用户名获取用户等级码
+     * 用于用户名合法性校验 用户登录成功后的跳转
+     * @param userName
+     * @return
+     */
+    UserInfo getUserInfoByUserName(String userName);
 }

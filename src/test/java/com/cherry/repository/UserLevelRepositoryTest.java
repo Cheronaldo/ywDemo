@@ -44,4 +44,12 @@ public class UserLevelRepositoryTest {
 
     }
 
+    @Test
+    public void findByUserClass() throws Exception{
+
+        String result = repository.findByUserClass(2).getClassInfo();
+
+        Assert.assertEquals("经销商",result);
+    }
+
 }

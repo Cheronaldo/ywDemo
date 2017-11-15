@@ -8,7 +8,9 @@ import com.cherry.service.UserInfoService;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.util.ShortMessagingServiceUtil;
 import com.cherry.vo.ResultVO;
+import com.cherry.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +39,7 @@ public class UserInfoController {
      */
     @PostMapping("/check")
     public ResultVO userCheck(@RequestParam("userName") String userName){
-        UserInfo userInfo = userInfoService.getUserByUserName(userName);
+        UserInfo userInfo = userInfoService.getUserInfoByUserName(userName);
         if (userInfo != null){
             log.error("用户名已存在");
             throw new UserException(UserEnum.USER_ALREADY_EXIST);
@@ -89,7 +91,7 @@ public class UserInfoController {
         log.info((String)request.getSession().getAttribute("userName"));
 
         // 4.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
-        int userClass = userInfoService.getUserByUserName(userName).getUserClass();
+        int userClass = userInfoService.getUserInfoByUserName(userName).getUserClass();
 
         // 5.返回结果
         return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage(),userClass);
@@ -102,13 +104,14 @@ public class UserInfoController {
      */
     @PostMapping("/getUser")
     public ResultVO getUser(@RequestParam("userName") String userName){
-        UserInfo userInfo = userInfoService.getUserByUserName(userName);
+        UserInfoVO userInfoVO = userInfoService.getUserInfoVOByUserName(userName);
         // 密码直接上传，解码过程在前端页面
         // 目的：这样数据传输过程中即使数据被截获，也不会看到密码明文
-        if (userInfo == null){
+        if (userInfoVO == null){
             return ResultVOUtil.error(1,UserEnum.USER_GET_FAIL.getMessage());
         }
-        return ResultVOUtil.success(UserEnum.USER_GET_SUCCESS.getMessage(),userInfo);
+
+        return ResultVOUtil.success(UserEnum.USER_GET_SUCCESS.getMessage(),userInfoVO);
     }
 
     /**

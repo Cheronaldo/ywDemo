@@ -37,12 +37,12 @@ public class DeviceStatusRepositoryTest {
     }
 
     @Test
-    public void findBySnCodeIn() throws Exception {
+    public void findBySnCode(){
+        DeviceStatus result = repository.findOne("1510543259454686637");
 
-        List<String> list = Arrays.asList("1510311999826615905","1510312472692722083");
-        List<DeviceStatus> result = repository.findBySnCodeIn(list);
+        Assert.assertNotNull(result);
 
-        Assert.assertNotEquals(0,result.size());
+
     }
 
 }

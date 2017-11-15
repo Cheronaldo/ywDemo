@@ -2,6 +2,7 @@ package com.cherry.service.impl;
 
 import com.cherry.dataobject.UserInfo;
 import com.cherry.form.UserInfoForm;
+import com.cherry.vo.UserInfoVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,10 +46,16 @@ public class UserInfoServiceImplTest {
         Assert.assertEquals(0,result);
     }
 
+    @Test
+    public void getUserInfoVOByUserName() throws Exception{
+        UserInfoVO result = userInfoService.getUserInfoVOByUserName("abc1234");
+
+        Assert.assertNotNull(result);
+    }
 
     @Test
-    public void getUserByUserName() throws Exception {
-        UserInfo result = userInfoService.getUserByUserName("张三");
+    public void getUserInfoByUserName() throws Exception {
+        UserInfo result = userInfoService.getUserInfoByUserName("abc1234");
         Assert.assertNotNull(result);
 
     }

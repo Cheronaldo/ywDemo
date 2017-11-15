@@ -5,6 +5,7 @@ import com.cherry.form.UserInfoForm;
 import com.cherry.repository.UserInfoRepository;
 import com.cherry.repository.UserLevelRepository;
 import com.cherry.service.UserInfoService;
+import com.cherry.vo.UserInfoVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,19 @@ public class UserInfoServiceImpl implements UserInfoService{
     }
 
     @Override
-    public UserInfo getUserByUserName(String userName) {
+    public UserInfoVO getUserInfoVOByUserName(String userName) {
+
+        UserInfo userInfo = repository.findOne(userName);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(userInfo, userInfoVO);
+        userInfoVO.setUserClass(levelRepository.findByUserClass(userInfo.getUserClass()).getClassInfo());
+
+        return userInfoVO;
+
+    }
+
+    @Override
+    public UserInfo getUserInfoByUserName(String userName) {
         return repository.findOne(userName);
     }
 }

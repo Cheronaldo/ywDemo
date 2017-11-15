@@ -105,9 +105,9 @@ public class DeviceServiceImplTest {
     @Test
     public void getStatusBySnCode() throws Exception {
 
-        int result = service.getStatusBySnCode("1510312472692722083");
+        int result = service.getStatusBySnCode("1510543259454686637");
 
-        Assert.assertEquals(1,result);
+        Assert.assertEquals(0,result);
 
     }
 
