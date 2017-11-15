@@ -11,5 +11,7 @@ spring:
       ddl-auto: update
   jackson:
     default-property-inclusion: non_null
+  thymeleaf:
+    mode: LEGACYHTML5
 #server:
 #  port: 8081

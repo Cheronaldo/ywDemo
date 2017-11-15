@@ -125,12 +125,19 @@
 			<!--<artifactId>httpclient</artifactId>-->
 		<!--</dependency>-->
 
+		<!--短信校验码依赖-->
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
 
+		<!--thymeleaf模版 LEGACYHTML5-->
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.22</version>
+		</dependency>
 
 	</dependencies>
 
