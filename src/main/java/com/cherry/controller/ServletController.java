@@ -46,4 +46,13 @@ public class ServletController {
         return "device";
     }
 
+    /**
+     * 首页跳转
+     * @return
+     */
+    @GetMapping("/devList")
+    public String devList(){
+        return "devList";
+    }
+
 }

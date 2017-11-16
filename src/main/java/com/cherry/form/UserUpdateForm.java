@@ -1,17 +1,19 @@
-package com.cherry.vo;
+package com.cherry.form;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 用户信息视图对象
- * Created by Administrator on 2017/11/15.
+ * 用户级别信息修改 表单验证
+ * 不包括对密码修改
+ * Created by Administrator on 2017/11/16.
  */
-public class UserInfoVO {
-
+public class UserUpdateForm {
+    /**  用户名 */
+    @NotEmpty(message = "用户名必传")
     private String userName;
-//    /**  用户密码 （是否删除 待定）*/
-//    private String userPassword;
     /**  用户类型 */
     private String userClass;
-    /**  用户职务 */
+    /**  用户职务 前端是字符串 后台转化为code*/
     private String userPost;
     /**  用户邮箱 */
     private String userMail;
@@ -20,8 +22,6 @@ public class UserInfoVO {
     /**  用户手机号 */
     private String userTelephone;
 
-    public UserInfoVO(){}
-
     public String getUserName() {
         return userName;
     }
@@ -29,14 +29,6 @@ public class UserInfoVO {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
-//    public String getUserPassword() {
-//        return userPassword;
-//    }
-//
-//    public void setUserPassword(String userPassword) {
-//        this.userPassword = userPassword;
-//    }
 
     public String getUserClass() {
         return userClass;
@@ -80,7 +72,7 @@ public class UserInfoVO {
 
     @Override
     public String toString() {
-        return "UserInfoVO{" +
+        return "UserUpdateForm{" +
                 "userName='" + userName + '\'' +
                 ", userClass='" + userClass + '\'' +
                 ", userPost='" + userPost + '\'' +

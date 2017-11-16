@@ -11,7 +11,7 @@ public class UserInfoForm {
     /**  用户名 */
     @NotEmpty(message = "用户名必传")
     private String userName;
-    /**  用户密码 */
+    /**  用户密码 (是否删除待定)*/
     private String userPassword;
     /**  用户类型 */
     private String userClass;
@@ -78,5 +78,18 @@ public class UserInfoForm {
 
     public void setUserTelephone(String userTelephone) {
         this.userTelephone = userTelephone;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoForm{" +
+                "userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userClass='" + userClass + '\'' +
+                ", userPost='" + userPost + '\'' +
+                ", userMail='" + userMail + '\'' +
+                ", userCompany='" + userCompany + '\'' +
+                ", userTelephone='" + userTelephone + '\'' +
+                '}';
     }
 }

@@ -120,11 +120,6 @@
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
 
-		<!--<dependency>-->
-			<!--<groupId>org.apache.httpcomponents</groupId>-->
-			<!--<artifactId>httpclient</artifactId>-->
-		<!--</dependency>-->
-
 		<!--短信校验码依赖-->
 		<dependency>
 			<groupId>commons-httpclient</groupId>

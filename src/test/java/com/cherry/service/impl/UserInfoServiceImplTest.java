@@ -2,6 +2,7 @@ package com.cherry.service.impl;
 
 import com.cherry.dataobject.UserInfo;
 import com.cherry.form.UserInfoForm;
+import com.cherry.form.UserUpdateForm;
 import com.cherry.vo.UserInfoVO;
 import org.junit.Assert;
 import org.junit.Test;
@@ -58,6 +59,30 @@ public class UserInfoServiceImplTest {
         UserInfo result = userInfoService.getUserInfoByUserName("abc1234");
         Assert.assertNotNull(result);
 
+    }
+
+    @Test
+    public void updateUserInfo() throws Exception{
+
+        UserUpdateForm form = new UserUpdateForm();
+        form.setUserName("abc1234");
+        form.setUserClass("经销商");
+        form.setUserPost("经理");
+        form.setUserMail("123@qq.com");
+        form.setUserCompany("深圳亿维自动化");
+        form.setUserTelephone("15927061684");
+
+        int result = userInfoService.updateUserInfo(form);
+
+        Assert.assertEquals(0,result);
+
+    }
+
+    @Test
+    public void updateUserPassword() throws Exception{
+        int result = userInfoService.updateUserPassword("abc1234","abc1234");
+
+        Assert.assertEquals(0,result);
     }
 
 }

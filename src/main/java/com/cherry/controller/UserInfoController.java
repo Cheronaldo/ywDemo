@@ -4,6 +4,7 @@ import com.cherry.dataobject.UserInfo;
 import com.cherry.enums.UserEnum;
 import com.cherry.exception.UserException;
 import com.cherry.form.UserInfoForm;
+import com.cherry.form.UserUpdateForm;
 import com.cherry.service.UserInfoService;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.util.ShortMessagingServiceUtil;
@@ -115,19 +116,19 @@ public class UserInfoController {
     }
 
     /**
-     * 用户信息修改
+     * 用户基本信息修改
      * @param form
      * @param bindingResult
      * @return
      */
-    @PostMapping("/update")
-    public ResultVO userUpdate(@Valid UserInfoForm form,
+    @PostMapping("/updateInfo")
+    public ResultVO userUpdateInfo(@Valid UserUpdateForm form,
                                BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             log.error("用户信息填写错误");
             throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
         }
-        int result = userInfoService.saveUser(form);
+        int result = userInfoService.updateUserInfo(form);
 
         if (result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_UPDATE_FAIL.getMessage());
@@ -136,6 +137,24 @@ public class UserInfoController {
         return ResultVOUtil.success(UserEnum.USER_UPDATE_SUCCESS.getMessage());
     }
 
+    /**
+     * 用户密码修改
+     * @param userName
+     * @param userPassword
+     * @return
+     */
+    @PostMapping("/updatePassword")
+    public ResultVO userUpdatePassword(@RequestParam("userName") String userName,
+                                       @RequestParam("userPassword") String userPassword){
+
+        int result = userInfoService.updateUserPassword(userName, userPassword);
+
+        if (result == 1){
+            return ResultVOUtil.error(1,UserEnum.PASSWORD_UPDATE_FAIL.getMessage());
+        }
+
+        return ResultVOUtil.success(UserEnum.PASSWORD_UPDATE_SUCCESS.getMessage());
+    }
 
     /**
      * 用户注销
@@ -157,8 +176,6 @@ public class UserInfoController {
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
         //TODO 向用户和页面发送 短信校验码 修改返回参数（因为会对应多种情况 如：多次注册）
 
-
-
         ShortMessagingServiceUtil messagingServiceUtil = new ShortMessagingServiceUtil();
 
         Map<String, Object> map = messagingServiceUtil.sendShortMessage(userTelephone);
@@ -175,8 +192,6 @@ public class UserInfoController {
         }
 
        return ResultVOUtil.error(1,UserEnum.SEND_CODE_FAIL.getMessage());
-
-
     }
 
 }

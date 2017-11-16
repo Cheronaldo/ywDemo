@@ -3,6 +3,7 @@ package com.cherry.service;
 import com.cherry.dataobject.UserInfo;
 import com.cherry.dataobject.UserLevel;
 import com.cherry.form.UserInfoForm;
+import com.cherry.form.UserUpdateForm;
 import com.cherry.vo.UserInfoVO;
 
 /**
@@ -12,7 +13,8 @@ import com.cherry.vo.UserInfoVO;
 public interface UserInfoService {
 
     /**
-     * 用户信息注册 修改保存
+     * 用户信息注册
+     * 包括储存密码
      * @param userInfoForm
      * @return
      */
@@ -29,7 +31,7 @@ public interface UserInfoService {
 
     /**
      * 通过用户名查询用户信息
-     * 信息修改
+     * 信息修改时返回给前端视图对象
      * @param userName
      * @return
      */
@@ -42,4 +44,20 @@ public interface UserInfoService {
      * @return
      */
     UserInfo getUserInfoByUserName(String userName);
+
+    /**
+     * 用户基本信息修改
+     * 不包括修改密码
+     * @param form
+     * @return
+     */
+    Integer updateUserInfo(UserUpdateForm form);
+
+    /**
+     * 修改用户密码
+     * @param userName
+     * @param userPassword
+     * @return
+     */
+    Integer updateUserPassword(String userName, String userPassword);
 }
