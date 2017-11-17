@@ -9,6 +9,9 @@ import com.cherry.repository.ProtocolConfigMasterRepository;
 import com.cherry.service.ProtocolService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +30,7 @@ public class ProtocolServiceImpl implements ProtocolService{
     private ProtocolConfigMasterRepository masterRepository;
 
     @Override
-    public List<ProtocolConfigDetail> listFindCurrentBySnCode(String snCode) {
+    public Page<ProtocolConfigDetail> listFindCurrentBySnCode(String snCode, Pageable pageable) {
 
         // 1.查询设备已启用的设备版本号
         ProtocolConfigMaster protocolConfigMaster = masterRepository.findBySnCodeAndIsUsed(snCode, 1);
@@ -36,14 +39,15 @@ public class ProtocolServiceImpl implements ProtocolService{
         }
         String protocolVersion = protocolConfigMaster.getProtocolVersion();
 
-        // 2.通过SN码 已启用的协议版本号查询 协议祥表list
-        List<ProtocolConfigDetail> detailList = detailRepository.findBySnCodeAndProtocolVersion(snCode, protocolVersion);
+        // 2.通过SN码 已启用的协议版本号查询 协议祥表list 分页
+        Page<ProtocolConfigDetail> configDetailPage = detailRepository.findBySnCodeAndProtocolVersion(snCode, protocolVersion, pageable);
 
-        return detailList;
+        //return detailList;
+        return new PageImpl<ProtocolConfigDetail>(configDetailPage.getContent(), pageable,configDetailPage.getTotalElements());
     }
 
     @Override
-    public List<ProtocolConfigDetail> updateProtocolDetail(ProtocolDetailForm form) {
+    public Page<ProtocolConfigDetail> updateProtocolDetail(ProtocolDetailForm form, Pageable pageable) {
 
         // 1.通过ID查询祥表记录
         ProtocolConfigDetail protocolConfigDetail = detailRepository.findOne(form.getId());
@@ -54,10 +58,11 @@ public class ProtocolServiceImpl implements ProtocolService{
         // 3.修改 保存祥表记录
         detailRepository.save(protocolConfigDetail);
 
-        // 4.通过SN码 协议版本号 查询协议祥表list
-        List<ProtocolConfigDetail> detailList = detailRepository.findBySnCodeAndProtocolVersion(form.getSnCode(), form.getProtocolVersion());
+        // 4.通过SN码 协议版本号 查询协议祥表list 分页
+        Page<ProtocolConfigDetail> configDetailPage = detailRepository.findBySnCodeAndProtocolVersion(form.getSnCode(), form.getProtocolVersion(),pageable);
 
-        return detailList;
+        //return detailList;
+        return  new PageImpl<ProtocolConfigDetail>(configDetailPage.getContent(), pageable,configDetailPage.getTotalElements());
     }
 
     @Override

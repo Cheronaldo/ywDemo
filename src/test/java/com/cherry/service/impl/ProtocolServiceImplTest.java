@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -27,9 +29,10 @@ public class ProtocolServiceImplTest {
     @Test
     public void listFindCurrentBySnCode() throws Exception {
 
-        List<ProtocolConfigDetail> result = service.listFindCurrentBySnCode("1510730959647775198");
+        PageRequest request = new PageRequest(0, 2);
+        Page<ProtocolConfigDetail> result = service.listFindCurrentBySnCode("1510730959647775198", request);
 
-        Assert.assertNotEquals(0,result.size());
+        Assert.assertNotEquals(0,result.getSize());
 
     }
 
@@ -44,9 +47,10 @@ public class ProtocolServiceImplTest {
         form.setIsVisible(1);
         form.setIsAlarmed(1);
 
-        List<ProtocolConfigDetail> result = service.updateProtocolDetail(form);
+        PageRequest request = new PageRequest(0, 2);
+        Page<ProtocolConfigDetail> result = service.updateProtocolDetail(form, request);
 
-        Assert.assertNotEquals(0,result.size());
+        Assert.assertNotEquals(0,result.getSize());
     }
 
     @Test

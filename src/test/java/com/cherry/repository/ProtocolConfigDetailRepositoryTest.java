@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -52,9 +54,11 @@ public class ProtocolConfigDetailRepositoryTest {
     @Test
     public void findBySnCodeAndProtocolVersion() throws Exception {
 
-        List<ProtocolConfigDetail> result = repository.findBySnCodeAndProtocolVersion("1510730959647775198","1234");
+        PageRequest request = new PageRequest(0, 2);
 
-        Assert.assertNotEquals(0,result.size());
+        Page<ProtocolConfigDetail> result = repository.findBySnCodeAndProtocolVersion("1510730959647775198","1234", request);
+
+        Assert.assertNotEquals(0,result.getTotalPages());
     }
 
 }

@@ -3,6 +3,8 @@ package com.cherry.service;
 import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolReAdaptForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -14,18 +16,20 @@ public interface ProtocolService {
 
     /**
      * 通过SN码 查询设备当前启用的 协议祥表list
+     * 分页查询
      * @param snCode
      * @return
      */
-    List<ProtocolConfigDetail> listFindCurrentBySnCode(String snCode);
+    Page<ProtocolConfigDetail> listFindCurrentBySnCode(String snCode, Pageable pageable);
 
     /**
      * 修改协议祥表记录
      * 并返回协议祥表记录列表
+     * 分页查询
      * @param form
      * @return
      */
-    List<ProtocolConfigDetail> updateProtocolDetail(ProtocolDetailForm form);
+    Page<ProtocolConfigDetail> updateProtocolDetail(ProtocolDetailForm form, Pageable pageable);
 
     /**
      * 通过SN码 查询获取设备当前启用的协议版本号
