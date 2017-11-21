@@ -38,7 +38,7 @@ public class ServletController {
     }
 
     /**
-     * 首页跳转
+     * 设备注册跳转
      * @return
      */
     @GetMapping("/device")
@@ -47,12 +47,30 @@ public class ServletController {
     }
 
     /**
-     * 首页跳转
+     * 设备列表跳转
      * @return
      */
     @GetMapping("/devList")
     public String devList(){
         return "devList";
+    }
+
+    /**
+     * 设备地图跳转
+     * @return
+     */
+    @GetMapping("/deviceMap")
+    public String deviceMap(){
+        return "deviceMap";
+    }
+
+    /**
+     * 设备协议配置跳转
+     * @return
+     */
+    @GetMapping("/deviceConfig")
+    public String deviceConfig(){
+        return "deviceConfig";
     }
 
 }
