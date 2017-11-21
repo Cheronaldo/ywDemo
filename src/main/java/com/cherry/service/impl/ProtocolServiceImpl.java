@@ -7,6 +7,8 @@ import com.cherry.form.ProtocolReAdaptForm;
 import com.cherry.repository.ProtocolConfigDetailRepository;
 import com.cherry.repository.ProtocolConfigMasterRepository;
 import com.cherry.service.ProtocolService;
+import com.cherry.util.DateUtil;
+import com.cherry.util.KeyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,7 +61,10 @@ public class ProtocolServiceImpl implements ProtocolService{
         detailRepository.save(protocolConfigDetail);
 
         // 4.通过SN码 协议版本号 查询协议祥表list 分页
-        Page<ProtocolConfigDetail> configDetailPage = detailRepository.findBySnCodeAndProtocolVersion(form.getSnCode(), form.getProtocolVersion(),pageable);
+        Page<ProtocolConfigDetail> configDetailPage = detailRepository.findBySnCodeAndProtocolVersion(
+                protocolConfigDetail.getSnCode(),
+                protocolConfigDetail.getProtocolVersion(),
+                pageable);
 
         //return detailList;
         return  new PageImpl<ProtocolConfigDetail>(configDetailPage.getContent(), pageable,configDetailPage.getTotalElements());
@@ -80,17 +85,50 @@ public class ProtocolServiceImpl implements ProtocolService{
     public Integer protocolReAdapt(ProtocolReAdaptForm form) {
 
         // 1.查询设备当前启用协议
+        ProtocolConfigMaster protocolConfigMasterOld = masterRepository.findBySnCodeAndIsUsed(form.getSnCode(), 1);
 
-        // 2.将已启用的协议 设置为未启用
+        if (protocolConfigMasterOld != null){
+            // 2.若存在已启用协议 将已启用的协议 设置为未启用
+            protocolConfigMasterOld.setIsUsed(0);
+            masterRepository.save(protocolConfigMasterOld);
+        }
 
         // 3.查询要适配的协议是否存在
+        ProtocolConfigMaster protocolConfigMasterNew = masterRepository.findBySnCodeAndProtocolVersion(form.getSnCode(), form.getProtocolVersion());
+        if (protocolConfigMasterNew != null){
+            // 4.存在 协议重新启用
+            protocolConfigMasterNew.setIsUsed(1);
+            masterRepository.save(protocolConfigMasterNew);
 
-        // 4.协议重新启用
+            return 0;
+        }
 
-        // 5.添加协议主表
+        // 5.不存在 则添加协议主表
+        ProtocolConfigMaster protocolConfigMaster = new ProtocolConfigMaster();
+        protocolConfigMaster.setId(KeyUtil.genUniqueKey());
+        protocolConfigMaster.setSnCode(form.getSnCode());
+        protocolConfigMaster.setProtocolVersion(form.getProtocolVersion());
+        protocolConfigMaster.setIsUsed(1);
+        protocolConfigMaster.setUsedTime(DateUtil.getDate());
+        masterRepository.save(protocolConfigMaster);
 
         // 6.添加协议祥表记录
+        // 6.1 先提取协议中的数据名称
+        String[] arrayDataName = form.getItems().split("_");
+        // 6.2 储存协议祥表
+        for (int i = 0; i <= arrayDataName.length - 1; i ++){
+            ProtocolConfigDetail configDetail = new ProtocolConfigDetail();
+            configDetail.setId(KeyUtil.genUniqueKey());
+            configDetail.setSnCode(form.getSnCode());
+            configDetail.setProtocolVersion(form.getProtocolVersion());
+            configDetail.setOffsetNumber(i + 1);
+            configDetail.setDataName(arrayDataName[i]);
+            configDetail.setIsVisible(1);
+            configDetail.setIsAlarmed(1);
 
-        return null;
+            detailRepository.save(configDetail);
+        }
+
+        return 0;
     }
 }

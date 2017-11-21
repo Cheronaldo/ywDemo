@@ -85,6 +85,8 @@ public class DeviceController {
             throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
         }
 
+        // TODO 3.协议适配
+
         return ResultVOUtil.success(DeviceHandleEnum.REGISTER_SUCCESS.getMessage());
     }
 
@@ -162,6 +164,7 @@ public class DeviceController {
 
         // 3.将设备状态信息 写入设备信息DTO列表
         for (SiteDeviceListDTO siteDeviceListDTO : siteDeviceListDTOList){
+            // TODO 改进：通过sn list查询到对应设备状态记录的list 再进行取值处理，一般不在for循环中操作数据库
             siteDeviceListDTO.setIsOnline(deviceService.getStatusBySnCode(siteDeviceListDTO.getSnCode()));
             //TODO 若需要返回给前端 设备类型 则也在此处进行转换 取值
         }

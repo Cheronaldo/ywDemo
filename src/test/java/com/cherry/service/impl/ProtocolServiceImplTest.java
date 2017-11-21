@@ -2,6 +2,8 @@ package com.cherry.service.impl;
 
 import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.form.ProtocolDetailForm;
+import com.cherry.form.ProtocolReAdaptForm;
+import com.cherry.util.KeyUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,10 +42,10 @@ public class ProtocolServiceImplTest {
     public void updateProtocolDetail() throws Exception {
         ProtocolDetailForm form = new ProtocolDetailForm();
         form.setId("1510732127485461440");
-        form.setSnCode("1510730959647775198");
-        form.setProtocolVersion("1234");
-        form.setOffsetNumber(2);
-        form.setDataName("湿度");
+//        form.setSnCode("1510730959647775198");
+//        form.setProtocolVersion("1234");
+//        form.setOffsetNumber(2);
+//        form.setDataName("湿度");
         form.setIsVisible(1);
         form.setIsAlarmed(1);
 
@@ -62,6 +64,16 @@ public class ProtocolServiceImplTest {
 
     @Test
     public void protocolReAdapt() throws Exception {
+
+        ProtocolReAdaptForm form = new ProtocolReAdaptForm();
+        form.setSnCode("1511169122529118429");
+        form.setProtocolVersion("123456");
+        form.setItems("温度_湿度");
+
+        int result = service.protocolReAdapt(form);
+
+        Assert.assertEquals(0,result);
+
     }
 
 }
