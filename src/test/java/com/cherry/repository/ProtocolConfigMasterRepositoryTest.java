@@ -27,7 +27,7 @@ public class ProtocolConfigMasterRepositoryTest {
     public void saveProtocolMaster(){
         ProtocolConfigMaster protocolConfigMaster = new ProtocolConfigMaster();
         protocolConfigMaster.setId(KeyUtil.genUniqueKey());
-        protocolConfigMaster.setSnCode("1510730959647775198");
+        protocolConfigMaster.setSnCode("1510312407397859686");
         protocolConfigMaster.setProtocolVersion("123456");
         protocolConfigMaster.setIsUsed(1);
         protocolConfigMaster.setUsedTime(DateUtil.getDate());

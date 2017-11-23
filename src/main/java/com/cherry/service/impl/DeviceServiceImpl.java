@@ -3,15 +3,14 @@ package com.cherry.service.impl;
 import com.cherry.converter.DeviceInfo2SiteDeviceInfoDTOConverter;
 import com.cherry.dataobject.DeviceInfo;
 import com.cherry.dataobject.DeviceVerify;
+import com.cherry.dataobject.ProtocolConfigMaster;
 import com.cherry.dataobject.UserDeviceRelationship;
 import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.enums.DeviceHandleEnum;
 import com.cherry.form.SiteDeviceForm;
-import com.cherry.repository.DeviceInfoRepository;
-import com.cherry.repository.DeviceStatusRepository;
-import com.cherry.repository.DeviceVerifyRepository;
-import com.cherry.repository.UserDeviceRelationshipRepository;
+import com.cherry.repository.*;
 import com.cherry.service.DeviceService;
+import com.cherry.service.ProtocolService;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +44,8 @@ public class DeviceServiceImpl implements DeviceService{
     @Autowired
     private UserDeviceRelationshipRepository userDeviceRelationshipRepository;
 
+    @Autowired
+    private ProtocolService protocolService;
 
     @Override
     public Map<String, Object> checkSiteDeviceIsOnHand(String snCode, String checkCode, String userName) {
@@ -78,21 +79,27 @@ public class DeviceServiceImpl implements DeviceService{
             map.put("msg",DeviceHandleEnum.REGISTER_ENABLE.getMessage());
             return map;
         }
-        // 4.是否为现场首次注册
+        // 获取SiteDeviceInfoDTO
         SiteDeviceInfoDTO siteDeviceInfoDTO = DeviceInfo2SiteDeviceInfoDTOConverter.convert(deviceInfo);
-        // 从校验表中获取相应版本号
-        siteDeviceInfoDTO.setProtocolVersion(deviceVerify.getProtocolVersion());
-        //if (siteDeviceInfoDTO.getDeviceAddress() == null){
+        // 4.判断是否需要进行协议请求
+        String currentProtocolVersion = protocolService.getProtocolVersionBySnCode(snCode);
+        boolean isProtocolEquals = currentProtocolVersion.equals(deviceVerify.getProtocolVersion());
+        if (isProtocolEquals){
+            // 协议版本适配 不启用协议请求
+            siteDeviceInfoDTO.setIsAsk(0);
+        }
+        siteDeviceInfoDTO.setIsAsk(1);
+        // 5.是否为现场首次注册
         if (StringUtils.isEmpty(siteDeviceInfoDTO.getDeviceAddress())){
             // 设备部署地址为空 则为首次注册
             map.put("code", 0);
             map.put("msg",DeviceHandleEnum.FIRST_REGISTER.getMessage());
-            map.put("data", siteDeviceInfoDTO.getProtocolVersion());
+            map.put("data", siteDeviceInfoDTO.getIsAsk());
             return map;
         }
 
-        // 5.是否为该用户注册
-        // 6.该用户是否已启用该设备
+        // 6.是否为该用户注册
+        // 7.该用户是否已启用该设备
         UserDeviceRelationship userDeviceRelationship = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
         boolean isUsed = (userDeviceRelationship == null) || (userDeviceRelationship.getIsUsed() == 0);
         if (isUsed){
@@ -103,7 +110,7 @@ public class DeviceServiceImpl implements DeviceService{
             return map;
         }
 
-        // 该用户已注册 且以启用 此时只能修改 或注销
+        // 8.该用户已注册 且以启用 此时只能修改 或注销
         map.put("code", 2);
         map.put("msg",DeviceHandleEnum.ALREADY_REGISTERED.getMessage());
         map.put("data", siteDeviceInfoDTO);

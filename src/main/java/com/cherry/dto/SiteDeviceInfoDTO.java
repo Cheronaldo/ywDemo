@@ -21,8 +21,8 @@ public class SiteDeviceInfoDTO {
     /** 现场图标  */
     private String siteIcon;
 
-    /**  协议版本号 */
-    private String protocolVersion;
+    /**  是否启用协议请求 */
+    private Integer isAsk;
 
     public SiteDeviceInfoDTO(){}
 
@@ -82,12 +82,12 @@ public class SiteDeviceInfoDTO {
         this.siteIcon = siteIcon;
     }
 
-    public String getProtocolVersion() {
-        return protocolVersion;
+    public Integer getIsAsk() {
+        return isAsk;
     }
 
-    public void setProtocolVersion(String protocolVersion) {
-        this.protocolVersion = protocolVersion;
+    public void setIsAsk(Integer isAsk) {
+        this.isAsk = isAsk;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class SiteDeviceInfoDTO {
                 ", siteName='" + siteName + '\'' +
                 ", siteType='" + siteType + '\'' +
                 ", siteIcon='" + siteIcon + '\'' +
-                ", protocolVersion='" + protocolVersion + '\'' +
+                ", isAsk=" + isAsk +
                 '}';
     }
 }
