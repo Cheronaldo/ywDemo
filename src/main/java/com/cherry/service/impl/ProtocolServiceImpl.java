@@ -2,8 +2,8 @@ package com.cherry.service.impl;
 
 import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.dataobject.ProtocolConfigMaster;
+import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
-import com.cherry.form.ProtocolReAdaptForm;
 import com.cherry.repository.ProtocolConfigDetailRepository;
 import com.cherry.repository.ProtocolConfigMasterRepository;
 import com.cherry.service.ProtocolService;
@@ -82,10 +82,10 @@ public class ProtocolServiceImpl implements ProtocolService{
 
     @Override
     @Transactional
-    public Integer protocolReAdapt(ProtocolReAdaptForm form) {
+    public Integer protocolAdapt(ProtocolAdaptDTO adaptDTO) {
 
         // 1.查询设备当前启用协议
-        ProtocolConfigMaster protocolConfigMasterOld = masterRepository.findBySnCodeAndIsUsed(form.getSnCode(), 1);
+        ProtocolConfigMaster protocolConfigMasterOld = masterRepository.findBySnCodeAndIsUsed(adaptDTO.getSnCode(), 1);
 
         if (protocolConfigMasterOld != null){
             // 2.若存在已启用协议 将已启用的协议 设置为未启用
@@ -94,7 +94,7 @@ public class ProtocolServiceImpl implements ProtocolService{
         }
 
         // 3.查询要适配的协议是否存在
-        ProtocolConfigMaster protocolConfigMasterNew = masterRepository.findBySnCodeAndProtocolVersion(form.getSnCode(), form.getProtocolVersion());
+        ProtocolConfigMaster protocolConfigMasterNew = masterRepository.findBySnCodeAndProtocolVersion(adaptDTO.getSnCode(), adaptDTO.getProtocolVersion());
         if (protocolConfigMasterNew != null){
             // 4.存在 协议重新启用
             protocolConfigMasterNew.setIsUsed(1);
@@ -106,21 +106,21 @@ public class ProtocolServiceImpl implements ProtocolService{
         // 5.不存在 则添加协议主表
         ProtocolConfigMaster protocolConfigMaster = new ProtocolConfigMaster();
         protocolConfigMaster.setId(KeyUtil.genUniqueKey());
-        protocolConfigMaster.setSnCode(form.getSnCode());
-        protocolConfigMaster.setProtocolVersion(form.getProtocolVersion());
+        protocolConfigMaster.setSnCode(adaptDTO.getSnCode());
+        protocolConfigMaster.setProtocolVersion(adaptDTO.getProtocolVersion());
         protocolConfigMaster.setIsUsed(1);
         protocolConfigMaster.setUsedTime(DateUtil.getDate());
         masterRepository.save(protocolConfigMaster);
 
         // 6.添加协议祥表记录
         // 6.1 先提取协议中的数据名称
-        String[] arrayDataName = form.getItems().split("_");
+        String[] arrayDataName = adaptDTO.getProtocolContent().split("_");
         // 6.2 储存协议祥表
         for (int i = 0; i <= arrayDataName.length - 1; i ++){
             ProtocolConfigDetail configDetail = new ProtocolConfigDetail();
             configDetail.setId(KeyUtil.genUniqueKey());
-            configDetail.setSnCode(form.getSnCode());
-            configDetail.setProtocolVersion(form.getProtocolVersion());
+            configDetail.setSnCode(adaptDTO.getSnCode());
+            configDetail.setProtocolVersion(adaptDTO.getProtocolVersion());
             configDetail.setOffsetNumber(i + 1);
             configDetail.setDataName(arrayDataName[i]);
             configDetail.setIsVisible(1);

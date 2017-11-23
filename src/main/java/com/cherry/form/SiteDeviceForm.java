@@ -3,7 +3,8 @@ package com.cherry.form;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 现场设备注册 修改 参数表单验证
+ * 现场设备注册(用户设备关系修改) 修改 参数表单验证
+ * 包含有适配信息
  * Created by Administrator on 2017/11/10.
  */
 public class SiteDeviceForm {
@@ -26,6 +27,12 @@ public class SiteDeviceForm {
     private String siteType;
     /** 现场图标  */
     private String siteIcon;
+    /** 是否启用协议适配 1 表示启用  */
+    private Integer isAdapt;
+    /** 协议版本号  */
+    private String protocolVersion;
+    /** 协议具体内容  */
+    private String protocolContent;
 
     public String getUserName() {
         return userName;
@@ -90,4 +97,46 @@ public class SiteDeviceForm {
     public void setSiteIcon(String siteIcon) {
         this.siteIcon = siteIcon;
     }
+
+    public Integer getIsAdapt() {
+        return isAdapt;
+    }
+
+    public void setIsAdapt(Integer isAdapt) {
+        this.isAdapt = isAdapt;
+    }
+
+    public String getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public void setProtocolVersion(String protocolVersion) {
+        this.protocolVersion = protocolVersion;
+    }
+
+    public String getProtocolContent() {
+        return protocolContent;
+    }
+
+    public void setProtocolContent(String protocolContent) {
+        this.protocolContent = protocolContent;
+    }
+
+    @Override
+    public String toString() {
+        return "SiteDeviceForm{" +
+                "userName='" + userName + '\'' +
+                ", snCode='" + snCode + '\'' +
+                ", deviceAddress='" + deviceAddress + '\'' +
+                ", deviceLongitude='" + deviceLongitude + '\'' +
+                ", deviceLatitude='" + deviceLatitude + '\'' +
+                ", siteName='" + siteName + '\'' +
+                ", siteType='" + siteType + '\'' +
+                ", siteIcon='" + siteIcon + '\'' +
+                ", isAdapt=" + isAdapt +
+                ", protocolVersion='" + protocolVersion + '\'' +
+                ", protocolContent='" + protocolContent + '\'' +
+                '}';
+    }
+
 }

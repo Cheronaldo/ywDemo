@@ -120,15 +120,15 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public Map<String, Object> saveSiteUserDeviceInfo(SiteDeviceForm siteDeviceForm) {
+    public Map<String, Object> saveSiteUserDeviceInfo(SiteDeviceInfoDTO siteDeviceInfoDTO) {
 
         Map<String,Object> map = new HashMap<String,Object>();
 
         // 1.查询设备信息记录  修改记录时 一定要先查 再修改 最后储存修改后的结果
-        DeviceInfo deviceInfo =deviceInfoRepository.findOne(siteDeviceForm.getSnCode());
+        DeviceInfo deviceInfo =deviceInfoRepository.findOne(siteDeviceInfoDTO.getSnCode());
 
-        // 2.将form对象属性赋给设备信息对象
-        BeanUtils.copyProperties(siteDeviceForm, deviceInfo);
+        // 2.将siteDeviceInfoDTO对象属性赋给设备信息对象
+        BeanUtils.copyProperties(siteDeviceInfoDTO, deviceInfo);
         deviceInfoRepository.save(deviceInfo);
         map.put("code",0);
         map.put("msg",DeviceHandleEnum.SAVE_SUCCESS.getMessage());

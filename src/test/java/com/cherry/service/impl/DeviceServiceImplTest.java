@@ -1,11 +1,13 @@
 package com.cherry.service.impl;
 
 import com.cherry.dataobject.DeviceInfo;
+import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.form.SiteDeviceForm;
 import com.cherry.util.KeyUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -44,17 +46,16 @@ public class DeviceServiceImplTest {
 
         Map<String,Object> map = new HashMap<String,Object>();
 
-        SiteDeviceForm siteDeviceForm = new SiteDeviceForm();
-        siteDeviceForm.setSnCode("1510376873026663728");
-        siteDeviceForm.setUserName("abc1234");
-        siteDeviceForm.setDeviceAddress("武汉大学");
-        siteDeviceForm.setDeviceLongitude("114.368107");
-        siteDeviceForm.setDeviceLatitude("30.543083");
-        siteDeviceForm.setSiteType("饲料生产");
-        siteDeviceForm.setSiteName("车间搅拌线");
-        siteDeviceForm.setSiteIcon("/12345");
+        SiteDeviceInfoDTO siteDeviceInfoDTO = new SiteDeviceInfoDTO();
+        siteDeviceInfoDTO.setSnCode("1510311999826615905");
+        siteDeviceInfoDTO.setDeviceAddress("武汉大学");
+        siteDeviceInfoDTO.setDeviceLongitude("114.368107");
+        siteDeviceInfoDTO.setDeviceLatitude("30.543083");
+        siteDeviceInfoDTO.setSiteType("饲料生产");
+        siteDeviceInfoDTO.setSiteName("车间搅拌线");
+        siteDeviceInfoDTO.setSiteIcon("/12345");
 
-        map = service.saveSiteUserDeviceInfo(siteDeviceForm);
+        map = service.saveSiteUserDeviceInfo(siteDeviceInfoDTO);
         int code = Integer.parseInt(String.valueOf(map.get("code")));
         String msg = (String)map.get("msg");
 

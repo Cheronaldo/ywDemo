@@ -3,15 +3,19 @@ package com.cherry.controller;
 import com.cherry.converter.DeviceInfo2SiteDeviceListDTOConverter;
 import com.cherry.converter.DeviceInfo2SiteDeviceMapDTOConverter;
 import com.cherry.dataobject.DeviceInfo;
+import com.cherry.dto.ProtocolAdaptDTO;
+import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.dto.SiteDeviceListDTO;
 import com.cherry.dto.SiteDeviceMapDTO;
 import com.cherry.enums.DeviceHandleEnum;
 import com.cherry.exception.DeviceException;
 import com.cherry.form.SiteDeviceForm;
 import com.cherry.service.DeviceService;
+import com.cherry.service.ProtocolService;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +41,9 @@ public class DeviceController {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired
+    private ProtocolService protocolService;
 
     /**
      * 校验设备是否在现场用户手中
@@ -74,18 +81,30 @@ public class DeviceController {
             log.error("设备信息填写错误");
             throw  new DeviceException((DeviceHandleEnum.DEVICE_INFO_ERROR));
         }
+        // 1.获取现场设备信息DTO   SiteDeviceInfoDTO
+        SiteDeviceInfoDTO siteDeviceInfoDTO = new SiteDeviceInfoDTO();
+        BeanUtils.copyProperties(form, siteDeviceInfoDTO);
         try {
-            // 1.设备信息储存
-            deviceService.saveSiteUserDeviceInfo(form);
+            // 2.设备信息储存
+            deviceService.saveSiteUserDeviceInfo(siteDeviceInfoDTO);
 
-            // 2.设备信息储存成功，修改用户 设备关系记录
+            // 3.设备信息储存成功，修改用户 设备关系记录
             deviceService.saveUserDeviceRelationshipHandle(form.getSnCode(), form.getUserName());
         }catch (DeviceException e){
             log.error("注册失败");
             throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
         }
 
-        // TODO 3.协议适配
+        // 4.协议适配
+        if (form.getIsAdapt() == 1){
+            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
+            BeanUtils.copyProperties(form, adaptDTO);
+            int adaptResult = protocolService.protocolAdapt(adaptDTO);
+            if (adaptResult == 1){
+                log.error("注册失败");
+                throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
+            }
+        }
 
         return ResultVOUtil.success(DeviceHandleEnum.REGISTER_SUCCESS.getMessage());
     }
@@ -103,12 +122,26 @@ public class DeviceController {
             log.error("设备信息填写错误");
             throw  new DeviceException((DeviceHandleEnum.DEVICE_INFO_ERROR));
         }
+        // 1.获取现场设备信息DTO   SiteDeviceInfoDTO
+        SiteDeviceInfoDTO siteDeviceInfoDTO = new SiteDeviceInfoDTO();
+        BeanUtils.copyProperties(form, siteDeviceInfoDTO);
         try {
-            // 1.设备信息储存
-            deviceService.saveSiteUserDeviceInfo(form);
+            // 2.设备信息储存
+            deviceService.saveSiteUserDeviceInfo(siteDeviceInfoDTO);
         }catch (DeviceException e){
             log.error("修改失败");
             throw new DeviceException(DeviceHandleEnum.UPDATE_FAIL);
+        }
+
+        // 3.协议适配
+        if (form.getIsAdapt() == 1){
+            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
+            BeanUtils.copyProperties(form, adaptDTO);
+            int adaptResult = protocolService.protocolAdapt(adaptDTO);
+            if (adaptResult == 1){
+                log.error("修改失败");
+                throw new DeviceException(DeviceHandleEnum.UPDATE_FAIL);
+            }
         }
 
         return ResultVOUtil.success(DeviceHandleEnum.UPDATE_SUCCESS.getMessage());

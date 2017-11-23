@@ -1,6 +1,7 @@
 package com.cherry.service;
 
 import com.cherry.dataobject.ProtocolConfigDetail;
+import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolReAdaptForm;
 import org.springframework.data.domain.Page;
@@ -42,9 +43,9 @@ public interface ProtocolService {
     /**
      * 协议查询适配
      * 实时数据 数据储存
-     * @param form
+     * @param adaptDTO
      * @return
      */
-    Integer protocolReAdapt(ProtocolReAdaptForm form);
+    Integer protocolAdapt(ProtocolAdaptDTO adaptDTO);
 
 }

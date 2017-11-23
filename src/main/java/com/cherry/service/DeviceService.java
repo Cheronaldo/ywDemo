@@ -1,6 +1,7 @@
 package com.cherry.service;
 
 import com.cherry.dataobject.DeviceInfo;
+import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.form.SiteDeviceForm;
 
 import java.util.HashMap;
@@ -28,10 +29,10 @@ public interface DeviceService {
     /**
      * 现场用户保存设备信息
      * 用于注册 修改
-     * @param siteDeviceForm
+     * @param siteDeviceInfoDTO
      * @return
      */
-    Map<String,Object> saveSiteUserDeviceInfo(SiteDeviceForm siteDeviceForm);
+    Map<String,Object> saveSiteUserDeviceInfo(SiteDeviceInfoDTO siteDeviceInfoDTO);
 
     /**
      * 操作用户与设备关系

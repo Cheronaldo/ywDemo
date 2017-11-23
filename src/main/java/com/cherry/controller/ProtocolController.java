@@ -1,13 +1,16 @@
 package com.cherry.controller;
 
 import com.cherry.dataobject.ProtocolConfigDetail;
+import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.enums.ProtocolEnum;
 import com.cherry.exception.ProtocolException;
 import com.cherry.form.ProtocolDetailForm;
+import com.cherry.form.ProtocolQueryForm;
 import com.cherry.service.ProtocolService;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,20 +41,40 @@ public class ProtocolController {
     /**
      * 现场用户查询设备当前启用的协议列表
      * 分页
-     * @param snCode
+     * @param form
+     * @param bindingResult
+     * @param page
+     * @param rows
      * @return
      */
     @PostMapping("/site/get")
-    public Map<String, Object> getSiteProtocol(@RequestParam("snCode") String snCode,
+    public Map<String, Object> getSiteProtocol(@Valid ProtocolQueryForm form,
+                                               BindingResult bindingResult,
                                                @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                @RequestParam(value = "rows", defaultValue = "10") Integer rows){
 
+        if (bindingResult.hasErrors()){
+            log.error("协议查询信息填写错误");
+            throw  new ProtocolException((ProtocolEnum.PROTOCOL_INFO_ERROR));
+        }
         Map<String, Object> map = new HashMap<String, Object>();
-        // 1.封装查询参数
+
+        // 1.判断是否需要进行相应校验
+        if (form.getIsAdapt() == 1){
+            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
+            BeanUtils.copyProperties(form, adaptDTO);
+            int adaptResult = protocolService.protocolAdapt(adaptDTO);
+            if (adaptResult == 1){
+                log.error("协议查询失败");
+                throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
+            }
+        }
+
+        // 2.封装查询参数
         PageRequest request = new PageRequest(page - 1, rows);
 
         // 2.获取分页查询对象
-        Page<ProtocolConfigDetail> configDetailPage = protocolService.listFindCurrentBySnCode(snCode, request);
+        Page<ProtocolConfigDetail> configDetailPage = protocolService.listFindCurrentBySnCode(form.getSnCode(), request);
         if (configDetailPage == null){
             // TODO 查询异常也要返回对应的map?
             log.error("未查询到相关协议！");

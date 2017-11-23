@@ -1,7 +1,8 @@
 package com.cherry.dto;
 
 /**
- * 现场设备注册信息DTO
+ * 现场设备操作DTO
+ * 设备校验 设备注册 设备修改
  * Created by Administrator on 2017/11/10.
  */
 public class SiteDeviceInfoDTO {

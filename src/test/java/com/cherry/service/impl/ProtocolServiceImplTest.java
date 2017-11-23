@@ -1,6 +1,7 @@
 package com.cherry.service.impl;
 
 import com.cherry.dataobject.ProtocolConfigDetail;
+import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolReAdaptForm;
 import com.cherry.util.KeyUtil;
@@ -63,14 +64,14 @@ public class ProtocolServiceImplTest {
     }
 
     @Test
-    public void protocolReAdapt() throws Exception {
+    public void protocolAdapt() throws Exception {
 
-        ProtocolReAdaptForm form = new ProtocolReAdaptForm();
-        form.setSnCode("1511169122529118429");
-        form.setProtocolVersion("123456");
-        form.setItems("温度_湿度");
+        ProtocolAdaptDTO protocolAdaptDTO = new ProtocolAdaptDTO();
+        protocolAdaptDTO.setSnCode("1510311999826615905");
+        protocolAdaptDTO.setProtocolVersion("1234561");
+        protocolAdaptDTO.setProtocolContent("温度_湿度_压强");
 
-        int result = service.protocolReAdapt(form);
+        int result = service.protocolAdapt(protocolAdaptDTO);
 
         Assert.assertEquals(0,result);
 
