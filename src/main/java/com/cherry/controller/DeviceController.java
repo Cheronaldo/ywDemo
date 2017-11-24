@@ -81,29 +81,18 @@ public class DeviceController {
             log.error("设备信息填写错误");
             throw  new DeviceException((DeviceHandleEnum.DEVICE_INFO_ERROR));
         }
-        // 1.获取现场设备信息DTO   SiteDeviceInfoDTO
-        SiteDeviceInfoDTO siteDeviceInfoDTO = new SiteDeviceInfoDTO();
-        BeanUtils.copyProperties(form, siteDeviceInfoDTO);
+        int registerResult = 1;
         try {
-            // 2.设备信息储存
-            deviceService.saveSiteUserDeviceInfo(siteDeviceInfoDTO);
-
-            // 3.设备信息储存成功，修改用户 设备关系记录
-            deviceService.saveUserDeviceRelationshipHandle(form.getSnCode(), form.getUserName());
+            // 进行协议适配 信息储存 关系操作
+           registerResult = deviceService.siteUserDeviceRegister(form);
         }catch (DeviceException e){
             log.error("注册失败");
             throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
         }
 
-        // 4.协议适配
-        if (form.getIsAdapt() == 1){
-            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
-            BeanUtils.copyProperties(form, adaptDTO);
-            int adaptResult = protocolService.protocolAdapt(adaptDTO);
-            if (adaptResult == 1){
-                log.error("注册失败");
-                throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
-            }
+        if (registerResult == 1){
+            log.error("注册失败");
+            throw new DeviceException(DeviceHandleEnum.REGISTER_FAIL);
         }
 
         return ResultVOUtil.success(DeviceHandleEnum.REGISTER_SUCCESS.getMessage());
@@ -122,26 +111,17 @@ public class DeviceController {
             log.error("设备信息填写错误");
             throw  new DeviceException((DeviceHandleEnum.DEVICE_INFO_ERROR));
         }
-        // 1.获取现场设备信息DTO   SiteDeviceInfoDTO
-        SiteDeviceInfoDTO siteDeviceInfoDTO = new SiteDeviceInfoDTO();
-        BeanUtils.copyProperties(form, siteDeviceInfoDTO);
+        int registerResult = 1;
         try {
-            // 2.设备信息储存
-            deviceService.saveSiteUserDeviceInfo(siteDeviceInfoDTO);
+            // 进行协议适配 信息储存
+            registerResult = deviceService.saveSiteUserDeviceInfo(form);
         }catch (DeviceException e){
             log.error("修改失败");
             throw new DeviceException(DeviceHandleEnum.UPDATE_FAIL);
         }
-
-        // 3.协议适配
-        if (form.getIsAdapt() == 1){
-            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
-            BeanUtils.copyProperties(form, adaptDTO);
-            int adaptResult = protocolService.protocolAdapt(adaptDTO);
-            if (adaptResult == 1){
-                log.error("修改失败");
-                throw new DeviceException(DeviceHandleEnum.UPDATE_FAIL);
-            }
+        if (registerResult == 1){
+            log.error("修改失败");
+            throw new DeviceException(DeviceHandleEnum.UPDATE_FAIL);
         }
 
         return ResultVOUtil.success(DeviceHandleEnum.UPDATE_SUCCESS.getMessage());
@@ -168,7 +148,6 @@ public class DeviceController {
 
         return ResultVOUtil.success(DeviceHandleEnum.DEVICE_UNBIND_SUCCESS.getMessage());
     }
-
 
     /**
      * 现场用户通过用户名查询 所有启用设备

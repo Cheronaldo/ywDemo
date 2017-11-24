@@ -59,22 +59,11 @@ public class ProtocolController {
         }
         Map<String, Object> map = new HashMap<String, Object>();
 
-        // 1.判断是否需要进行相应校验
-        if (form.getIsAdapt() == 1){
-            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
-            BeanUtils.copyProperties(form, adaptDTO);
-            int adaptResult = protocolService.protocolAdapt(adaptDTO);
-            if (adaptResult == 1){
-                log.error("协议查询失败");
-                throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
-            }
-        }
-
-        // 2.封装查询参数
+        // 1.封装查询参数
         PageRequest request = new PageRequest(page - 1, rows);
 
         // 2.获取分页查询对象
-        Page<ProtocolConfigDetail> configDetailPage = protocolService.listFindCurrentBySnCode(form.getSnCode(), request);
+        Page<ProtocolConfigDetail> configDetailPage = protocolService.listFindCurrentBySnCode(form, request);
         if (configDetailPage == null){
             // TODO 查询异常也要返回对应的map?
             log.error("未查询到相关协议！");
@@ -84,7 +73,7 @@ public class ProtocolController {
             log.error("未查询到相关协议！");
             throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
         }
-
+        // total: 总页数 records：总记录数 rows:当前页的实体记录
         map.put("total", configDetailPage.getTotalPages());
         map.put("records", configDetailPage.getTotalElements());
         map.put("rows", configDetailPage.getContent());

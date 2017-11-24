@@ -44,39 +44,43 @@ public class DeviceServiceImplTest {
     @Test
     public void saveSiteUserDeviceInfo() throws Exception {
 
-        Map<String,Object> map = new HashMap<String,Object>();
+        SiteDeviceForm siteDeviceForm = new SiteDeviceForm();
+        siteDeviceForm.setUserName("abc1234");
+        siteDeviceForm.setSnCode("1510311999826615905");
+        siteDeviceForm.setDeviceAddress("武汉大学");
+        siteDeviceForm.setDeviceLongitude("114.368107");
+        siteDeviceForm.setDeviceLatitude("30.543083");
+        siteDeviceForm.setSiteType("饲料生产");
+        siteDeviceForm.setSiteName("车间搅拌线");
+        siteDeviceForm.setSiteIcon("/12345");
+        siteDeviceForm.setIsAdapt(1);
+        siteDeviceForm.setProtocolVersion("abc12345");
+        siteDeviceForm.setProtocolContent("PH值");// 注意若协议内容只有一个值 即没有 _ 隔开的情况
 
-        SiteDeviceInfoDTO siteDeviceInfoDTO = new SiteDeviceInfoDTO();
-        siteDeviceInfoDTO.setSnCode("1510311999826615905");
-        siteDeviceInfoDTO.setDeviceAddress("武汉大学");
-        siteDeviceInfoDTO.setDeviceLongitude("114.368107");
-        siteDeviceInfoDTO.setDeviceLatitude("30.543083");
-        siteDeviceInfoDTO.setSiteType("饲料生产");
-        siteDeviceInfoDTO.setSiteName("车间搅拌线");
-        siteDeviceInfoDTO.setSiteIcon("/12345");
+        int result = service.saveSiteUserDeviceInfo(siteDeviceForm);
 
-        map = service.saveSiteUserDeviceInfo(siteDeviceInfoDTO);
-        int code = Integer.parseInt(String.valueOf(map.get("code")));
-        String msg = (String)map.get("msg");
-
-
-        Assert.assertNotNull(msg);
+       Assert.assertEquals(0,result);
 
     }
 
     @Test
-    public void saveUserDeviceRelationshipHandle() throws Exception {
+    public void siteUserDeviceRegister() throws Exception{
+        SiteDeviceForm siteDeviceForm = new SiteDeviceForm();
+        siteDeviceForm.setUserName("abc1234");
+        siteDeviceForm.setSnCode("1510311999826615905");
+        siteDeviceForm.setDeviceAddress("武汉大学");
+        siteDeviceForm.setDeviceLongitude("114.368107");
+        siteDeviceForm.setDeviceLatitude("30.543083");
+        siteDeviceForm.setSiteType("饲料生产");
+        siteDeviceForm.setSiteName("车间搅拌线");
+        siteDeviceForm.setSiteIcon("/12345");
+        siteDeviceForm.setIsAdapt(1);
+        siteDeviceForm.setProtocolVersion("abc12345");
+        siteDeviceForm.setProtocolContent("PH值");
 
-        Map<String,Object> map = new HashMap<String,Object>();
+        int result = service.siteUserDeviceRegister(siteDeviceForm);
 
-        map = service.saveUserDeviceRelationshipHandle(KeyUtil.genUniqueKey(),"abc1234");
-
-        int code = Integer.parseInt(String.valueOf(map.get("code")));
-        String msg = (String)map.get("msg");
-
-
-        Assert.assertNotNull(msg);
-
+        Assert.assertEquals(0, result);
     }
 
     @Test

@@ -3,7 +3,7 @@ package com.cherry.service.impl;
 import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
-import com.cherry.form.ProtocolReAdaptForm;
+import com.cherry.form.ProtocolQueryForm;
 import com.cherry.util.KeyUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,8 +32,14 @@ public class ProtocolServiceImplTest {
     @Test
     public void listFindCurrentBySnCode() throws Exception {
 
-        PageRequest request = new PageRequest(0, 2);
-        Page<ProtocolConfigDetail> result = service.listFindCurrentBySnCode("1510730959647775198", request);
+        ProtocolQueryForm queryForm = new ProtocolQueryForm();
+        queryForm.setSnCode("1510311999826615905");
+        queryForm.setIsAdapt(1);
+        queryForm.setProtocolVersion("1234abc");
+        queryForm.setProtocolContent("温度_湿度_压强");
+
+        PageRequest request = new PageRequest(0, 1);
+        Page<ProtocolConfigDetail> result = service.listFindCurrentBySnCode(queryForm, request);
 
         Assert.assertNotEquals(0,result.getSize());
 

@@ -5,8 +5,10 @@ import com.cherry.dataobject.DeviceInfo;
 import com.cherry.dataobject.DeviceVerify;
 import com.cherry.dataobject.ProtocolConfigMaster;
 import com.cherry.dataobject.UserDeviceRelationship;
+import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.enums.DeviceHandleEnum;
+import com.cherry.exception.DeviceException;
 import com.cherry.form.SiteDeviceForm;
 import com.cherry.repository.*;
 import com.cherry.service.DeviceService;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
@@ -43,6 +46,9 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Autowired
     private UserDeviceRelationshipRepository userDeviceRelationshipRepository;
+
+    @Autowired
+    private DeviceService deviceService;
 
     @Autowired
     private ProtocolService protocolService;
@@ -120,50 +126,65 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public Map<String, Object> saveSiteUserDeviceInfo(SiteDeviceInfoDTO siteDeviceInfoDTO) {
+    @Transactional
+    public Integer saveSiteUserDeviceInfo(SiteDeviceForm siteDeviceForm) {
 
         Map<String,Object> map = new HashMap<String,Object>();
 
-        // 1.查询设备信息记录  修改记录时 一定要先查 再修改 最后储存修改后的结果
-        DeviceInfo deviceInfo =deviceInfoRepository.findOne(siteDeviceInfoDTO.getSnCode());
+        // 1.判断是否需要进行相应适配
+        if (siteDeviceForm.getIsAdapt() == 1){
+            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
+            BeanUtils.copyProperties(siteDeviceForm, adaptDTO);
+            int adaptResult = protocolService.protocolAdapt(adaptDTO);
+            if (adaptResult == 1){
+                // adaptResult 为 1时 说明协议适配失败
+                return 1;
+            }
 
-        // 2.将siteDeviceInfoDTO对象属性赋给设备信息对象
-        BeanUtils.copyProperties(siteDeviceInfoDTO, deviceInfo);
+        }
+
+        // 2.查询设备信息记录  修改记录时 一定要先查 再修改 最后储存修改后的结果
+        DeviceInfo deviceInfo =deviceInfoRepository.findOne(siteDeviceForm.getSnCode());
+
+        // 3.将siteDeviceInfoDTO对象属性赋给设备信息对象
+        BeanUtils.copyProperties(siteDeviceForm, deviceInfo);
         deviceInfoRepository.save(deviceInfo);
-        map.put("code",0);
-        map.put("msg",DeviceHandleEnum.SAVE_SUCCESS.getMessage());
 
-        return map;
+        return 0;
     }
 
     @Override
-    public Map<String, Object> saveUserDeviceRelationshipHandle(String snCode, String userName) {
-
-        Map<String,Object> map = new HashMap<String,Object>();
-
-        // 1.查询用户是否已注册过该设备
-        UserDeviceRelationship userDeviceRelationship = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
+    @Transactional
+    public Integer siteUserDeviceRegister(SiteDeviceForm siteDeviceForm) {
+        // 1.进行协议适配 设备信息储存
+        int saveResult = deviceService.saveSiteUserDeviceInfo(siteDeviceForm);
+        if (saveResult == 1){
+            // 协议适配或信息储存失败
+            return 1;
+        }
+        // 2.操作用户与设备关系
+        // 2.1 查询用户是否已注册过该设备
+        UserDeviceRelationship userDeviceRelationship = userDeviceRelationshipRepository.findBySnCodeAndUserName(siteDeviceForm.getSnCode(), siteDeviceForm.getUserName());
         if (userDeviceRelationship == null){
-            // 2.没有 则添加用户 设备关系记录
+            // 2.2 没有 则添加用户 设备关系记录
             UserDeviceRelationship relationship = new UserDeviceRelationship();
             relationship.setId(KeyUtil.genUniqueKey());
-            relationship.setSnCode(snCode);
-            relationship.setUserName(userName);
+            relationship.setSnCode(siteDeviceForm.getSnCode());
+            relationship.setUserName(siteDeviceForm.getUserName());
             relationship.setRegisterTime(DateUtil.getDate());
             relationship.setIsUsed(1);
 
             userDeviceRelationshipRepository.save(relationship);
+            return 0;
 
-        }else {
-            // 3.已注册 则修改注册时间 修改启用标志
-            userDeviceRelationship.setRegisterTime(DateUtil.getDate());
-            userDeviceRelationship.setIsUsed(1);
-            userDeviceRelationshipRepository.save(userDeviceRelationship);
         }
+        // 2.3 已注册 则修改注册时间 修改启用标志
+        userDeviceRelationship.setRegisterTime(DateUtil.getDate());
+        userDeviceRelationship.setIsUsed(1);
+        userDeviceRelationshipRepository.save(userDeviceRelationship);
 
-        map.put("code", 0);
-        map.put("msg", DeviceHandleEnum.USER_DEVICE_RELATIONSHIP_HANDLE_SUCCESS.getMessage());
-        return map;
+        return 0;
+
     }
 
     @Override

@@ -27,21 +27,23 @@ public interface DeviceService {
     Map<String,Object> checkSiteDeviceIsOnHand(String snCode, String checkCode, String userName);
 
     /**
-     * 现场用户保存设备信息
+     * 1.协议适配
+     * 2.现场用户保存设备信息
      * 用于注册 修改
-     * @param siteDeviceInfoDTO
+     * @param siteDeviceForm
      * @return
      */
-    Map<String,Object> saveSiteUserDeviceInfo(SiteDeviceInfoDTO siteDeviceInfoDTO);
+    Integer saveSiteUserDeviceInfo(SiteDeviceForm siteDeviceForm);
 
     /**
-     * 操作用户与设备关系
-     * 用于经销商 现场 用户注册设备
-     * @param snCode
-     * @param userName
+     * 现场用户设备注册
+     * 协议适配
+     * 设备信息储存
+     * 用户设备关系操作
+     * @param siteDeviceForm
      * @return
      */
-    Map<String,Object> saveUserDeviceRelationshipHandle(String snCode, String userName);
+    Integer siteUserDeviceRegister(SiteDeviceForm siteDeviceForm);
 
     /**
      * 用户与设备解绑

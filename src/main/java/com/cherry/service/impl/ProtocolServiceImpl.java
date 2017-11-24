@@ -3,12 +3,16 @@ package com.cherry.service.impl;
 import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.dataobject.ProtocolConfigMaster;
 import com.cherry.dto.ProtocolAdaptDTO;
+import com.cherry.enums.ProtocolEnum;
+import com.cherry.exception.ProtocolException;
 import com.cherry.form.ProtocolDetailForm;
+import com.cherry.form.ProtocolQueryForm;
 import com.cherry.repository.ProtocolConfigDetailRepository;
 import com.cherry.repository.ProtocolConfigMasterRepository;
 import com.cherry.service.ProtocolService;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +27,7 @@ import java.util.List;
  * Created by Administrator on 2017/11/15.
  */
 @Service
+@Slf4j
 public class ProtocolServiceImpl implements ProtocolService{
 
     @Autowired
@@ -31,20 +36,34 @@ public class ProtocolServiceImpl implements ProtocolService{
     @Autowired
     private ProtocolConfigMasterRepository masterRepository;
 
-    @Override
-    public Page<ProtocolConfigDetail> listFindCurrentBySnCode(String snCode, Pageable pageable) {
+    @Autowired
+    private ProtocolService protocolService;
 
-        // 1.查询设备已启用的设备版本号
-        ProtocolConfigMaster protocolConfigMaster = masterRepository.findBySnCodeAndIsUsed(snCode, 1);
+    @Override
+    @Transactional
+    public Page<ProtocolConfigDetail> listFindCurrentBySnCode(ProtocolQueryForm queryForm, Pageable pageable) {
+
+        // 1.判断是否需要进行适配
+        if (queryForm.getIsAdapt() == 1){
+            ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
+            BeanUtils.copyProperties(queryForm, adaptDTO);
+            int adaptResult = protocolService.protocolAdapt(adaptDTO);
+            if (adaptResult == 1){
+                log.error("协议查询失败");
+                return null;
+            }
+        }
+
+        // 2.查询设备已启用的设备版本号
+        ProtocolConfigMaster protocolConfigMaster = masterRepository.findBySnCodeAndIsUsed(queryForm.getSnCode(), 1);
         if (protocolConfigMaster == null){
             return null;
         }
         String protocolVersion = protocolConfigMaster.getProtocolVersion();
 
-        // 2.通过SN码 已启用的协议版本号查询 协议祥表list 分页
-        Page<ProtocolConfigDetail> configDetailPage = detailRepository.findBySnCodeAndProtocolVersion(snCode, protocolVersion, pageable);
+        // 3.通过SN码 已启用的协议版本号查询 协议祥表list 分页
+        Page<ProtocolConfigDetail> configDetailPage = detailRepository.findBySnCodeAndProtocolVersion(queryForm.getSnCode(), protocolVersion, pageable);
 
-        //return detailList;
         return new PageImpl<ProtocolConfigDetail>(configDetailPage.getContent(), pageable,configDetailPage.getTotalElements());
     }
 
@@ -66,7 +85,6 @@ public class ProtocolServiceImpl implements ProtocolService{
                 protocolConfigDetail.getProtocolVersion(),
                 pageable);
 
-        //return detailList;
         return  new PageImpl<ProtocolConfigDetail>(configDetailPage.getContent(), pageable,configDetailPage.getTotalElements());
     }
 
