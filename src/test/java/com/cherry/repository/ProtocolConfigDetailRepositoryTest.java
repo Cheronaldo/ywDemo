@@ -61,4 +61,13 @@ public class ProtocolConfigDetailRepositoryTest {
         Assert.assertNotEquals(0,result.getTotalPages());
     }
 
+    @Test
+    public void findBySnCodeAndProtocolVersionAndIsVisible() throws Exception{
+
+        List<ProtocolConfigDetail> result = repository.findBySnCodeAndProtocolVersionAndIsVisible("1510311999826615905", "abc", 1);
+
+        Assert.assertNotEquals(0, result.size());
+
+    }
+
 }

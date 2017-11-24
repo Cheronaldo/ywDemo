@@ -43,10 +43,20 @@ public interface ProtocolService {
 
     /**
      * 协议查询适配
-     * 实时数据 数据储存
+     * 设备注册 修改
+     * 实时数据查询 历史数据储存
      * @param adaptDTO
      * @return
      */
     Integer protocolAdapt(ProtocolAdaptDTO adaptDTO);
+
+    /**
+     * 通过SN码 协议版本号 查询需要显示的 实时数据协议详情列表
+     * 用于实时数据显示协议查询
+     * @param snCode
+     * @param protocolVersion
+     * @return
+     */
+    List<ProtocolConfigDetail> listForRealTimeDisplay(String snCode, String protocolVersion);
 
 }

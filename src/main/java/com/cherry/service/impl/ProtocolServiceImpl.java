@@ -149,4 +149,9 @@ public class ProtocolServiceImpl implements ProtocolService{
 
         return 0;
     }
+
+    @Override
+    public List<ProtocolConfigDetail> listForRealTimeDisplay(String snCode, String protocolVersion) {
+        return detailRepository.findBySnCodeAndProtocolVersionAndIsVisible(snCode, protocolVersion, 1);
+    }
 }

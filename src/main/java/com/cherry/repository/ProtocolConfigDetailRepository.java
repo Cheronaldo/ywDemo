@@ -21,4 +21,14 @@ public interface ProtocolConfigDetailRepository extends JpaRepository<ProtocolCo
      * @return
      */
     Page<ProtocolConfigDetail> findBySnCodeAndProtocolVersion(String snCode, String protocolVersion, Pageable pageable);
+
+    /**
+     * 通过SN码 和协议版本 查询需要显示的 协议详情列表
+     * 实时数据显示 协议查询
+     * @param snCode
+     * @param protocolVersion
+     * @param isVisible
+     * @return
+     */
+    List<ProtocolConfigDetail> findBySnCodeAndProtocolVersionAndIsVisible(String snCode, String protocolVersion, Integer isVisible);
 }

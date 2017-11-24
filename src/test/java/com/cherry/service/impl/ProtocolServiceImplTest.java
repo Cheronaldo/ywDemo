@@ -49,10 +49,6 @@ public class ProtocolServiceImplTest {
     public void updateProtocolDetail() throws Exception {
         ProtocolDetailForm form = new ProtocolDetailForm();
         form.setId("1510732127485461440");
-//        form.setSnCode("1510730959647775198");
-//        form.setProtocolVersion("1234");
-//        form.setOffsetNumber(2);
-//        form.setDataName("湿度");
         form.setIsVisible(1);
         form.setIsAlarmed(1);
 
@@ -81,6 +77,13 @@ public class ProtocolServiceImplTest {
 
         Assert.assertEquals(0,result);
 
+    }
+
+    @Test
+    public void listForRealTimeDisplay() throws Exception{
+        List<ProtocolConfigDetail> result = service.listForRealTimeDisplay("1510311999826615905", "abc");
+
+        Assert.assertNotEquals(0, result.size());
     }
 
 }
