@@ -1,0 +1,41 @@
+<!--<h1>map</h1>-->
+
+<!DOCTYPE html>
+<!--<html xmlns:th="http://www.springframework.org/schema/mvc">-->
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";font-size:14px;}
+        #container{
+            position: absolute;
+            margin-top:0px;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            /*border: 1px solid gray;*/
+            overflow:hidden;
+        }
+
+        /*#searchResultPanel{width: 200px;}*/
+    </style>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=VbpWh7Ci96yQPLcTEQ0BFsjDzN8rwqGC;"></script>-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=NkMIX99EyeqCnDFTYFm3h1a9WDQXZYWx"></script>
+
+    <script src="../static/assets/js/jquery-1.10.2.min.js" th:src="@{/assets/js/jquery-1.10.2.min.js}"></script>
+    <script src="../static/assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script src="../static/assets/js/jquery.messager.js" th:src="@{/assets/js/jquery.messager.js}"></script>
+
+    <script th:src="@{/js/info-window1.js}"></script>
+
+    <title>设备地图查看</title>
+</head>
+<body>
+<div id="container"></div>
+</body>
+</html>
+
+
+
+

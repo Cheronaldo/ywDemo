@@ -1,0 +1,95 @@
+<!--<h1>map</h1>-->
+
+<!DOCTYPE html>
+<!--<html xmlns:th="http://www.springframework.org/schema/mvc">-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";font-size:14px;}
+        #container{
+            position: absolute;
+            margin-top:120px;
+            width: 100%;
+            height: 100%;
+            top: 16px;
+            border: 1px solid gray;
+            overflow:hidden;
+        }
+        #r-sn{
+            margin-top:10px;
+            margin-left: 10px;
+        }
+        #snCode{
+            width: 220px;
+        }
+        #r-result{width:100%;
+            margin-top:5px;
+            margin-left: 8px;
+        }
+        #suggestId{
+            width: 220px;
+        }
+        #r-jiaoyan{
+            margin-top:5px;
+            margin-left: 430px;
+        }
+        #jiaoyan{
+            width: 135px;
+        }
+        #xcType{
+            width: 142px;
+        }
+        #r-tijiao{
+            margin-top:8px;
+            margin-left: 8px;
+        }
+        #modify_{
+            margin-left: 35px;
+        }
+        #cancel_{
+            margin-left: 35px;
+        }
+        /*#searchResultPanel{width: 200px;}*/
+    </style>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=VbpWh7Ci96yQPLcTEQ0BFsjDzN8rwqGC;"></script>-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=NkMIX99EyeqCnDFTYFm3h1a9WDQXZYWx"></script>
+
+    <script src="../static/assets/js/jquery-1.10.2.min.js" th:src="@{/assets/js/jquery-1.10.2.min.js}"></script>
+    <script src="../static/assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script src="../static/assets/js/jquery.messager.js" th:src="@{/assets/js/jquery.messager.js}"></script>
+
+    <script src="../static/js/register.js" th:src="@{/js/register.js}"></script>
+
+
+    <title>根据地址查询经纬度</title>
+</head>
+<body>
+<div id="container">
+</div>
+<div id="r-sn">设备S/N码&nbsp;：&nbsp;&nbsp;&nbsp; <input id="snCode" type="text"  value="" style="margin-right:100px;" />
+               校&nbsp;验&nbsp;码：<input id="jiaoyan" type="text"  value="" style="margin-right:100px;" />
+</div>
+<div id="r-result">设备部署地址：&nbsp;<input id="suggestId" type="text" disabled="disabled"   value="" style="margin-right:100px;" />
+                   现场名称：<input id="xcName" type="text" disabled="disabled" value="-车间搅拌生产线1" style="margin-right:100px;" />
+</div>
+<div id="r-jiaoyan">
+                    &nbsp;现场类型：&nbsp;<select id="xcType" type="text" disabled="disabled"  value="" style="margin-right:100px;" >
+
+                                         <option value="饲料生产">饲料生产</option>
+                                         <option value="环境监测">环境监测</option>
+
+                                   </select>
+</div>
+<div id="r-tijiao">
+    <button id="query_" disabled = "disabled" type="button">设备注册</button>
+    <button id="modify_" disabled = "disabled" type="button">设备修改</button>
+    <button id="cancel_" disabled = "disabled" type="button">设备注销</button>
+</div>
+<div id="searchResultPanel" style="border:10px solid #C0C0C0;width:150px;height:auto; display:none;">
+
+</div>
+</body>
+</html>
+

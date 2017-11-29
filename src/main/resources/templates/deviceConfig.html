@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../static/assets/css/deviceConfig.css" th:href="@{/assets/css/deviceConfig.css}"/>
+    <link rel="stylesheet" href="../static/assets/css/ui.jqgrid.css" th:href="@{/assets/css/ui.jqgrid.css}"/>
+    <!--<link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}" />-->
+    <link rel="stylesheet" href="../static/assets/css/ace.min.css" th:href="@{/assets/css/ace.min.css}"/>
+    <link rel="stylesheet" href="../static/assets/css/font-awesome.min.css" th:href="@{/assets/css/font-awesome.min.css}"/>
+	<title>亿维智能云平台设备配置页面</title>
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";font-size:14px;}
+		.jqGridDiv{
+			width: 95%;
+		}
+	</style>
+	<script type="text/javascript">
+        var getUrl = window.location.search;
+        var devSNCode = getUrl.substring(11);
+	</script>
+</head>
+<body>
+	<div class="main">
+		<div class="wrap">
+			<div class="info">
+				<label for="snCode">SN码：</label>
+				<input id="snCode" type="text" class="snCode input" readonly="readonly" />
+			</div>
+			<div class="info">
+				<label for="protocolVersion">协议版本：</label>
+				<input id="protocolVersion" type="text" class="protocolVersion input" readonly="readonly" />
+			</div>
+		</div>
+		<div id="jqGridDiv" class="jqGridDiv">
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+		</div>
+	</div>
+
+	<div id="addModal" tabindex="-1" class="addModal hide">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" id="close-modal"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">修改设备信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="modal-form" role="form">
+
+						<div class="form-group">
+							<span>序号：</span>
+							<input id="offsetNumber" readonly="readonly" type="text" class="form-control" placeholder="" />
+						</div>
+						<div class="form-group">
+							<span>属性：</span>
+							<input id="dataName" readonly="readonly" type="text" class="form-control" placeholder="输入用户类型" />
+						</div>
+						<div class="form-group" >
+							<span>数据是否可见：</span>
+							<select id="isVisible" class="form-control" >
+								<option value="是">是</option>
+								<option value="否">否</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<span>报警是否接收：</span>
+							<select id="isAlarmed" class="form-control" >
+								<option value="是">是</option>
+								<option value="否">否</option>
+							</select>
+						</div>
+
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="saveUserInfoBtn" class="btn btn-success radius">&nbsp;保&nbsp;&nbsp;存&nbsp;</button>
+					<button type="button" id="cancelSave" class="btn btn-danger radius">&nbsp;取&nbsp;&nbsp;消&nbsp;</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
+<script src="../static/assets/js/jqGrid/jquery.jqGrid.min.js" th:src="@{/assets/js/jqGrid/jquery.jqGrid.min.js}"></script>
+<script src="../static/assets/js/jqGrid/i18n/grid.locale-en.js" th:src="@{/assets/js/jqGrid/i18n/grid.locale-en.js}"></script>
+<script src="../static/assets/js/jqGrid/i18n/grid.locale-cn.js" th:src="@{/assets/js/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script src="../static/assets/js/layer/layer.js" th:src="@{/assets/js/layer/layer.js}"></script>
+<!--<script src="../static/assets/js/jquery.jqGrid.src.js" th:src="@{/assets/js/jquery.jqGrid.src.js}"></script>-->
+<script src="../static/js/deviceConfig.js" th:src="@{/js/deviceConfig.js}"></script>
+
+</body>
+</html>
