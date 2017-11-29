@@ -124,11 +124,11 @@ a:hover {
 				if (passwdInput.type == "password") {
 					passwdInput.type = "text";
 					img.setAttribute("th:src","@{/assets/images/invisible.png}");
-                	img.setAttribute("src","../static/assets/images/invisible.png");
+                	img.setAttribute("src","/assets/images/invisible.png");
 				}else {
 					passwdInput.type = "password";
 					img.setAttribute("th:src","@{/assets/images/visible.png}");
-                	img.setAttribute("src","../static/assets/images/visible.png");
+                	img.setAttribute("src","/assets/images/visible.png");
 				}
 			}
 			function reset(){
@@ -184,7 +184,7 @@ a:hover {
     <input id="username" class="login_input" type="text" style="margin-top:30px; border-radius:5px;" placeholder="请输入帐号"/><br/>
     <span style="margin-left:7px">密码：</span>
     <input id="passwd" class="login_input" type="password" style="margin-top:30px;border-radius:5px;border-top:1px solid #ccc" placeholder="请输入密码" />
-    <img class="eyes" id="eyes" onclick="hideShowPsw()" th:src="@{/assets/images/visible.png}" /><br/>
+    <img class="eyes" id="eyes" onclick="hideShowPsw()" src="../static/assets/images/visible.png" th:src="@{/assets/images/visible.png}" /><br/>
     <div class="remember">
        <!--<p style="left:40;text-align:left;color: " onclick="reset()">重置</p>-->
        <!--<p style="left:-30;text-align:right">忘记密码?</p>-->

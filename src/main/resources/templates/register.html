@@ -13,13 +13,8 @@
             text-align:center;
         }
         .login {
-            width: 1000px;
-            height: 500px;
-            margin: 50px auto;
             text-align: center;
             border-radius: 10px;
-        }
-        .login {
             position: relative;
         }
         .login h1 ,label{
@@ -28,17 +23,16 @@
         .form_content {
             margin-top: 20px;
         }
+        .form_content > select{
+
+        }
         .input_control {
             width: 150px;
             height: 20px;
             line-height: 20px;
-            font-size: 14px
-        }
-        .confirm {
-            width: 50px;
-            height: 20px;
-            line-height: 20px;
-            font-size: 14px
+            font-size: 14px;
+            text-align: left;
+            border: 1px solid;
         }
         .register {
             width: 150px;
@@ -63,18 +57,29 @@
             outline: 0;
             cursor: pointer;
         }
+        .getCode {
+            position: absolute;
+            margin-left: 10px;
+        }
         .getCode:hover {
             background: #60a855;
             outline: 0;
             cursor: pointer;
         }
         .eyes {
-            width: 15px;
+            width: 20px;
             height: 10px;
-            right: 0px;
+            position: absolute;
+            cursor: pointer;
+            margin: 7px;
         }
         .nameReminder {
             position: absolute;
+        }
+        .form_content > label {
+            width: 115px;
+            text-align: right;
+            display: inline-block;
         }
     </style>
 
@@ -325,60 +330,61 @@
 <body th:background="@{/assets/images/1.png}">
 <div class="login">
     <h1>欢迎来到亿维智能云平台</h1>
-    <div class="form_content">
-        <label class="user_class">用户类别：</label>
-        <select id="user_class" class="input_control" placeholder="经销商" >
-            <option value="(空)">(空)</option>
-            <option value="经销商">经销商</option>
-            <option value="现场用户">现场用户</option>
-        </select>
-    </div>
-    <div class="form_content">
-        <label for="username">用&nbsp;&nbsp;户&nbsp;&nbsp;名：</label>
-        <input id="username" type="text" class="input_control" placeholder="必填" />
-        <span class="nameReminder" id="nameReminder"></span>
-    </div>
-    <div>
-        <span class="userReminder">(用户名为6-12长度的字母和数字组合)</span>
-    </div>
-    <div class="form_content">
-        <label for="passwd">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
-        <input id="passwd" type="password" class="input_control" placeholder="必填" />
-        <img class="eyes" id="eyes1" onclick="hideShowPsw1()" th:src="@{/assets/images/visible.png}" />
-    </div>
-    <div class="form_content">
-        <label for="passwd_again">确认密码：</label>
-        <input id="passwd_again" type="password" class="input_control" placeholder="必填" />
-        <img class="eyes" id="eyes2" onclick="hideShowPsw2()" th:src="@{/assets/images/visible.png}" />
-    </div>
-    <div class="form_content">
-        <label class="post">职务（选填）：</label>
-        <select id="post" class="input_control" placeholder="经理" >
-            <option value="(空)">(空)</option>
-            <option value="经理">经理</option>
-            <option value="副经理">副经理</option>
-            <option value="工程师">工程师</option>
-        </select>
-    </div>
-    <div class="form_content">
-        <label for="mail">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
-        <input id="mail" type="text" class="input_control" placeholder="必填" />
-    </div>
-    <div class="form_content">
-        <label for="companyname">公司名称：</label>
-        <input id="companyname" type="text" class="input_control" placeholder="必填" />
-    </div>
-    <div class="form_content">
-        <label for="tel">联系方式：</label>
-        <input id="tel" type="text" class="input_control" placeholder="必填" />
-    </div>
-    <div class="form_content">
-        <label for="idCode">验 证 码：</label>
-        <input id="idCode" type="text" class="confirm" />
-        <button class="getCode" id="getCode">获取手机验证码</button>
-    </div>
-    <button id="register" class="register">注&nbsp;&nbsp;册</button>
-
+    <form class="modal-form" role="form">
+        <div class="form_content">
+            <label class="user_class">用户类别：</label>
+            <select id="user_class" class="input_control" placeholder="经销商" >
+                <option value="(空)">(空)</option>
+                <option value="经销商">经销商</option>
+                <option value="现场用户">现场用户</option>
+            </select>
+        </div>
+        <div class="form_content">
+            <label for="username">用户名：</label>
+            <input id="username" type="text" class="input_control" placeholder="必填" />
+            <span class="nameReminder" id="nameReminder"></span>
+        </div>
+        <div>
+            <span class="userReminder">(用户名为6-12长度的字母和数字组合)</span>
+        </div>
+        <div class="form_content">
+            <label for="passwd">密码：</label>
+            <input id="passwd" type="password" class="input_control" placeholder="必填" />
+            <img class="eyes" id="eyes1" onclick="hideShowPsw1()" th:src="@{/assets/images/visible.png}" />
+        </div>
+        <div class="form_content">
+            <label for="passwd_again">确认密码：</label>
+            <input id="passwd_again" type="password" class="input_control" placeholder="必填" />
+            <img class="eyes" id="eyes2" onclick="hideShowPsw2()" th:src="@{/assets/images/visible.png}" />
+        </div>
+        <div class="form_content">
+            <label class="post">职务（选填）：</label>
+            <select id="post" class="input_control" placeholder="经理" >
+                <option value="(空)">(空)</option>
+                <option value="经理">经理</option>
+                <option value="副经理">副经理</option>
+                <option value="工程师">工程师</option>
+            </select>
+        </div>
+        <div class="form_content">
+            <label for="mail">邮箱：</label>
+            <input id="mail" type="text" class="input_control" placeholder="必填" />
+        </div>
+        <div class="form_content">
+            <label for="companyname">公司名称：</label>
+            <input id="companyname" type="text" class="input_control" placeholder="必填" />
+        </div>
+        <div class="form_content">
+            <label for="tel">联系方式：</label>
+            <input id="tel" type="text" class="input_control" placeholder="必填" />
+        </div>
+        <div class="form_content">
+            <label for="idCode">验证码：</label>
+            <input id="idCode" type="text" class="input_control" />
+            <button class="getCode" id="getCode">获取手机验证码</button>
+        </div>
+        <button id="register" class="register">注&nbsp;&nbsp;&nbsp;册</button>
+    </form>
 </div>
 </body>
 </html>
