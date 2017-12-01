@@ -39,5 +39,18 @@ public class DateUtil {
         return b;
     }
 
+    public static synchronized Date convertString2Date(String time){
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date  date = sdf.parse(time);
+            return date;
+        }catch (Exception e){
+
+        }
+
+
+        return null;
+    }
 
 }

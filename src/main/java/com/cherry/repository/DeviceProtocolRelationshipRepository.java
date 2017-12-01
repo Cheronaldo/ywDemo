@@ -15,7 +15,7 @@ public interface DeviceProtocolRelationshipRepository extends JpaRepository<Devi
      * @param isUsed
      * @return
      */
-    DeviceProtocolRelationship findBySnCodeAndIsUsed(String snCode, Integer isUsed);
+    DeviceProtocolRelationship findBySnCodeAndIsUsed(String snCode,Integer isUsed);
 
 
     /**

@@ -25,5 +25,6 @@ public interface UserDeviceRelationshipRepository extends JpaRepository<UserDevi
      * @param userName
      * @return
      */
+    // TODO 待优化： userName 的区分度更高，应该在索引的前面
     List<UserDeviceRelationship> findByIsUsedAndUserName(Integer isUsed, String userName);
 }

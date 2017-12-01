@@ -16,20 +16,19 @@ public interface ProtocolDetailRepository extends JpaRepository<ProtocolDetail,S
     /**
      * 通过SN码和版本号查询协议祥表List
      * 分页功能
-     * @param snCode
+     * 将查询的结果与可见策略表 阈值表 结合再回传给前端
      * @param protocolVersion
      * @return
      */
-    Page<ProtocolDetail> findBySnCodeAndProtocolVersion(String snCode, String protocolVersion, Pageable pageable);
+    Page<ProtocolDetail> findByProtocolVersion(String protocolVersion, Pageable pageable);
 
     /**
      * 通过SN码 和协议版本 查询需要显示的 协议详情列表
-     * 实时数据显示 协议查询
+     * 实时数据显示中 协议查询
      * 将查询的结果与可见策略表结合再回传给前端
-     * @param snCode
      * @param protocolVersion
      * @return
      */
-    List<ProtocolDetail> findListBySnCodeAndProtocolVersion(String snCode, String protocolVersion);
+    List<ProtocolDetail> findListByProtocolVersion(String protocolVersion);
 
 }

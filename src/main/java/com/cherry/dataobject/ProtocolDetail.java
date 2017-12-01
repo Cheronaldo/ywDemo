@@ -12,16 +12,16 @@ public class ProtocolDetail {
 
     @Id
     private String id;
-    /**  设备SN码 */
-    private String snCode;
+//    /**  设备SN码 */
+//    private String snCode;
     /**  协议版本号 */
     private String protocolVersion;
     /**  数据编号 */
     private Integer offsetNumber;
     /**  数据名称 */
     private String dataName;
-    /**  数据报警阈值 */
-    private String alarmThreshold;
+//    /**  数据报警阈值 */
+//    private String alarmThreshold;
     /**  备用字段 */
     private String deleted;
 
@@ -35,13 +35,13 @@ public class ProtocolDetail {
         this.id = id;
     }
 
-    public String getSnCode() {
-        return snCode;
-    }
-
-    public void setSnCode(String snCode) {
-        this.snCode = snCode;
-    }
+//    public String getSnCode() {
+//        return snCode;
+//    }
+//
+//    public void setSnCode(String snCode) {
+//        this.snCode = snCode;
+//    }
 
     public String getProtocolVersion() {
         return protocolVersion;
@@ -67,13 +67,13 @@ public class ProtocolDetail {
         this.dataName = dataName;
     }
 
-    public String getAlarmThreshold() {
-        return alarmThreshold;
-    }
-
-    public void setAlarmThreshold(String alarmThreshold) {
-        this.alarmThreshold = alarmThreshold;
-    }
+//    public String getAlarmThreshold() {
+//        return alarmThreshold;
+//    }
+//
+//    public void setAlarmThreshold(String alarmThreshold) {
+//        this.alarmThreshold = alarmThreshold;
+//    }
 
     public String getDeleted() {
         return deleted;
@@ -87,11 +87,11 @@ public class ProtocolDetail {
     public String toString() {
         return "ProtocolDetail{" +
                 "id='" + id + '\'' +
-                ", snCode='" + snCode + '\'' +
+               // ", snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", offsetNumber=" + offsetNumber +
                 ", dataName='" + dataName + '\'' +
-                ", alarmThreshold='" + alarmThreshold + '\'' +
+                //", alarmThreshold='" + alarmThreshold + '\'' +
                 ", deleted='" + deleted + '\'' +
                 '}';
     }

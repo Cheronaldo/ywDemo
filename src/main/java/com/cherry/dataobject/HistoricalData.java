@@ -21,6 +21,8 @@ public class HistoricalData {
     private String deviceData;
     /**  数据储存时间 */
     private Date dataTime;
+    /**  数据偏移值 */
+    private Integer offsetNumber;
 
     public HistoricalData(){}
 
@@ -64,6 +66,14 @@ public class HistoricalData {
         this.dataTime = dataTime;
     }
 
+    public Integer getOffsetNumber() {
+        return offsetNumber;
+    }
+
+    public void setOffsetNumber(Integer offsetNumber) {
+        this.offsetNumber = offsetNumber;
+    }
+
     @Override
     public String toString() {
         return "HistoricalData{" +
@@ -72,6 +82,7 @@ public class HistoricalData {
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", deviceData='" + deviceData + '\'' +
                 ", dataTime=" + dataTime +
+                ", offsetNumber=" + offsetNumber +
                 '}';
     }
 }

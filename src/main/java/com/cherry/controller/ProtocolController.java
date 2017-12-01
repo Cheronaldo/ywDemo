@@ -63,20 +63,17 @@ public class ProtocolController {
         PageRequest request = new PageRequest(page - 1, rows);
 
         // 2.获取分页查询对象
-        Page<ProtocolConfigDetail> configDetailPage = protocolService.listFindCurrentBySnCode(form, request);
-        if (configDetailPage == null){
+       map = protocolService.listFindCurrentBySnCode(form, request);
+        if (map.size() == 0){
             // TODO 查询异常也要返回对应的map?
             log.error("未查询到相关协议！");
             throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
         }
-        if (configDetailPage.getSize() == 0){
+        boolean isNull = Integer.parseInt(String.valueOf(map.get("records"))) == 0;
+        if (isNull){
             log.error("未查询到相关协议！");
             throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
         }
-        // total: 总页数 records：总记录数 rows:当前页的实体记录
-        map.put("total", configDetailPage.getTotalPages());
-        map.put("records", configDetailPage.getTotalElements());
-        map.put("rows", configDetailPage.getContent());
 
         return map;
        // return ResultVOUtil.success(ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage(), detailList);
@@ -105,19 +102,16 @@ public class ProtocolController {
         // 1.封装查询参数
         PageRequest request = new PageRequest(page - 1, rows);
         // 2.获取分页查询对象
-        Page<ProtocolConfigDetail> configDetailPage = protocolService.updateProtocolDetail(form, request);
-        if (configDetailPage == null){
+        map = protocolService.updateProtocolDetail(form, request);
+        if (map.size() == 0){
             log.error("协议修改失败！");
             throw new ProtocolException(ProtocolEnum.UPDATE_PROTOCOL_FAIL);
         }
-        if (configDetailPage.getSize() == 0){
+        boolean isNull = Integer.parseInt(String.valueOf(map.get("records"))) == 0;
+        if (isNull){
             log.error("协议修改失败！");
             throw new ProtocolException(ProtocolEnum.UPDATE_PROTOCOL_FAIL);
         }
-
-        map.put("total", configDetailPage.getTotalPages());
-        map.put("records", configDetailPage.getTotalElements());
-        map.put("rows", configDetailPage.getContent());
 
         return map;
         //return ResultVOUtil.success(ProtocolEnum.UPDATE_PROTOCOL_SUCCESS.getMessage(), detailList);

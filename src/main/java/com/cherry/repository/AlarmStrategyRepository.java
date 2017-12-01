@@ -8,4 +8,25 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by Administrator on 2017/11/29.
  */
 public interface AlarmStrategyRepository extends JpaRepository<AlarmStrategy,String>{
+
+    /**
+     * 通过用户名 SN 版本号 获取 报警策略记录
+     * @param userName
+     * @param snCode
+     * @param protocolVersion
+     * @param isUsed
+     * @return
+     */
+    AlarmStrategy findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(String userName, String snCode, String protocolVersion, Integer isUsed);
+
+    /**
+     * 通过用户名 SN 版本号 可视掩码获取 可视策略记录
+     * @param userName
+     * @param snCode
+     * @param protocolVersion
+     * @param alarmMask
+     * @return
+     */
+    AlarmStrategy findByUserNameAndSnCodeAndProtocolVersionAndAlarmMask(String userName, String snCode, String protocolVersion, String alarmMask);
+
 }

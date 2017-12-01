@@ -82,21 +82,19 @@ public class DataController {
     }
 
     @PostMapping("/getProtocol")
-    public ResultVO getRealTimeProtocol(@RequestParam("snCode") String snCode,
+    public ResultVO getRealTimeProtocol(@RequestParam("userName") String userName,
+                                        @RequestParam("snCode") String snCode,
                                         @RequestParam("protocolVersion") String protocolVersion){
 
         // 1.查询需要显示的协议详情列表
-        List<ProtocolConfigDetail> detailList = protocolService.listForRealTimeDisplay(snCode, protocolVersion);
+        List<RealTimeProtocolVO> protocolVOList = protocolService.listForRealTimeDisplay(userName, snCode, protocolVersion);
 
-        if(detailList.size() == 0){
+        if(protocolVOList.size() == 0){
             log.error("协议查询失败！");
             throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
         }
 
-        // 2.封装为RealTimeProtocolVO对象
-        List<RealTimeProtocolVO> protocolVOList = ProtocolConfigDetail2RealTimeProtocolVOConverter.convert(detailList);
-
-        return ResultVOUtil.success(ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage(), protocolVOList);
+       return ResultVOUtil.success(ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage(), protocolVOList);
 
     }
 

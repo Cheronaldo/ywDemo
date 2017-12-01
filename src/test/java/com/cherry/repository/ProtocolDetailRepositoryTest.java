@@ -31,11 +31,11 @@ public class ProtocolDetailRepositoryTest {
 
         ProtocolDetail detail = new ProtocolDetail();
         detail.setId(KeyUtil.genUniqueKey());
-        detail.setSnCode("1511962706665703659");
+//        detail.setSnCode("1511962706665703659");
         detail.setProtocolVersion("yw1234");
         detail.setOffsetNumber(2);
         detail.setDataName("PH值");
-        detail.setAlarmThreshold("2");
+        //detail.setAlarmThreshold("2");
 
         ProtocolDetail result = repository.save(detail);
 
@@ -49,7 +49,7 @@ public class ProtocolDetailRepositoryTest {
 
         PageRequest request = new PageRequest(0, 2);
 
-        Page<ProtocolDetail> result = repository.findBySnCodeAndProtocolVersion("1511962658712691673", "yw1234", request);
+        Page<ProtocolDetail> result = repository.findByProtocolVersion( "yw123", request);
 
         Assert.assertNotEquals(0,result.getSize());
 
@@ -58,7 +58,7 @@ public class ProtocolDetailRepositoryTest {
     @Test
     public void findListBySnCodeAndProtocolVersion() throws Exception {
 
-        List<ProtocolDetail> result = repository.findListBySnCodeAndProtocolVersion("1511962658712691673", "yw1234");
+        List<ProtocolDetail> result = repository.findListByProtocolVersion( "yw1234");
 
         Assert.assertNotEquals(0, result.size());
 

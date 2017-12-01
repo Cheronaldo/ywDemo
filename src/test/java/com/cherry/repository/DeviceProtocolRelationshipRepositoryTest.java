@@ -43,7 +43,7 @@ public class DeviceProtocolRelationshipRepositoryTest {
     @Test
     public void findBySnCodeAndIsUsed() throws Exception {
 
-        DeviceProtocolRelationship result = relationshipRepository.findBySnCodeAndIsUsed("1511962658712691673", 1);
+        DeviceProtocolRelationship result = relationshipRepository.findBySnCodeAndIsUsed("1511962658712691673",1);
 
         Assert.assertNotNull(result);
     }

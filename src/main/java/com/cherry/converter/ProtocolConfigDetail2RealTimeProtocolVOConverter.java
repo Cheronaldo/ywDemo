@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * ProtocolConfigDetail --> RealTimeProtocolVO 转换器
+ * 可删除
  * Created by Administrator on 2017/11/24.
  */
 public class ProtocolConfigDetail2RealTimeProtocolVOConverter {
