@@ -5,6 +5,7 @@ import com.cherry.dataobject.ProtocolDetail;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolQueryForm;
+import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.RealTimeProtocolVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +65,12 @@ public interface ProtocolService {
      */
     List<RealTimeProtocolVO> listForRealTimeDisplay(String userName,String snCode, String protocolVersion);
 
-    // TODO 所有项历史数据协议请求 查询当前使用协议的协议详情列表
+    /**
+     * 通过协议版本获取协议详情
+     * 用于全项历史数据查询协议详情
+     * @param protocolVersion
+     * @return
+     */
+    List<HistoricalDataProtocolVO> listFindByProtocolVersion(String protocolVersion);
 
 }

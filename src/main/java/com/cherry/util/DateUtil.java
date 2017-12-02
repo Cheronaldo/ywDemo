@@ -48,9 +48,14 @@ public class DateUtil {
         }catch (Exception e){
 
         }
-
-
         return null;
+    }
+
+    public static synchronized String convertDate2String(Date date){
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(date);
+
     }
 
 }

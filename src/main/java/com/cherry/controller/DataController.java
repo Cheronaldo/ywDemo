@@ -5,14 +5,20 @@ import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.enums.ProtocolEnum;
 import com.cherry.exception.ProtocolException;
+import com.cherry.form.AllDataQueryForm;
 import com.cherry.form.ProtocolAdaptForm;
+import com.cherry.form.SingleDataQueryForm;
+import com.cherry.service.DataService;
 import com.cherry.service.ProtocolService;
 import com.cherry.util.ResultVOUtil;
+import com.cherry.vo.HistoricalDataProtocolVO;
+import com.cherry.vo.HistoricalDataVO;
 import com.cherry.vo.RealTimeProtocolVO;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据处理API层
@@ -34,6 +41,9 @@ public class DataController {
 
     @Autowired
     private ProtocolService protocolService;
+
+    @Autowired
+    private DataService dataService;
 
 
     /**
@@ -81,7 +91,14 @@ public class DataController {
         return ResultVOUtil.success(ProtocolEnum.PROTOCOL_ADAPT_SUCCESS.getMessage());
     }
 
-    @PostMapping("/getProtocol")
+    /**
+     * 获取实时数据协议详情
+     * @param userName
+     * @param snCode
+     * @param protocolVersion
+     * @return
+     */
+    @PostMapping("/getProtocol/realTime")
     public ResultVO getRealTimeProtocol(@RequestParam("userName") String userName,
                                         @RequestParam("snCode") String snCode,
                                         @RequestParam("protocolVersion") String protocolVersion){
@@ -98,5 +115,82 @@ public class DataController {
 
     }
 
+    /**
+     * 查询单项历史数据
+     * @param form
+     * @param bindingResult
+     * @return
+     */
+    @PostMapping("/getData/single")
+    public ResultVO getSingleHistoricalData(@Valid SingleDataQueryForm form,
+                                            BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            // TODO 数据处理异常！！！
+            log.error("协议版本查询失败！");
+            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+        }
+
+        List<HistoricalDataVO> dataVOList = dataService.listGetOne(form);
+
+        if (dataVOList == null){
+            // TODO 数据处理异常！！！
+            log.error("为查询到相关数据记录！");
+            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
+        }
+
+        return ResultVOUtil.success("数据查询成功", dataVOList);
+    }
+
+    /**
+     * 获取历史数据 协议详情
+     * @param protocolVersion
+     * @return
+     */
+    @PostMapping("/getProtocol/history")
+    public ResultVO getHistoryDataProtocol(@RequestParam("protocolVersion") String protocolVersion){
+
+        List<HistoricalDataProtocolVO> protocolVOList = protocolService.listFindByProtocolVersion(protocolVersion);
+
+        if (protocolVOList.size() == 0){
+            log.error("查询协议失败！");
+            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
+        }
+
+        return ResultVOUtil.success(ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage(), protocolVOList);
+
+    }
+
+    /**
+     * 全项历史数据查询
+     * @param form
+     * @param bindingResult
+     * @param page
+     * @param rows
+     * @return
+     */
+    @PostMapping("/getData/all")
+    public Map<String, Object> getAllHistoricalData(@Valid AllDataQueryForm form,
+                                                    BindingResult bindingResult,
+                                                    @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                    @RequestParam(value = "rows", defaultValue = "10") Integer rows){
+
+        if (bindingResult.hasErrors()){
+            // TODO 数据处理异常！！！
+            log.error("协议版本查询失败！");
+            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+        }
+        // 1.封装查询参数
+        PageRequest request = new PageRequest(page - 1, rows);
+        // 2.获取数据查询 分页对象
+        Map<String, Object> map = dataService.listGetAll(form, request);
+
+        if (map == null){
+            // TODO 数据处理异常！！！
+            log.error("协议版本查询失败！");
+            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+        }
+
+        return map;
+    }
 
 }

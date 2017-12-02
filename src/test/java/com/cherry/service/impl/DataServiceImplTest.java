@@ -2,7 +2,9 @@ package com.cherry.service.impl;
 
 import com.cherry.dataobject.HistoricalData;
 import com.cherry.form.AllDataQueryForm;
+import com.cherry.form.SingleDataQueryForm;
 import com.cherry.util.DateUtil;
+import com.cherry.vo.HistoricalDataVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -30,25 +34,36 @@ public class DataServiceImplTest {
     @Test
     public void listGetAll() throws Exception {
 
-        Date oldDate = DateUtil.convertString2Date("2017-12-01 21:51:00");
-        Date newDate = DateUtil.convertString2Date("2017-12-01 21:53:00");
+        //Date oldDate = DateUtil.convertString2Date("2017-12-01 21:51:00");
+        //Date newDate = DateUtil.convertString2Date("2017-12-01 21:53:00");
 
         AllDataQueryForm form = new AllDataQueryForm();
         form.setSnCode("1511962658712691673");
         form.setProtocolVersion("yw123");
-        form.setOldDate(oldDate);
-        form.setNewDate(newDate);
+        form.setOldDate("");
+        form.setNewDate("");
 
         PageRequest request = new PageRequest(0, 5);
 
-        Page<HistoricalData> result = service.listGetAll(form, request);
+        Map<String, Object> result = service.listGetAll(form, request);
 
 
-        Assert.assertNotEquals(0, result.getTotalPages());
+        Assert.assertNotEquals(0, result.get("total"));
     }
 
     @Test
     public void listGetOne() throws Exception {
+
+        SingleDataQueryForm form = new SingleDataQueryForm();
+        form.setSnCode("1511962658712691673");
+        form.setProtocolVersion("yw123");
+        form.setOffsetNumber(2);
+        form.setOldDate("");
+        form.setNewDate("");
+
+        List<HistoricalDataVO> result = service.listGetOne(form);
+
+        Assert.assertNotEquals(0, result.size());
     }
 
 }

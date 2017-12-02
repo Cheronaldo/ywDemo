@@ -15,9 +15,9 @@ public class SingleDataQueryForm {
     /**  数据编号 */
     private Integer offsetNumber;
     /**  起始时间 */
-    private Date oldDate;
+    private String oldDate;
     /**  终止时间 */
-    private Date newDate;
+    private String newDate;
 
     public SingleDataQueryForm(){}
 
@@ -45,19 +45,19 @@ public class SingleDataQueryForm {
         this.offsetNumber = offsetNumber;
     }
 
-    public Date getOldDate() {
+    public String getOldDate() {
         return oldDate;
     }
 
-    public void setOldDate(Date oldDate) {
+    public void setOldDate(String oldDate) {
         this.oldDate = oldDate;
     }
 
-    public Date getNewDate() {
+    public String getNewDate() {
         return newDate;
     }
 
-    public void setNewDate(Date newDate) {
+    public void setNewDate(String newDate) {
         this.newDate = newDate;
     }
 
@@ -67,8 +67,8 @@ public class SingleDataQueryForm {
                 "snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", offsetNumber=" + offsetNumber +
-                ", oldDate=" + oldDate +
-                ", newDate=" + newDate +
+                ", oldDate='" + oldDate + '\'' +
+                ", newDate='" + newDate + '\'' +
                 '}';
     }
 }

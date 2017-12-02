@@ -1,6 +1,7 @@
 package com.cherry.service.impl;
 
 import com.cherry.converter.ProtocolConfigDetail2RealTimeProtocolVOConverter;
+import com.cherry.converter.ProtocolDetail2HistoricalDataProtocolVO;
 import com.cherry.converter.ProtocolDetail2ProtocolDetailVO;
 import com.cherry.converter.ProtocolDetail2RealTimeProtocolVO;
 import com.cherry.dataobject.*;
@@ -14,6 +15,7 @@ import com.cherry.repository.*;
 import com.cherry.service.ProtocolService;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
+import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.ProtocolDetailVO;
 import com.cherry.vo.RealTimeProtocolVO;
 import lombok.extern.slf4j.Slf4j;
@@ -344,5 +346,17 @@ public class ProtocolServiceImpl implements ProtocolService{
         // 3.将 ProtocolDetail 对象列表 封装为 RealTimeProtocolVO 对象列表
         return ProtocolDetail2RealTimeProtocolVO.convert(detailListShow);
 
+    }
+
+    @Override
+    public List<HistoricalDataProtocolVO> listFindByProtocolVersion(String protocolVersion) {
+
+        // 1.获取协议详情 列表
+        List<ProtocolDetail> detailList = detailRepository.findListByProtocolVersion(protocolVersion);
+
+        // 2.转换为HistoricalDataProtocolVO 列表
+        List<HistoricalDataProtocolVO> protocolVOList = ProtocolDetail2HistoricalDataProtocolVO.convert(detailList);
+
+        return protocolVOList;
     }
 }

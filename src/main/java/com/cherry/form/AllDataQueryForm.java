@@ -13,9 +13,10 @@ public class AllDataQueryForm {
     /**  协议版本号 */
     private String protocolVersion;
     /**  起始时间 */
-    private Date oldDate;
+    // 页面传下来的是字符串时间——————————————————
+    private String oldDate;
     /**  终止时间 */
-    private Date newDate;
+    private String newDate;
 
     public String getSnCode() {
         return snCode;
@@ -33,19 +34,19 @@ public class AllDataQueryForm {
         this.protocolVersion = protocolVersion;
     }
 
-    public Date getOldDate() {
+    public String getOldDate() {
         return oldDate;
     }
 
-    public void setOldDate(Date oldDate) {
+    public void setOldDate(String oldDate) {
         this.oldDate = oldDate;
     }
 
-    public Date getNewDate() {
+    public String getNewDate() {
         return newDate;
     }
 
-    public void setNewDate(Date newDate) {
+    public void setNewDate(String newDate) {
         this.newDate = newDate;
     }
 
@@ -54,8 +55,8 @@ public class AllDataQueryForm {
         return "AllDataQueryForm{" +
                 "snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
-                ", oldDate=" + oldDate +
-                ", newDate=" + newDate +
+                ", oldDate='" + oldDate + '\'' +
+                ", newDate='" + newDate + '\'' +
                 '}';
     }
 }

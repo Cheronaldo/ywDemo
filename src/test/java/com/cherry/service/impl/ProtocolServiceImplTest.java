@@ -6,6 +6,7 @@ import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolQueryForm;
 import com.cherry.util.KeyUtil;
+import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.RealTimeProtocolVO;
 import org.junit.Assert;
 import org.junit.Test;
@@ -91,6 +92,13 @@ public class ProtocolServiceImplTest {
     @Test
     public void listForRealTimeDisplay() throws Exception{
         List<RealTimeProtocolVO> result = service.listForRealTimeDisplay("abc1234","1511962658712691673", "yw123");
+
+        Assert.assertNotEquals(0, result.size());
+    }
+
+    @Test
+    public void listFindByProtocolVersion(){
+        List<HistoricalDataProtocolVO> result = service.listFindByProtocolVersion("yw123");
 
         Assert.assertNotEquals(0, result.size());
     }
