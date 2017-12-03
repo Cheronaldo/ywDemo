@@ -47,8 +47,8 @@ public class UserDeviceRelationshipRepositoryTest {
     }
 
     @Test
-    public void findByIsUsedAndUserName() throws Exception {
-        List<UserDeviceRelationship> result = relationshipRepository.findByIsUsedAndUserName(1,"abc1234");
+    public void findByUserNameAndIsUsed() throws Exception {
+        List<UserDeviceRelationship> result = relationshipRepository.findByUserNameAndIsUsed("cherry1",1);
 
         Assert.assertNotEquals(0,result.size());
     }

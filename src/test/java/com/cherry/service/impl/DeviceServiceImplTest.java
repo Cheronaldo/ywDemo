@@ -32,7 +32,7 @@ public class DeviceServiceImplTest {
 
     @Test
     public void checkSiteDeviceIsOnHand() throws Exception {
-        Map<String,Object> map = service.checkSiteDeviceIsOnHand("1510311999826615905","34fr6t","abc1234");
+        Map<String,Object> map = service.checkSiteDeviceIsOnHand("1510917580195286976","34fr6t","abc1234");
 
         int code = Integer.parseInt(String.valueOf(map.get("code")));
         String msg = (String)map.get("msg");
@@ -102,7 +102,7 @@ public class DeviceServiceImplTest {
     @Test
     public void listFindByUser() throws Exception {
 
-        List<DeviceInfo> result = service.listFindByUser("abc1234567");
+        List<DeviceInfo> result = service.listFindByUser("cherry1");
         Assert.assertNotEquals(0,result.size());
 
     }

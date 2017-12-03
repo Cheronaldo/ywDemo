@@ -21,10 +21,10 @@ public interface UserDeviceRelationshipRepository extends JpaRepository<UserDevi
 
     /**
      * 通过用户名和启用状态 查询该用户启用的全部设备SN码列表
-     * @param isUsed
      * @param userName
+     * @param isUsed
      * @return
      */
     // TODO 待优化： userName 的区分度更高，应该在索引的前面
-    List<UserDeviceRelationship> findByIsUsedAndUserName(Integer isUsed, String userName);
+    List<UserDeviceRelationship> findByUserNameAndIsUsed(String userName,Integer isUsed);
 }

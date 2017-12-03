@@ -15,6 +15,7 @@ import com.cherry.repository.*;
 import com.cherry.service.ProtocolService;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
+import com.cherry.util.StringUtil;
 import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.ProtocolDetailVO;
 import com.cherry.vo.RealTimeProtocolVO;
@@ -102,11 +103,9 @@ public class ProtocolServiceImpl implements ProtocolService{
         String visibleMask = visibleStrategy.getVisibleMask();
         String alarmMask = alarmStrategy.getAlarmMask();
 
-        char[] visibleList = new char[visibleMask.length()];
-        visibleList = visibleMask.toCharArray();
 
-        char[] alarmList = new char[alarmMask.length()];
-        alarmList = alarmMask.toCharArray();
+        char[] visibleList = StringUtil.string2CharList(visibleMask);
+        char[] alarmList = StringUtil.string2CharList(alarmMask);
 
         List<ProtocolStrategyDTO> strategyDTOList = new ArrayList<>();
         for (int i = 0; i<= visibleMask.length()-1; i++){
@@ -330,8 +329,7 @@ public class ProtocolServiceImpl implements ProtocolService{
         VisibleStrategy visibleStrategy = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(userName, snCode, protocolVersion, 1);
 
         String visibleMask = visibleStrategy.getVisibleMask();
-        char[] visibleList = new char[visibleMask.length()];
-        visibleList = visibleMask.toCharArray();
+        char[] visibleList = StringUtil.string2CharList(visibleMask);
 
         // 2.2 封装为可视 ProtocolDetail 对象列表
         List<ProtocolDetail> detailListShow = new ArrayList<ProtocolDetail>();

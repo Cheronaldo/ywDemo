@@ -59,7 +59,7 @@ public class DeviceServiceImpl implements DeviceService{
         Map<String,Object> map = new HashMap<String,Object>();
 
         // 1.SN码是否有对应的校验码 查询最新一条校验记录
-        DeviceVerify deviceVerify = deviceVerifyRepository.findLatestOneBySnCode(snCode);
+        DeviceVerify deviceVerify = deviceVerifyRepository.findFirstBySnCodeOrderByIdDesc(snCode);
         boolean isChecked = (deviceVerify == null) || (!checkCode.equals(deviceVerify.getCheckCode()));
         if (isChecked){
             // SN码或校验码错误
@@ -207,7 +207,7 @@ public class DeviceServiceImpl implements DeviceService{
 
 
         // 1.通过 用户名 和已启用 获取用户设备启用关系列表
-        List<UserDeviceRelationship> userDeviceRelationshipList = userDeviceRelationshipRepository.findByIsUsedAndUserName(1,userName);
+        List<UserDeviceRelationship> userDeviceRelationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsed(userName, 1);
 
         // 2.获取SN码查询列表
         List<String> snCodeList = userDeviceRelationshipList.stream()

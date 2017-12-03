@@ -34,16 +34,13 @@ public class DataServiceImplTest {
     @Test
     public void listGetAll() throws Exception {
 
-        //Date oldDate = DateUtil.convertString2Date("2017-12-01 21:51:00");
-        //Date newDate = DateUtil.convertString2Date("2017-12-01 21:53:00");
-
         AllDataQueryForm form = new AllDataQueryForm();
         form.setSnCode("1511962658712691673");
         form.setProtocolVersion("yw123");
-        form.setOldDate("");
-        form.setNewDate("");
+        form.setOldDate("2017-12-01 21:51:00");
+        form.setNewDate("2017-12-01 21:53:00");
 
-        PageRequest request = new PageRequest(0, 5);
+        PageRequest request = new PageRequest(0, 1);
 
         Map<String, Object> result = service.listGetAll(form, request);
 

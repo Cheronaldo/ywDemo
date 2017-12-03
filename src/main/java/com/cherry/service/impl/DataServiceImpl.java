@@ -30,22 +30,9 @@ public class DataServiceImpl implements DataService{
     public Map<String, Object> listGetAll(AllDataQueryForm form, Pageable pageable) {
 
         Map<String, Object> map = new HashMap<String, Object>();
-        Date oldDate = null;
-        Date newDate = null;
         // 1.判断页面时间参数是否为 null
-        boolean isOldDateNull = StringUtils.isEmpty(form.getOldDate());
-        boolean isNewDateNull = StringUtils.isEmpty(form.getNewDate());
-        if (isOldDateNull){
-            // 为空 则默认为最早记录的时间
-            form.setOldDate("2017-01-01 00:00:00");
-        }
-        oldDate = DateUtil.convertString2Date(form.getOldDate());
-        if (isNewDateNull){
-            // 为空则默认为当前系统时间
-            newDate = new Date();
-        }else {
-            newDate = DateUtil.convertString2Date(form.getNewDate());
-        }
+        Date oldDate = DateUtil.oldDateHandle(form.getOldDate());
+        Date newDate = DateUtil.newDateHandle(form.getNewDate());
 
         // 2.获取历史数据记录 分页对象
         Page<HistoricalData> dataPage = dataRepository.findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc(form.getSnCode(),
@@ -58,7 +45,7 @@ public class DataServiceImpl implements DataService{
         }
 
         // 3.封装为 HistoricalDataVO
-        List<HistoricalDataVO> historicalDataVOList = HistoricalData2HistoricalDataVO.convert(dataPage.getContent());
+        List<HistoricalDataVO> historicalDataVOList = HistoricalData2HistoricalDataVO.convertAll(dataPage.getContent());
 
 
         map.put("total",dataPage.getTotalPages());
@@ -73,22 +60,8 @@ public class DataServiceImpl implements DataService{
     public List<HistoricalDataVO> listGetOne(SingleDataQueryForm form) {
 
         // 1.判断页面时间参数是否为 null
-        Date oldDate = null;
-        Date newDate = null;
-        // 1.判断页面时间参数是否为 null
-        boolean isOldDateNull = StringUtils.isEmpty(form.getOldDate());
-        boolean isNewDateNull = StringUtils.isEmpty(form.getNewDate());
-        if (isOldDateNull){
-            // 为空 则默认为最早记录的时间
-            form.setOldDate("2017-01-01 00:00:00");
-        }
-        oldDate = DateUtil.convertString2Date(form.getOldDate());
-        if (isNewDateNull){
-            // 为空则默认为当前系统时间
-            newDate = new Date();
-        }else {
-            newDate = DateUtil.convertString2Date(form.getNewDate());
-        }
+        Date oldDate = DateUtil.oldDateHandle(form.getOldDate());
+        Date newDate = DateUtil.newDateHandle(form.getNewDate());
 
         // 2.获取历史数据记录列表
         List<HistoricalData> historicalDataList = dataRepository.findBySnCodeAndProtocolVersionAndDataTimeBetween(form.getSnCode(),
@@ -99,7 +72,7 @@ public class DataServiceImpl implements DataService{
         if (historicalDataList.size() == 0){
             return null;
         }
-        // 3. 获取单项历史数据对象列表  封装为lambda表达式
+        // 3. 获取单项历史数据对象列表  不封装为lambda表达式 因为还有参数 offsetNumber ,使用lambda表达式更麻烦
         List<HistoricalDataVO> historicalDataVOList = new ArrayList<>();
         for (HistoricalData historicalData : historicalDataList){
 

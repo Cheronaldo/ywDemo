@@ -13,18 +13,19 @@ import java.util.stream.Collectors;
  */
 public class HistoricalData2HistoricalDataVO {
 
-    public static HistoricalDataVO convert(HistoricalData historicalData){
+    public static HistoricalDataVO convertAll(HistoricalData historicalData){
         HistoricalDataVO historicalDataVO = new HistoricalDataVO();
         historicalDataVO.setDataTime(DateUtil.convertDate2String(historicalData.getDataTime()));
         historicalDataVO.setDeviceData(historicalData.getDeviceData());
         return historicalDataVO;
     }
 
-    public static List<HistoricalDataVO> convert(List<HistoricalData> historicalDataList){
+    public static List<HistoricalDataVO> convertAll(List<HistoricalData> historicalDataList){
 
         return historicalDataList.stream().map(e ->
-                convert(e)
+                convertAll(e)
         ).collect(Collectors.toList());
     }
+
 
 }
