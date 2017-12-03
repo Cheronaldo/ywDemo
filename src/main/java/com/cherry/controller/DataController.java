@@ -3,7 +3,9 @@ package com.cherry.controller;
 import com.cherry.converter.ProtocolConfigDetail2RealTimeProtocolVOConverter;
 import com.cherry.dataobject.ProtocolConfigDetail;
 import com.cherry.dto.ProtocolAdaptDTO;
+import com.cherry.enums.DataHandleEnum;
 import com.cherry.enums.ProtocolEnum;
+import com.cherry.exception.DataException;
 import com.cherry.exception.ProtocolException;
 import com.cherry.form.AllDataQueryForm;
 import com.cherry.form.ProtocolAdaptForm;
@@ -74,8 +76,8 @@ public class DataController {
     public ResultVO realTimeProtocolAdapt (@Valid ProtocolAdaptForm form,
                                            BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            log.error("协议版本查询失败！");
-            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+            log.error("适配条件异常！");
+            throw new ProtocolException(ProtocolEnum.ADAPT_CRITERIA_ERROR);
         }
         // 1.获取ProtocolAdaptDTO对象
         ProtocolAdaptDTO adaptDTO = new ProtocolAdaptDTO();
@@ -125,20 +127,18 @@ public class DataController {
     public ResultVO getSingleHistoricalData(@Valid SingleDataQueryForm form,
                                             BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            // TODO 数据处理异常！！！
-            log.error("协议版本查询失败！");
-            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+            log.error("查询条件异常！");
+            throw new DataException(DataHandleEnum.QUERY_CRITERIA_ERROR);
         }
 
         List<HistoricalDataVO> dataVOList = dataService.listGetOne(form);
 
         if (dataVOList == null){
-            // TODO 数据处理异常！！！
-            log.error("为查询到相关数据记录！");
-            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
+            log.error("未查询到相关数据记录！");
+            throw new DataException(DataHandleEnum.GET_DATA_FAIL);
         }
 
-        return ResultVOUtil.success("数据查询成功", dataVOList);
+        return ResultVOUtil.success(DataHandleEnum.GET_DATA_SUCCESS.getMessage(), dataVOList);
     }
 
     /**
@@ -175,9 +175,8 @@ public class DataController {
                                                     @RequestParam(value = "rows", defaultValue = "10") Integer rows){
 
         if (bindingResult.hasErrors()){
-            // TODO 数据处理异常！！！
-            log.error("协议版本查询失败！");
-            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+            log.error("查询条件异常！");
+            throw new DataException(DataHandleEnum.QUERY_CRITERIA_ERROR);
         }
         // 1.封装查询参数
         PageRequest request = new PageRequest(page - 1, rows);
@@ -185,9 +184,8 @@ public class DataController {
         Map<String, Object> map = dataService.listGetAll(form, request);
 
         if (map == null){
-            // TODO 数据处理异常！！！
-            log.error("协议版本查询失败！");
-            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_VERSION_FAIL);
+            log.error("未查询到相关数据记录！");
+            throw new DataException(DataHandleEnum.GET_DATA_FAIL);
         }
 
         return map;

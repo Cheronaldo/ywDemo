@@ -48,7 +48,7 @@ public class DataServiceImpl implements DataService{
         }
 
         // 2.获取历史数据记录 分页对象
-        Page<HistoricalData> dataPage = dataRepository.findBySnCodeAndProtocolVersionAndDataTime(form.getSnCode(),
+        Page<HistoricalData> dataPage = dataRepository.findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc(form.getSnCode(),
                                                                         form.getProtocolVersion(),
                                                                         oldDate,
                                                                         newDate,

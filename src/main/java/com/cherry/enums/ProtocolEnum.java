@@ -14,6 +14,7 @@ public enum ProtocolEnum {
     GET_PROTOCOL_VERSION_SUCCESS(7,"获取协议版本号成功！"),
     PROTOCOL_ADAPT_SUCCESS(8,"协议适配成功！"),
     PROTOCOL_ADAPT_FAIL(9,"协议适配失败！"),
+    ADAPT_CRITERIA_ERROR(10,"适配条件异常!")
     ;
 
 
