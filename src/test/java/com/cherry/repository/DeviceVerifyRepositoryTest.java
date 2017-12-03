@@ -31,8 +31,8 @@ public class DeviceVerifyRepositoryTest {
 
         DeviceVerify deviceVerify = new DeviceVerify();
         deviceVerify.setId(KeyUtil.genUniqueKey());
-        deviceVerify.setSnCode(KeyUtil.genUniqueKey());
-        deviceVerify.setCheckCode("34fr6r");
+        deviceVerify.setSnCode("1510917580195286976");
+        deviceVerify.setCheckCode("34fr6k");
         deviceVerify.setGenerateTime(DateUtil.getDate());
         deviceVerify.setProtocolVersion("12345");
 
@@ -51,6 +51,15 @@ public class DeviceVerifyRepositoryTest {
     @Test
     public void findBySnCode() throws Exception {
         DeviceVerify result = deviceVerifyRepository.findLatestOneBySnCode("1510543259454686637");
+
+        Assert.assertNotNull(result);
+
+    }
+
+    @Test
+    public void findFirstBySnCodeOrderByIdDesc() throws Exception{
+
+        DeviceVerify result = deviceVerifyRepository.findFirstBySnCodeOrderByIdDesc("1510917580195286976");
 
         Assert.assertNotNull(result);
 

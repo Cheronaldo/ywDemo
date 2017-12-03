@@ -19,4 +19,11 @@ public interface DeviceVerifyRepository extends JpaRepository<DeviceVerify,Strin
     @Transactional
     @Query(value = "select * from device_verify where device_verify.sn_code = ?1 order by device_verify.id desc limit 1",nativeQuery = true)
     DeviceVerify findLatestOneBySnCode(String snCode);
+
+    /**
+     * 通过SN码查询设备最新一条校验码记录(不需写原生sql)
+     * @param snCode
+     * @return
+     */
+    DeviceVerify findFirstBySnCodeOrderByIdDesc(String snCode);
 }

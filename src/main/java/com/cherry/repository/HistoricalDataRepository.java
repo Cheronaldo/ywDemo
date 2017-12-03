@@ -32,6 +32,30 @@ public interface HistoricalDataRepository extends JpaRepository<HistoricalData,S
             nativeQuery = true)
     Page<HistoricalData> findBySnCodeAndProtocolVersionAndDataTime(String snCode, String protocolVersion, Date oldDate, Date newDate, Pageable pageable);
 
+    /**
+     *
+     * 通过SN 协议版本 查询一段时间内的数据记录
+     * 分页
+     * 所有项历史数据
+     * 以数据逆序输出（显示最新数据）
+     * @param snCode
+     * @param protocolVersion
+     * @param oldDate
+     * @param newDate
+     * @param pageable
+     * @return
+     */
+    Page<HistoricalData> findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc(String snCode, String protocolVersion, Date oldDate, Date newDate, Pageable pageable);
+
+    /**
+     * 通过SN 协议版本 查询一段时间内的数据记录
+     * 单项历史数据
+     * @param snCode
+     * @param protocolVersion
+     * @param oldDate
+     * @param newDate
+     * @return
+     */
     List<HistoricalData> findBySnCodeAndProtocolVersionAndDataTimeBetween(String snCode, String protocolVersion, Date oldDate, Date newDate);
 
 }

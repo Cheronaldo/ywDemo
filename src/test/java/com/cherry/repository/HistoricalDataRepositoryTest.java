@@ -62,6 +62,26 @@ public class HistoricalDataRepositoryTest {
     }
 
     @Test
+    public void findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc() throws Exception{
+
+        Date oldDate = DateUtil.convertString2Date("2017-01-01 00:00:00");
+        Date newDate = DateUtil.convertString2Date("2017-12-01 21:52:40");
+
+        PageRequest request = new PageRequest(0, 5);
+
+        Page<HistoricalData> result = repository.findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc("1511962658712691673",
+                "yw123",
+                oldDate,
+                newDate,
+                request);
+
+        Assert.assertNotEquals(0, result.getTotalPages());
+
+    }
+
+
+
+    @Test
     public void findBySnCodeAndProtocolVersionAndDataTimeBetween() throws Exception {
 
         Date oldDate = DateUtil.convertString2Date("2017-12-01 21:51:30");
