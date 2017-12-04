@@ -87,14 +87,16 @@ public class DeviceServiceImpl implements DeviceService{
         }
         // 获取SiteDeviceInfoDTO
         SiteDeviceInfoDTO siteDeviceInfoDTO = DeviceInfo2SiteDeviceInfoDTOConverter.convert(deviceInfo);
-        // 4.判断是否需要进行协议请求
+        // 4.判断是否需要进行协议请求 (由于经销商注册时会添加协议，现场注册时不必考虑协议为null)
         String currentProtocolVersion = protocolService.getProtocolVersionBySnCode(snCode);
         boolean isProtocolEquals = currentProtocolVersion.equals(deviceVerify.getProtocolVersion());
         if (isProtocolEquals){
             // 协议版本适配 不启用协议请求
             siteDeviceInfoDTO.setIsAsk(0);
+        } else {
+            siteDeviceInfoDTO.setIsAsk(1);
         }
-        siteDeviceInfoDTO.setIsAsk(1);
+
         // 5.是否为现场首次注册
         if (StringUtils.isEmpty(siteDeviceInfoDTO.getDeviceAddress())){
             // 设备部署地址为空 则为首次注册
