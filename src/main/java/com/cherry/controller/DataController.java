@@ -165,21 +165,21 @@ public class DataController {
      * @param form
      * @param bindingResult
      * @param page
-     * @param rows
+     * @param size
      * @return
      */
     @PostMapping("/getData/all")
     public Map<String, Object> getAllHistoricalData(@Valid AllDataQueryForm form,
                                                     BindingResult bindingResult,
                                                     @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                    @RequestParam(value = "rows", defaultValue = "10") Integer rows){
+                                                    @RequestParam(value = "size", defaultValue = "10") Integer size){
 
         if (bindingResult.hasErrors()){
             log.error("查询条件异常！");
             throw new DataException(DataHandleEnum.QUERY_CRITERIA_ERROR);
         }
         // 1.封装查询参数
-        PageRequest request = new PageRequest(page - 1, rows);
+        PageRequest request = new PageRequest(page - 1, size);
         // 2.获取数据查询 分页对象
         Map<String, Object> map = dataService.listGetAll(form, request);
 

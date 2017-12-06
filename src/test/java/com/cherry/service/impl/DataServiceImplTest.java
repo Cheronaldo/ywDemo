@@ -54,7 +54,7 @@ public class DataServiceImplTest {
         SingleDataQueryForm form = new SingleDataQueryForm();
         form.setSnCode("1511962658712691673");
         form.setProtocolVersion("yw123");
-        form.setOffsetNumber(2);
+        form.setOffsetNumber("2");
         form.setOldDate("");
         form.setNewDate("");
 

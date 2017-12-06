@@ -2,6 +2,7 @@ package com.cherry.service.impl;
 
 import com.cherry.converter.HistoricalData2HistoricalDataVO;
 import com.cherry.dataobject.HistoricalData;
+import com.cherry.enums.DataHandleEnum;
 import com.cherry.form.AllDataQueryForm;
 import com.cherry.form.SingleDataQueryForm;
 import com.cherry.repository.HistoricalDataRepository;
@@ -48,9 +49,11 @@ public class DataServiceImpl implements DataService{
         List<HistoricalDataVO> historicalDataVOList = HistoricalData2HistoricalDataVO.convertAll(dataPage.getContent());
 
 
+        map.put("code", 0);
+        map.put("msg", DataHandleEnum.GET_DATA_SUCCESS.getMessage());
         map.put("total",dataPage.getTotalPages());
         map.put("records",dataPage.getTotalElements());
-        map.put("rows",historicalDataVOList);
+        map.put("data",historicalDataVOList);
 
 
         return map;
@@ -79,7 +82,7 @@ public class DataServiceImpl implements DataService{
             HistoricalDataVO historicalDataVO = new HistoricalDataVO();
             String[] dataArray = historicalData.getDeviceData().split("_");
             historicalDataVO.setDataTime(DateUtil.convertDate2String(historicalData.getDataTime()));
-            historicalDataVO.setDeviceData(dataArray[form.getOffsetNumber() - 1]);
+            historicalDataVO.setDeviceData(dataArray[Integer.parseInt(form.getOffsetNumber()) - 1]);
 
             historicalDataVOList.add(historicalDataVO);
         }

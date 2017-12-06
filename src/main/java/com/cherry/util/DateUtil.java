@@ -86,7 +86,7 @@ public class DateUtil {
             // 为空 则默认为最早记录的时间
             oldDateString = "2017-01-01 00:00:00";
         }
-        return DateUtil.convertString2Date(oldDateString);
+        return DateUtil.convertString2Date(oldDateString + ":00");
     }
 
     /**
@@ -102,7 +102,7 @@ public class DateUtil {
             return new Date();
         }
 
-        return DateUtil.convertString2Date(newDateString);
+        return DateUtil.convertString2Date(newDateString + ":00");
     }
 
 }

@@ -7,6 +7,7 @@ import com.cherry.converter.ProtocolDetail2RealTimeProtocolVO;
 import com.cherry.dataobject.*;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.dto.ProtocolStrategyDTO;
+import com.cherry.enums.DataHandleEnum;
 import com.cherry.enums.ProtocolEnum;
 import com.cherry.exception.ProtocolException;
 import com.cherry.form.ProtocolDetailForm;
@@ -129,9 +130,11 @@ public class ProtocolServiceImpl implements ProtocolService{
             }
         }
 
+        map.put("code", 0);
+        map.put("msg", DataHandleEnum.GET_DATA_SUCCESS.getMessage());
         map.put("total",detailPage.getTotalPages());
         map.put("records",detailPage.getTotalElements());
-        map.put("rows",detailVOList);
+        map.put("data",detailVOList);
 
        return map;
 

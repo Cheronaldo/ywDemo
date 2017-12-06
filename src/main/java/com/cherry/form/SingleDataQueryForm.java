@@ -13,7 +13,7 @@ public class SingleDataQueryForm {
     /**  协议版本号 */
     private String protocolVersion;
     /**  数据编号 */
-    private Integer offsetNumber;
+    private String offsetNumber;
     /**  起始时间 */
     private String oldDate;
     /**  终止时间 */
@@ -37,11 +37,11 @@ public class SingleDataQueryForm {
         this.protocolVersion = protocolVersion;
     }
 
-    public Integer getOffsetNumber() {
+    public String getOffsetNumber() {
         return offsetNumber;
     }
 
-    public void setOffsetNumber(Integer offsetNumber) {
+    public void setOffsetNumber(String offsetNumber) {
         this.offsetNumber = offsetNumber;
     }
 
@@ -66,7 +66,7 @@ public class SingleDataQueryForm {
         return "SingleDataQueryForm{" +
                 "snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
-                ", offsetNumber=" + offsetNumber +
+                ", offsetNumber='" + offsetNumber + '\'' +
                 ", oldDate='" + oldDate + '\'' +
                 ", newDate='" + newDate + '\'' +
                 '}';
