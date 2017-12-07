@@ -24,8 +24,10 @@ public interface ProtocolDetailRepository extends JpaRepository<ProtocolDetail,S
 
     /**
      * 通过SN码 和协议版本 查询需要显示的 协议详情列表
-     * 实时数据显示中 协议查询
+     * 1.实时数据显示中 协议查询
      * 将查询的结果与可见策略表结合再回传给前端
+     * 2.全项历史数据查询协议详情
+     * 3.报警记录查询 获取报警数据名称
      * @param protocolVersion
      * @return
      */

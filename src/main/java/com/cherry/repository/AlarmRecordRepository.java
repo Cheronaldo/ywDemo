@@ -22,7 +22,7 @@ public interface AlarmRecordRepository extends JpaRepository<AlarmRecord,String>
      * @param pageable
      * @return
      */
-    Page<AlarmRecord> findBySnCodeAndAlarmTimeBetweenOrderByIdDesc(String snCode, Date oldDate, Date newDate, Pageable pageable);
+    Page<AlarmRecord> findBySnCodeAndProtocolVersionAndAlarmTimeBetweenOrderByIdDesc(String snCode, String protocolVersion, Date oldDate, Date newDate, Pageable pageable);
 
 
 }

@@ -21,6 +21,11 @@ public class AlarmMessage {
 
     public AlarmMessage(){}
 
+    public AlarmMessage(Integer alarmCode, String alarmInfo){
+        this.alarmCode = alarmCode;
+        this.alarmInfo = alarmInfo;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -178,7 +178,7 @@ public class DataController {
             log.error("查询条件异常！");
             throw new DataException(DataHandleEnum.QUERY_CRITERIA_ERROR);
         }
-        // 1.封装查询参数
+        // 1.封装分页查询参数
         PageRequest request = new PageRequest(page - 1, size);
         // 2.获取数据查询 分页对象
         Map<String, Object> map = dataService.listGetAll(form, request);
