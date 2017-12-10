@@ -132,9 +132,9 @@ public class ProtocolServiceImpl implements ProtocolService{
 
         map.put("code", 0);
         map.put("msg", DataHandleEnum.GET_DATA_SUCCESS.getMessage());
-        map.put("total",detailPage.getTotalPages());
-        map.put("records",detailPage.getTotalElements());
-        map.put("data",detailVOList);
+        map.put("total", detailPage.getTotalPages());
+        map.put("records", detailPage.getTotalElements());
+        map.put("data", detailVOList);
 
        return map;
 
@@ -176,6 +176,7 @@ public class ProtocolServiceImpl implements ProtocolService{
 
         ProtocolQueryForm queryForm = new ProtocolQueryForm();
         BeanUtils.copyProperties(form, queryForm);
+        // TODO 此处置为0 是为协议自动同步做预留
         queryForm.setIsAdapt(0);
 
         map = protocolService.listFindCurrentBySnCode(queryForm,pageable);
@@ -248,6 +249,7 @@ public class ProtocolServiceImpl implements ProtocolService{
         if (relationshipNew != null){
             // 4.1存在 协议重新启用
             relationshipNew.setIsUsed(1);
+            relationshipNew.setUsedTime(DateUtil.getDate());
             deviceProtocolRelationshipRepository.save(relationshipNew);
 
             // 4.2 修改 可视 报警策略为默认（即启用默认 策略）
@@ -257,6 +259,7 @@ public class ProtocolServiceImpl implements ProtocolService{
                     strategyDefault);
 
             visibleStrategyDefault.setIsUsed(1);
+            visibleStrategyDefault.setUsedTime(DateUtil.getDate());
             visibleStrategyRepository.save(visibleStrategyDefault);
 
             AlarmStrategy alarmStrategyDefault = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndAlarmMask(adaptDTO.getUserName(),
@@ -264,6 +267,7 @@ public class ProtocolServiceImpl implements ProtocolService{
                     relationshipNew.getProtocolVersion(),
                     strategyDefault);
             alarmStrategyDefault.setIsUsed(1);
+            alarmStrategyDefault.setUsedTime(DateUtil.getDate());
             alarmStrategyRepository.save(alarmStrategyDefault);
 
             return 0;

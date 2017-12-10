@@ -31,10 +31,10 @@ public class DeviceVerifyRepositoryTest {
 
         DeviceVerify deviceVerify = new DeviceVerify();
         deviceVerify.setId(KeyUtil.genUniqueKey());
-        deviceVerify.setSnCode("1510917580195286976");
+        deviceVerify.setSnCode("3");
         deviceVerify.setCheckCode("34fr6k");
         deviceVerify.setGenerateTime(DateUtil.getDate());
-        deviceVerify.setProtocolVersion("12345");
+        deviceVerify.setProtocolVersion("yw123");
 
         //boolean b = DateUtil.ifDateValid(deviceVerify.getGenerateTime());
 

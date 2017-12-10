@@ -3,7 +3,7 @@ package com.cherry.form;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 协议祥表记录 参数表单验证
+ * 协议祥表记录修改 参数表单验证
  * Created by Administrator on 2017/11/15.
  */
 public class ProtocolDetailForm {

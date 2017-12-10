@@ -32,7 +32,7 @@ public class DeviceServiceImplTest {
 
     @Test
     public void checkSiteDeviceIsOnHand() throws Exception {
-        Map<String,Object> map = service.checkSiteDeviceIsOnHand("1510917580195286976","34fr6t","abc1234");
+        Map<String,Object> map = service.checkSiteDeviceIsOnHand("3","34fr6k","abc1234");
 
         int code = Integer.parseInt(String.valueOf(map.get("code")));
         String msg = (String)map.get("msg");
