@@ -42,6 +42,9 @@ import java.util.Map;
 public class ProtocolServiceImpl implements ProtocolService{
 
     @Autowired
+    private ProtocolMasterRepository masterRepository;
+
+    @Autowired
     private ProtocolDetailRepository detailRepository;
 
     @Autowired
@@ -231,26 +234,49 @@ public class ProtocolServiceImpl implements ProtocolService{
                                                                                                                                 adaptDTO.getSnCode(),
                                                                                                                                 relationshipOld.getProtocolVersion(),
                                                                                                                                 1);
-            visibleStrategyOld.setIsUsed(0);
-            visibleStrategyRepository.save(visibleStrategyOld);
+            if (visibleStrategyOld != null){
+                // 该用户存在对应的设备掩码
+                visibleStrategyOld.setIsUsed(0);
+                visibleStrategyRepository.save(visibleStrategyOld);
+            }
+
 
             AlarmStrategy alarmStrategyOld = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(adaptDTO.getUserName(),
                                                                                                                         adaptDTO.getSnCode(),
                                                                                                                         relationshipOld.getProtocolVersion(),
                                                                                                                         1);
 
-            alarmStrategyOld.setIsUsed(0);
-            alarmStrategyRepository.save(alarmStrategyOld);
+            if (alarmStrategyOld != null){
+                alarmStrategyOld.setIsUsed(0);
+                alarmStrategyRepository.save(alarmStrategyOld);
+            }
+
 
         }
 
         // 3.查询要适配的协议是否存在
-        DeviceProtocolRelationship relationshipNew = deviceProtocolRelationshipRepository.findBySnCodeAndProtocolVersion(adaptDTO.getSnCode(), adaptDTO.getProtocolVersion());
-        if (relationshipNew != null){
-            // 4.1存在 协议重新启用
-            relationshipNew.setIsUsed(1);
-            relationshipNew.setUsedTime(DateUtil.getDate());
-            deviceProtocolRelationshipRepository.save(relationshipNew);
+        ProtocolMaster masterNew = masterRepository.findOne(adaptDTO.getProtocolVersion());
+
+        if (masterNew != null){
+            // 要适配的协议存在
+            // 4. 再判断该设备和协议是否有记录
+            DeviceProtocolRelationship relationshipNew = deviceProtocolRelationshipRepository.findBySnCodeAndProtocolVersion(adaptDTO.getSnCode(), adaptDTO.getProtocolVersion());
+            if (relationshipNew != null){
+                // 4.1 设备协议关系存在 协议重新启用
+                relationshipNew.setIsUsed(1);
+                relationshipNew.setUsedTime(DateUtil.getDate());
+                deviceProtocolRelationshipRepository.save(relationshipNew);
+            } else {
+                // 4.1 设备协议关系不存在 添加记录
+                DeviceProtocolRelationship addRelation = new DeviceProtocolRelationship();
+                addRelation.setId(KeyUtil.genUniqueKey());
+                addRelation.setSnCode(adaptDTO.getSnCode());
+                addRelation.setProtocolVersion(adaptDTO.getProtocolVersion());
+                addRelation.setIsUsed(1);
+                addRelation.setUsedTime(DateUtil.getDate());
+
+                deviceProtocolRelationshipRepository.save(addRelation);
+            }
 
             // 4.2 修改 可视 报警策略为默认（即启用默认 策略）
             VisibleStrategy visibleStrategyDefault = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask(adaptDTO.getUserName(),
@@ -258,6 +284,19 @@ public class ProtocolServiceImpl implements ProtocolService{
                     relationshipNew.getProtocolVersion(),
                     strategyDefault);
 
+            if (visibleStrategyDefault == null){
+                // 不存在默认记录 添加记录
+                VisibleStrategy addVisibleDefault = new VisibleStrategy();
+                addVisibleDefault.setUserName(adaptDTO.getUserName());
+                addVisibleDefault.setSnCode(adaptDTO.getSnCode());
+                addVisibleDefault.setProtocolVersion(adaptDTO.getProtocolVersion());
+                addVisibleDefault.setVisibleMask(strategyDefault);
+                addVisibleDefault.setIsUsed(1);
+                addVisibleDefault.setUsedTime(DateUtil.getDate());
+
+                visibleStrategyRepository.save(addVisibleDefault);
+            }
+            // 存在默认记录 修改为启用
             visibleStrategyDefault.setIsUsed(1);
             visibleStrategyDefault.setUsedTime(DateUtil.getDate());
             visibleStrategyRepository.save(visibleStrategyDefault);
@@ -266,14 +305,36 @@ public class ProtocolServiceImpl implements ProtocolService{
                     adaptDTO.getSnCode(),
                     relationshipNew.getProtocolVersion(),
                     strategyDefault);
+
+            if (alarmStrategyDefault == null){
+                // 不存在默认记录 添加记录
+                AlarmStrategy addAlarmDefault = new AlarmStrategy();
+                addAlarmDefault.setUserName(adaptDTO.getUserName());
+                addAlarmDefault.setSnCode(adaptDTO.getSnCode());
+                addAlarmDefault.setProtocolVersion(adaptDTO.getProtocolVersion());
+                addAlarmDefault.setAlarmMask(strategyDefault);
+                addAlarmDefault.setIsUsed(1);
+                addAlarmDefault.setUsedTime(DateUtil.getDate());
+
+                alarmStrategyRepository.save(addAlarmDefault);
+            }
+            // 存在默认记录 修改为启用
             alarmStrategyDefault.setIsUsed(1);
             alarmStrategyDefault.setUsedTime(DateUtil.getDate());
             alarmStrategyRepository.save(alarmStrategyDefault);
 
             return 0;
+
+
         }
 
-        // 5.不存在 则添加设备协议关系记录
+         // 5. 不存在 则添加设备主表记录
+        ProtocolMaster master = new ProtocolMaster();
+        master.setProtocolVersion(adaptDTO.getProtocolVersion());
+        // TODO 目前公司名采用默认值 后期为实时读取
+        master.setAgencyCompany("亿维自动化");
+
+        // 6.不存在 则添加设备协议关系记录
         DeviceProtocolRelationship relationship= new DeviceProtocolRelationship();
         relationship.setId(KeyUtil.genUniqueKey());
         relationship.setSnCode(adaptDTO.getSnCode());
@@ -282,10 +343,10 @@ public class ProtocolServiceImpl implements ProtocolService{
         relationship.setUsedTime(DateUtil.getDate());
         deviceProtocolRelationshipRepository.save(relationship);
 
-        // 6.添加协议祥表记录
-        // 6.1 先提取协议中的数据名称
+        // 7.添加协议祥表记录
+        // 7.1 先提取协议中的数据名称
 
-        // 6.2 储存协议祥表
+        // 7.2 储存协议祥表
         for (int i = 0; i <= arrayDataName.length - 1; i ++){
             ProtocolDetail detail = new ProtocolDetail();
             detail.setId(KeyUtil.genUniqueKey());
@@ -296,7 +357,7 @@ public class ProtocolServiceImpl implements ProtocolService{
             detailRepository.save(detail);
         }
 
-        // 6.3 添加 可视 报警策略为默认
+        // 7.3 添加 可视 报警策略为默认
         VisibleStrategy visibleStrategyNew = new VisibleStrategy();
         visibleStrategyNew.setId(KeyUtil.genUniqueKey());
         visibleStrategyNew.setUserName(adaptDTO.getUserName());
