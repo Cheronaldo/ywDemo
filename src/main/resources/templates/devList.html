@@ -76,25 +76,23 @@
 
 		function append(data){
 			for (var item in data) {
-//				var strDevicetr = $("<div class='dev'><tr><td>SN码：" + data[item].snCode +
-//											"</td></br><td>设备地址：" + data[item].deviceAddress +
-//											"</td></br><td>在线状态：" + translate(data[item].isOnline) +
-//											"</td></br><td>站点信息：" + data[item].siteName +
-//											"</td></br><td>设备型号：" + data[item].deviceModel + "</td></tr></div>");
                 var strDevicetr = $("<div class='dev'><div class = 'siteImg'><img alt='现场图片暂无' src='" + data[item].siteIcon +
 											"' /></div><div class = 'siteInfo'><tr><span class='siteName'>" + data[item].siteName +
 											"</span></br><span>在线状态：</span>" + translate(data[item].isOnline) +
 											"<a href='/deviceConfig?devSNCode=" + data[item].snCode +
 											"' target='fname' style='color: #ffa700' class='devConfig dev-a'>配置</a>" +
-											"<a href='#' target='fname' style='color: #00abff' class='devInfo dev-a'>设备数据</a>" +
+											"<a href='/deviceRealtimeData?devSNCode="+ data[item].snCode +
+											"' target='fname' style='color: #00abff' class='devInfo dev-a'>设备数据</a>" +
+											"<a href='/deviceHistory?devSNCode="+ data[item].snCode +
+											"' target='fname' style='color: #ff004d' class='devInfo dev-a'>历史数据</a>" +
                     						"</span></br><span>设备地址：" + data[item].deviceAddress +
 											"</span></tr></div></div>");
 				$("#devList").append(strDevicetr);
 			}
 		}
 		function translate(code){
-			if (code == 1) {return "<span style='color: #35c813'>在线";}
-				else if (code == 0) {return "<span style='color: #a300a3'>离线";}
+			if (code == 0) {return "<span style='color: #35c813'>在线";}
+				else if (code == 1) {return "<span style='color: #a300a3'>离线";}
 				else{
 					return "<span style='color: red'>error";
 				}

@@ -96,10 +96,16 @@
         $(function() {
             $("#getCode").click(function(){
                 checkInputRight();
-                clearInterval(timer);  // 先清除掉原来的定时器
-                this.disabled = true;
-                timer = setInterval(timerTick,1000);  // 开启定时器
-                askCode();
+                if(telFlag){
+                    clearInterval(timer);  // 先清除掉原来的定时器
+                    this.disabled = true;
+                    timer = setInterval(timerTick,1000);  // 开启定时器
+                    askCode();
+                }else{
+                    alert("联系电话输入有误，请重新输入!");
+                    $('#tel').val("");
+                    return false;
+                }
             });
 
             $("#register").click(function() {
@@ -119,18 +125,21 @@
                                     else {
                                         alert("验证码输入有误");
                                         $('#idcode').val("");
+                                        return false;
                                     }
                                 }
                                 //telFlag = false
                                 else {
                                     alert("联系电话输入有误，请重新输入!");
                                     $('#tel').val("");
+                                    return false;
                                 }
                             }
                             //mailFlag = false
                             else {
                                 alert("邮箱输入有误，请重新输入");
                                 $('#mail').val("");
+                                return false;
                             }
                         }
                         //passwordFlag = false
@@ -138,15 +147,18 @@
                             alert("密码不一致，请重新输入");
                             $('#passwd').val("");
                             $('#passwd_again').val("");
+                            return false;
                         }
                     }
                     else {
                         alert("用户名输入不合法，请重新输入");
                         $('#username').val("");
+                        return false;
                     }
                 }
                 else {
                     alert("用户名重复，请更改用户名");
+                    return false;
                 }
             });
             $("#username").change(function(){

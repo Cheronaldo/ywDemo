@@ -221,11 +221,11 @@ public class ProtocolServiceImpl implements ProtocolService{
             }
         }
 
-        map.put("code", 0);
-        map.put("msg", ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage());
+        //map.put("code", 0);
+        //map.put("msg", ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage());
         map.put("total", detailPage.getTotalPages());
         map.put("records", detailPage.getTotalElements());
-        map.put("data", detailVOList);
+        map.put("rows", detailVOList);
 
        return map;
 
@@ -318,10 +318,9 @@ public class ProtocolServiceImpl implements ProtocolService{
             deviceProtocolRelationshipRepository.save(relationshipOld);
 
             // 2.2 将该用户已启用的策略 设置为未启用
-            VisibleStrategy visibleStrategyOld = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(adaptDTO.getUserName(),
-                                                                                                                                adaptDTO.getSnCode(),
-                                                                                                                                relationshipOld.getProtocolVersion(),
-                                                                                                                                1);
+            VisibleStrategy visibleStrategyOld = visibleStrategyRepository.findByUserNameAndSnCodeAndIsUsed(adaptDTO.getUserName(),
+                                                                                                            adaptDTO.getSnCode(),
+                                                                                                            1);
             if (visibleStrategyOld != null){
                 // 存在该用户对应的设备掩码
                 visibleStrategyOld.setIsUsed(0);
@@ -329,10 +328,9 @@ public class ProtocolServiceImpl implements ProtocolService{
             }
 
 
-            AlarmStrategy alarmStrategyOld = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(adaptDTO.getUserName(),
-                                                                                                                        adaptDTO.getSnCode(),
-                                                                                                                        relationshipOld.getProtocolVersion(),
-                                                                                                                        1);
+            AlarmStrategy alarmStrategyOld = alarmStrategyRepository.findByUserNameAndSnCodeAndIsUsed(adaptDTO.getUserName(),
+                                                                                                        adaptDTO.getSnCode(),
+                                                                                                        1);
 
             if (alarmStrategyOld != null){
                 alarmStrategyOld.setIsUsed(0);
@@ -369,12 +367,13 @@ public class ProtocolServiceImpl implements ProtocolService{
             // 4.2 修改 可视 报警策略为默认（即启用默认 策略）
             VisibleStrategy visibleStrategyDefault = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask(adaptDTO.getUserName(),
                     adaptDTO.getSnCode(),
-                    relationshipNew.getProtocolVersion(),
+                    adaptDTO.getProtocolVersion(),
                     strategyDefault);
 
             if (visibleStrategyDefault == null){
                 // 不存在默认记录 添加记录
                 VisibleStrategy addVisibleDefault = new VisibleStrategy();
+                addVisibleDefault.setId(KeyUtil.genUniqueKey());
                 addVisibleDefault.setUserName(adaptDTO.getUserName());
                 addVisibleDefault.setSnCode(adaptDTO.getSnCode());
                 addVisibleDefault.setProtocolVersion(adaptDTO.getProtocolVersion());
@@ -383,20 +382,23 @@ public class ProtocolServiceImpl implements ProtocolService{
                 addVisibleDefault.setUsedTime(DateUtil.getDate());
 
                 visibleStrategyRepository.save(addVisibleDefault);
+            }else {
+                // 存在默认记录 修改为启用
+                visibleStrategyDefault.setIsUsed(1);
+                visibleStrategyDefault.setUsedTime(DateUtil.getDate());
+                visibleStrategyRepository.save(visibleStrategyDefault);
             }
-            // 存在默认记录 修改为启用
-            visibleStrategyDefault.setIsUsed(1);
-            visibleStrategyDefault.setUsedTime(DateUtil.getDate());
-            visibleStrategyRepository.save(visibleStrategyDefault);
+
 
             AlarmStrategy alarmStrategyDefault = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndAlarmMask(adaptDTO.getUserName(),
                     adaptDTO.getSnCode(),
-                    relationshipNew.getProtocolVersion(),
+                    adaptDTO.getProtocolVersion(),
                     strategyDefault);
 
             if (alarmStrategyDefault == null){
                 // 不存在默认记录 添加记录
                 AlarmStrategy addAlarmDefault = new AlarmStrategy();
+                addAlarmDefault.setId(KeyUtil.genUniqueKey());
                 addAlarmDefault.setUserName(adaptDTO.getUserName());
                 addAlarmDefault.setSnCode(adaptDTO.getSnCode());
                 addAlarmDefault.setProtocolVersion(adaptDTO.getProtocolVersion());
@@ -405,11 +407,12 @@ public class ProtocolServiceImpl implements ProtocolService{
                 addAlarmDefault.setUsedTime(DateUtil.getDate());
 
                 alarmStrategyRepository.save(addAlarmDefault);
+            }else {
+                // 存在默认记录 修改为启用
+                alarmStrategyDefault.setIsUsed(1);
+                alarmStrategyDefault.setUsedTime(DateUtil.getDate());
+                alarmStrategyRepository.save(alarmStrategyDefault);
             }
-            // 存在默认记录 修改为启用
-            alarmStrategyDefault.setIsUsed(1);
-            alarmStrategyDefault.setUsedTime(DateUtil.getDate());
-            alarmStrategyRepository.save(alarmStrategyDefault);
 
             return 0;
 

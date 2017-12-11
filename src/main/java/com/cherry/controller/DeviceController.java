@@ -3,6 +3,7 @@ package com.cherry.controller;
 import com.cherry.converter.DeviceInfo2SiteDeviceListDTOConverter;
 import com.cherry.converter.DeviceInfo2SiteDeviceMapDTOConverter;
 import com.cherry.dataobject.DeviceInfo;
+import com.cherry.dataobject.DeviceStatus;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.dto.SiteDeviceListDTO;
@@ -11,8 +12,10 @@ import com.cherry.enums.DeviceHandleEnum;
 import com.cherry.exception.DeviceException;
 import com.cherry.form.SiteDeviceForm;
 import com.cherry.repository.DeviceInfoRepository;
+import com.cherry.repository.DeviceStatusRepository;
 import com.cherry.service.DeviceService;
 import com.cherry.service.ProtocolService;
+import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.vo.ResultVO;
@@ -45,12 +48,14 @@ public class DeviceController {
     private DeviceInfoRepository deviceInfoRepository;
 
     @Autowired
+    private DeviceStatusRepository deviceStatusRepository;
+    @Autowired
     private DeviceService deviceService;
 
     @Autowired
     private ProtocolService protocolService;
 
-    @PostMapping("/device/addRegister")
+    @PostMapping("/addRegister")
     public ResultVO addAgencyRegister(@RequestParam("snCode") String snCode){
 
         DeviceInfo deviceInfo = new DeviceInfo();
@@ -62,6 +67,13 @@ public class DeviceController {
         deviceInfo.setResearchUnit("亿维自动化");
 
         deviceInfoRepository.save(deviceInfo);
+
+        DeviceStatus deviceStatus = new DeviceStatus();
+        deviceStatus.setSnCode(snCode);
+        deviceStatus.setIsOnline(1);
+        deviceStatus.setHeartTime(DateUtil.getDate());
+
+        deviceStatusRepository.save(deviceStatus);
 
         return ResultVOUtil.success("添加成功！");
 

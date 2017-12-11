@@ -40,11 +40,11 @@ function getData() {
         dataType : "json",
         success : function(data) {
 
-            if(data.result != null){
+            if(data.code != null){
 
 
 
-                $.each(data.result,function (index,device) {
+                $.each(data.code,function (index,device) {
 
                     markers[index] = {position:{
                         lng:device.deviceLng,

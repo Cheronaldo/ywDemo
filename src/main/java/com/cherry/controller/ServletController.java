@@ -73,4 +73,23 @@ public class ServletController {
         return "deviceConfig";
     }
 
+
+    /**
+     * 设备实时数据跳转
+     * @return
+     */
+    @GetMapping("/deviceRealtimeData")
+    public String deviceRealtimeData(){
+        return "deviceRealtimeData";
+    }
+
+    /**
+     * 设备历史数据跳转
+     * @return
+     */
+    @GetMapping("/deviceHistory")
+    public String deviceHistory(){
+        return "deviceHistory";
+    }
+
 }
