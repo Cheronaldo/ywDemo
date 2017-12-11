@@ -102,11 +102,99 @@ public class ProtocolServiceImpl implements ProtocolService{
         AlarmStrategy alarmStrategy = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(queryForm.getUserName(),
                                                                                                                 queryForm.getSnCode(),
                                                                                                                 queryForm.getProtocolVersion(),
+
                                                                                                                 1);
+        // 定义掩码字符串
+        String visibleMask = "";
+        String alarmMask = "";
+        // 5.1 判断用户对当前协议的策略是否存在 (可视和报警策略 状态一致)
+        if (visibleStrategy == null){
+            // 不存在 添加默认记录
+            // 5.2 设置默认掩码字符串
+            for (int j = 0; j< detailPage.getTotalElements(); j++){
+                visibleMask += "1";
+                alarmMask += "1";
+            }
+            // 5.3 将用户当前启用的策略 设置为未启用
+            VisibleStrategy visibleStrategyNow = visibleStrategyRepository.findByUserNameAndSnCodeAndIsUsed(queryForm.getUserName(),
+                    queryForm.getSnCode(),
+                    1);
+            if (visibleStrategyNow != null){
+                visibleStrategyNow.setIsUsed(0);
 
-        String visibleMask = visibleStrategy.getVisibleMask();
-        String alarmMask = alarmStrategy.getAlarmMask();
+                visibleStrategyRepository.save(visibleStrategyNow);
+            }
 
+            AlarmStrategy alarmStrategyNow = alarmStrategyRepository.findByUserNameAndSnCodeAndIsUsed(queryForm.getUserName(),
+                    queryForm.getSnCode(),
+                    1);
+
+            if (alarmStrategyNow != null){
+                alarmStrategyNow.setIsUsed(0);
+
+                alarmStrategyRepository.save(alarmStrategyNow);
+            }
+
+            // 5.4 再判断该用户是否存在默认策略
+
+            VisibleStrategy defaultVisible = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask(queryForm.getUserName(),
+                    queryForm.getSnCode(),
+                    queryForm.getProtocolVersion(),
+                    visibleMask);
+            if (defaultVisible == null){
+                // 5.4 默认策略不存在 添加记录
+                VisibleStrategy addVisibleDefault = new VisibleStrategy();
+                addVisibleDefault.setId(KeyUtil.genUniqueKey());
+                addVisibleDefault.setUserName(queryForm.getUserName());
+                addVisibleDefault.setSnCode(queryForm.getSnCode());
+                addVisibleDefault.setProtocolVersion(queryForm.getProtocolVersion());
+                addVisibleDefault.setVisibleMask(visibleMask);
+                addVisibleDefault.setIsUsed(1);
+                addVisibleDefault.setUsedTime(DateUtil.getDate());
+
+                visibleStrategyRepository.save(addVisibleDefault);
+            }else {
+                // 5.5 默认策略存在 启用记录
+                defaultVisible.setIsUsed(1);
+                defaultVisible.setUsedTime(DateUtil.getDate());
+
+                visibleStrategyRepository.save(defaultVisible);
+            }
+
+            // 判断报警策略
+            AlarmStrategy defaultAlarm = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndAlarmMask(queryForm.getUserName(),
+                    queryForm.getSnCode(),
+                    queryForm.getProtocolVersion(),
+                    alarmMask);
+
+            if (defaultAlarm == null){
+                // 添加默认记录
+                AlarmStrategy addAlarmDefault = new AlarmStrategy();
+                addAlarmDefault.setId(KeyUtil.genUniqueKey());
+                addAlarmDefault.setUserName(queryForm.getUserName());
+                addAlarmDefault.setSnCode(queryForm.getSnCode());
+                addAlarmDefault.setProtocolVersion(queryForm.getProtocolVersion());
+                addAlarmDefault.setAlarmMask(alarmMask);
+                addAlarmDefault.setIsUsed(1);
+                addAlarmDefault.setUsedTime(DateUtil.getDate());
+
+                alarmStrategyRepository.save(addAlarmDefault);
+
+            } else {
+                // 启用默认策略
+                defaultAlarm.setIsUsed(1);
+                defaultAlarm.setUsedTime(DateUtil.getDate());
+
+                alarmStrategyRepository.save(defaultAlarm);
+            }
+
+
+        } else {
+            // 策略表存在
+            visibleMask = visibleStrategy.getVisibleMask();
+            alarmMask = alarmStrategy.getAlarmMask();
+
+        }
 
         char[] visibleList = StringUtil.string2CharList(visibleMask);
         char[] alarmList = StringUtil.string2CharList(alarmMask);
@@ -134,7 +222,7 @@ public class ProtocolServiceImpl implements ProtocolService{
         }
 
         map.put("code", 0);
-        map.put("msg", DataHandleEnum.GET_DATA_SUCCESS.getMessage());
+        map.put("msg", ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage());
         map.put("total", detailPage.getTotalPages());
         map.put("records", detailPage.getTotalElements());
         map.put("data", detailVOList);
@@ -229,13 +317,13 @@ public class ProtocolServiceImpl implements ProtocolService{
             relationshipOld.setIsUsed(0);
             deviceProtocolRelationshipRepository.save(relationshipOld);
 
-            // 2.2 将已启用的策略 设置为未启用
+            // 2.2 将该用户已启用的策略 设置为未启用
             VisibleStrategy visibleStrategyOld = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(adaptDTO.getUserName(),
                                                                                                                                 adaptDTO.getSnCode(),
                                                                                                                                 relationshipOld.getProtocolVersion(),
                                                                                                                                 1);
             if (visibleStrategyOld != null){
-                // 该用户存在对应的设备掩码
+                // 存在该用户对应的设备掩码
                 visibleStrategyOld.setIsUsed(0);
                 visibleStrategyRepository.save(visibleStrategyOld);
             }
@@ -334,6 +422,8 @@ public class ProtocolServiceImpl implements ProtocolService{
         // TODO 目前公司名采用默认值 后期为实时读取
         master.setAgencyCompany("亿维自动化");
 
+        masterRepository.save(master);
+
         // 6.不存在 则添加设备协议关系记录
         DeviceProtocolRelationship relationship= new DeviceProtocolRelationship();
         relationship.setId(KeyUtil.genUniqueKey());
@@ -393,10 +483,79 @@ public class ProtocolServiceImpl implements ProtocolService{
         }
 
         // 2.获取需显示ProtocolDetail 对象列表
+        // TODO 这里也要考虑用户的可视策略不存在的情况  设置为默认
         // 2.1 获取可视策略记录
+        String visibleMask = "";
+        String alarmMask = "";
         VisibleStrategy visibleStrategy = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndIsUsed(userName, snCode, protocolVersion, 1);
 
-        String visibleMask = visibleStrategy.getVisibleMask();
+        if (visibleStrategy == null){
+            // 用户在当前协议下没有策略记录
+            // 2.1 先非能已启用可视策略
+            VisibleStrategy visibleStrategyNow = visibleStrategyRepository.findByUserNameAndSnCodeAndIsUsed(userName,snCode,1);
+            AlarmStrategy alarmStrategyNow = alarmStrategyRepository.findByUserNameAndSnCodeAndIsUsed(userName,snCode,1);
+            if (visibleStrategyNow != null){
+                visibleStrategyNow.setIsUsed(0);
+
+                visibleStrategyRepository.save(visibleStrategyNow);
+
+                alarmStrategyNow.setIsUsed(0);
+                alarmStrategyRepository.save(alarmStrategyNow);
+            }
+
+            // 2.2 用户是否存在当前协议的默认策略
+            for (int i = 0; i< detailList.size(); i++){
+                visibleMask += "1";
+                alarmMask += "1";
+            }
+
+            VisibleStrategy visibleStrategyDefault = visibleStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask(userName,snCode,protocolVersion,visibleMask);
+            AlarmStrategy alarmStrategyDefault = alarmStrategyRepository.findByUserNameAndSnCodeAndProtocolVersionAndAlarmMask(userName,snCode,protocolVersion,alarmMask);
+
+            if (visibleStrategyDefault != null){
+                // 启用协议
+                visibleStrategyDefault.setIsUsed(1);
+                visibleStrategyDefault.setUsedTime(DateUtil.getDate());
+
+                visibleStrategyRepository.save(visibleStrategyDefault);
+            } else {
+                // 添加掩码
+                VisibleStrategy addVisibleDefault = new VisibleStrategy();
+                addVisibleDefault.setId(KeyUtil.genUniqueKey());
+                addVisibleDefault.setUserName(userName);
+                addVisibleDefault.setSnCode(snCode);
+                addVisibleDefault.setProtocolVersion(protocolVersion);
+                addVisibleDefault.setVisibleMask(visibleMask);
+                addVisibleDefault.setIsUsed(1);
+                addVisibleDefault.setUsedTime(DateUtil.getDate());
+
+                visibleStrategyRepository.save(addVisibleDefault);
+            }
+
+            if (alarmStrategyDefault != null){
+                // 启用协议
+                alarmStrategyDefault.setIsUsed(1);
+                alarmStrategyDefault.setUsedTime(DateUtil.getDate());
+
+                alarmStrategyRepository.save(alarmStrategyDefault);
+            } else {
+                // 添加掩码
+                AlarmStrategy addAlarmDefault = new AlarmStrategy();
+                addAlarmDefault.setId(KeyUtil.genUniqueKey());
+                addAlarmDefault.setUserName(userName);
+                addAlarmDefault.setSnCode(snCode);
+                addAlarmDefault.setProtocolVersion(protocolVersion);
+                addAlarmDefault.setAlarmMask(alarmMask);
+                addAlarmDefault.setIsUsed(1);
+                addAlarmDefault.setUsedTime(DateUtil.getDate());
+
+                alarmStrategyRepository.save(addAlarmDefault);
+            }
+        } else {
+            // 用户当前协议掩码策略存在 直接获取即可
+            visibleMask = visibleStrategy.getVisibleMask();
+        }
+
         char[] visibleList = StringUtil.string2CharList(visibleMask);
 
         // 2.2 封装为可视 ProtocolDetail 对象列表

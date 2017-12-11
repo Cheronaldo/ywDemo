@@ -33,7 +33,10 @@ public class ShortMessagingServiceUtil {
         method.setRequestHeader("ContentType", "application/x-www-form-urlencoded;charset=GBK");
         int mobileCode = (int)((Math.random() * 9.0D + 1.0D) * 100000.0D);
         String content = new String("您的验证码是：" + mobileCode + "。请不要把验证码泄露给其他人。");
-        NameValuePair[] data = new NameValuePair[]{new NameValuePair("account", "C74015412"), new NameValuePair("password", "b0cdc650c2e5b6fa8d1e9281e77dae55   "), new NameValuePair("mobile", telephone), new NameValuePair("content", content)};
+        //NameValuePair[] data = new NameValuePair[]{new NameValuePair("account", "C74015412"), new NameValuePair("password", "b0cdc650c2e5b6fa8d1e9281e77dae55   "), new NameValuePair("mobile", telephone), new NameValuePair("content", content)};
+
+        NameValuePair[] data = new NameValuePair[]{new NameValuePair("account", "C34371003"), new NameValuePair("password", "559cd173ab675a89bc87c520bddb9e58"), new NameValuePair("mobile", telephone), new NameValuePair("content", content)};
+
         method.setRequestBody(data);
 
         try {

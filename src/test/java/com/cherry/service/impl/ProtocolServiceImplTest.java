@@ -37,10 +37,10 @@ public class ProtocolServiceImplTest {
     public void listFindCurrentBySnCode() throws Exception {
 
         ProtocolQueryForm queryForm = new ProtocolQueryForm();
-        queryForm.setUserName("abc1234");
-        queryForm.setSnCode("1511962658712691673");
+        queryForm.setUserName("cherry");
+        queryForm.setSnCode("3");
         queryForm.setIsAdapt(0);
-        queryForm.setProtocolVersion("yw123");
+        queryForm.setProtocolVersion("yw002");
         queryForm.setProtocolContent("温度_湿度_浓度");
 
         PageRequest request = new PageRequest(0, 5);
@@ -78,10 +78,10 @@ public class ProtocolServiceImplTest {
     public void protocolAdapt() throws Exception {
 
         ProtocolAdaptDTO protocolAdaptDTO = new ProtocolAdaptDTO();
-        protocolAdaptDTO.setUserName("abc1234");
-        protocolAdaptDTO.setSnCode("1511962658712691673");
-        protocolAdaptDTO.setProtocolVersion("yw123");
-        protocolAdaptDTO.setProtocolContent("温度_湿度_浓度");
+        protocolAdaptDTO.setUserName("cherry123");
+        protocolAdaptDTO.setSnCode("3");
+        protocolAdaptDTO.setProtocolVersion("yw002");
+        protocolAdaptDTO.setProtocolContent("电压_PH值");
 
         int result = service.protocolAdapt(protocolAdaptDTO);
 

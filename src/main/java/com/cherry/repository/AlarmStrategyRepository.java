@@ -29,4 +29,13 @@ public interface AlarmStrategyRepository extends JpaRepository<AlarmStrategy,Str
      */
     AlarmStrategy findByUserNameAndSnCodeAndProtocolVersionAndAlarmMask(String userName, String snCode, String protocolVersion, String alarmMask);
 
+    /**
+     * 通过用户名 SN 获取用户对应设备当前启用的策略
+     * @param userName
+     * @param snCode
+     * @param isUsed
+     * @return
+     */
+    AlarmStrategy findByUserNameAndSnCodeAndIsUsed(String userName, String snCode, Integer isUsed);
+
 }

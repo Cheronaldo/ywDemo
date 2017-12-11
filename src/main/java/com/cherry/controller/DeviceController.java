@@ -10,8 +10,10 @@ import com.cherry.dto.SiteDeviceMapDTO;
 import com.cherry.enums.DeviceHandleEnum;
 import com.cherry.exception.DeviceException;
 import com.cherry.form.SiteDeviceForm;
+import com.cherry.repository.DeviceInfoRepository;
 import com.cherry.service.DeviceService;
 import com.cherry.service.ProtocolService;
+import com.cherry.util.KeyUtil;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
@@ -40,10 +42,32 @@ import java.util.Map;
 public class DeviceController {
 
     @Autowired
+    private DeviceInfoRepository deviceInfoRepository;
+
+    @Autowired
     private DeviceService deviceService;
 
     @Autowired
     private ProtocolService protocolService;
+
+    @PostMapping("/device/addRegister")
+    public ResultVO addAgencyRegister(@RequestParam("snCode") String snCode){
+
+        DeviceInfo deviceInfo = new DeviceInfo();
+        deviceInfo.setSnCode(snCode);
+        deviceInfo.setDeviceMac(KeyUtil.genUniqueKey());
+        deviceInfo.setDeviceType(1);
+        deviceInfo.setDeviceModel("HMI0275");
+        deviceInfo.setShipmentNumber(KeyUtil.genUniqueKey());
+        deviceInfo.setResearchUnit("亿维自动化");
+
+        deviceInfoRepository.save(deviceInfo);
+
+        return ResultVOUtil.success("添加成功！");
+
+
+    }
+
 
     /**
      * 校验设备是否在现场用户手中

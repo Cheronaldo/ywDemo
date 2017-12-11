@@ -24,8 +24,8 @@ public class ProtocolMasterRepositoryTest {
     @Test
     public void saveProtocol() throws Exception{
         ProtocolMaster master = new ProtocolMaster();
-        master.setProtocolVersion("yw1234");
-        master.setAgencyCompany("中国移动");
+        master.setProtocolVersion("yw002");
+        master.setAgencyCompany("亿维自动化");
 
         ProtocolMaster result = repository.save(master);
 
