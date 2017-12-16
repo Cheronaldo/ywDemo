@@ -29,12 +29,12 @@ public class AlarmServiceImplTest {
     public void getRecordList() throws Exception {
 
         AlarmQueryForm form = new AlarmQueryForm();
-        form.setSnCode("1510311999826615905");
-        form.setProtocolVersion("yw123");
+        form.setSnCode("HMITest002");
+        form.setProtocolVersion("ywv1.1");
         form.setOldDate("");
         form.setNewDate("");
 
-        PageRequest request = new PageRequest(1, 2);
+        PageRequest request = new PageRequest(0, 2);
 
         Map<String, Object> result = service.getRecordList(form, request);
 
@@ -46,12 +46,13 @@ public class AlarmServiceImplTest {
     public void updateRecord() throws Exception {
 
         AlarmUpdateForm form = new AlarmUpdateForm();
-        form.setId("1512608680364769112");
+        form.setId("1513427918946975748");
         form.setHandleStatus("已处理");
-        form.setSnCode("1510311999826615905");
-        form.setProtocolVersion("yw123");
+        form.setSnCode("HMITest002");
+        form.setProtocolVersion("ywv1.1");
         form.setOldDate("");
         form.setNewDate("");
+        form.setHandleResult("警报解除");
 
         PageRequest request = new PageRequest(0, 2);
 

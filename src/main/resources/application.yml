@@ -16,5 +16,5 @@ spring:
 #  redis:
 #    host: 47.93.11.243
 #    port: 6379
-#server:
-#  port: 8081
+server:
+  port: 8081

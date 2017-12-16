@@ -20,8 +20,10 @@ public class ProtocolDetail {
     private Integer offsetNumber;
     /**  数据名称 */
     private String dataName;
-//    /**  数据报警阈值 */
-//    private String alarmThreshold;
+    /**  数据阈值上限 */
+    private String maxThreshold;
+    /**  数据阈值下限 */
+    private String minThreshold;
     /**  备用字段 */
     private String deleted;
 
@@ -67,13 +69,21 @@ public class ProtocolDetail {
         this.dataName = dataName;
     }
 
-//    public String getAlarmThreshold() {
-//        return alarmThreshold;
-//    }
-//
-//    public void setAlarmThreshold(String alarmThreshold) {
-//        this.alarmThreshold = alarmThreshold;
-//    }
+    public String getMaxThreshold() {
+        return maxThreshold;
+    }
+
+    public void setMaxThreshold(String maxThreshold) {
+        this.maxThreshold = maxThreshold;
+    }
+
+    public String getMinThreshold() {
+        return minThreshold;
+    }
+
+    public void setMinThreshold(String minThreshold) {
+        this.minThreshold = minThreshold;
+    }
 
     public String getDeleted() {
         return deleted;
@@ -87,11 +97,11 @@ public class ProtocolDetail {
     public String toString() {
         return "ProtocolDetail{" +
                 "id='" + id + '\'' +
-               // ", snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", offsetNumber=" + offsetNumber +
                 ", dataName='" + dataName + '\'' +
-                //", alarmThreshold='" + alarmThreshold + '\'' +
+                ", maxThreshold='" + maxThreshold + '\'' +
+                ", minThreshold='" + minThreshold + '\'' +
                 ", deleted='" + deleted + '\'' +
                 '}';
     }

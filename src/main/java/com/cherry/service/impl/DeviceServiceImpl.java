@@ -162,6 +162,8 @@ public class DeviceServiceImpl implements DeviceService{
 
         // 3.将siteDeviceInfoDTO对象属性赋给设备信息对象
         BeanUtils.copyProperties(siteDeviceForm, deviceInfo);
+        // TODO 目前测试将设备图片所在为统一值，后续为页面读取值
+        deviceInfo.setSiteIcon("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1513075990838&di=79aaffe7ac7d3feb98f7e0469fb9bc4d&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2Fb8389b504fc2d562dbd7f8d7ec1190ef76c66c28.jpg");
         deviceInfoRepository.save(deviceInfo);
 
         return 0;

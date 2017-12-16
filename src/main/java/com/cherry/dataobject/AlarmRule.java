@@ -2,14 +2,13 @@ package com.cherry.dataobject;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
 
 /**
- * 设备报警记录表
- * Created by Administrator on 2017/12/06.
+ * 报警规则表
+ * Created by Administrator on 2017/12/16.
  */
 @Entity
-public class AlarmRecord {
+public class AlarmRule {
 
     @Id
     private String id;
@@ -19,24 +18,12 @@ public class AlarmRecord {
     private String protocolVersion;
     /**  数据偏移 */
     private Integer offsetNumber;
-    /**  实际值 */
-    private String actualValue;
     /**  报警下阈值 */
     private String downThreshold;
     /**  报警上阈值 */
     private String upThreshold;
     /**  报警码 */
     private Integer alarmCode;
-    /**  报警时间 */
-    private Date alarmTime;
-    /**  报警处理状态 */
-    private Integer handleStatus;
-    /**  报警处理结果 */
-    private String handleResult;
-    /**  报警处理时间 */
-    private String handleTime;
-
-    public AlarmRecord(){}
 
     public String getId() {
         return id;
@@ -70,14 +57,6 @@ public class AlarmRecord {
         this.offsetNumber = offsetNumber;
     }
 
-    public String getActualValue() {
-        return actualValue;
-    }
-
-    public void setActualValue(String actualValue) {
-        this.actualValue = actualValue;
-    }
-
     public String getDownThreshold() {
         return downThreshold;
     }
@@ -102,53 +81,16 @@ public class AlarmRecord {
         this.alarmCode = alarmCode;
     }
 
-    public Date getAlarmTime() {
-        return alarmTime;
-    }
-
-    public void setAlarmTime(Date alarmTime) {
-        this.alarmTime = alarmTime;
-    }
-
-    public Integer getHandleStatus() {
-        return handleStatus;
-    }
-
-    public void setHandleStatus(Integer handleStatus) {
-        this.handleStatus = handleStatus;
-    }
-
-    public String getHandleResult() {
-        return handleResult;
-    }
-
-    public void setHandleResult(String handleResult) {
-        this.handleResult = handleResult;
-    }
-
-    public String getHandleTime() {
-        return handleTime;
-    }
-
-    public void setHandleTime(String handleTime) {
-        this.handleTime = handleTime;
-    }
-
     @Override
     public String toString() {
-        return "AlarmRecord{" +
+        return "AlarmRule{" +
                 "id='" + id + '\'' +
                 ", snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", offsetNumber=" + offsetNumber +
-                ", actualValue='" + actualValue + '\'' +
                 ", downThreshold='" + downThreshold + '\'' +
                 ", upThreshold='" + upThreshold + '\'' +
                 ", alarmCode=" + alarmCode +
-                ", alarmTime=" + alarmTime +
-                ", handleStatus=" + handleStatus +
-                ", handleResult='" + handleResult + '\'' +
-                ", handleTime='" + handleTime + '\'' +
                 '}';
     }
 }

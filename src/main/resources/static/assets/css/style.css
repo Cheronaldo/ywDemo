@@ -29,6 +29,7 @@ a{text-decoration:none;}
 	width:85%;
 	margin-left:10rem;
 	border:0;
+	position: fixed;
 }
 
 .fname{

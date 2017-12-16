@@ -9,6 +9,8 @@ public class AlarmUpdateForm {
     private String id;
     /**  报警处理状态 */
     private String handleStatus;
+    /**  处理结果 */
+    private String handleResult;
     /**  设备SN码 */
     private String snCode;
     /**  协议版本号 */
@@ -34,6 +36,14 @@ public class AlarmUpdateForm {
 
     public void setHandleStatus(String handleStatus) {
         this.handleStatus = handleStatus;
+    }
+
+    public String getHandleResult() {
+        return handleResult;
+    }
+
+    public void setHandleResult(String handleResult) {
+        this.handleResult = handleResult;
     }
 
     public String getSnCode() {
@@ -73,6 +83,7 @@ public class AlarmUpdateForm {
         return "AlarmUpdateForm{" +
                 "id='" + id + '\'' +
                 ", handleStatus='" + handleStatus + '\'' +
+                ", handleResult='" + handleResult + '\'' +
                 ", snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", oldDate='" + oldDate + '\'' +

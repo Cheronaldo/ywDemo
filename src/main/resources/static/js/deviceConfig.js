@@ -380,12 +380,12 @@ function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
     // client.subscribe("/China/HuBei/#");
-    c_sub_topic = "/China/HuBei/HMITest001/#";
+    c_sub_topic = "/China/HuBei/"+devSNCode+"/#";
     client.subscribe(c_sub_topic);
     message_payloadString = "1";
     message = new Paho.MQTT.Message(message_payloadString);
     devSNCodeTest = "HMITest001";       //测试用
-    message_destinationName = "/China/HuBei/" + devSNCodeTest + "/cfg/req"
+    message_destinationName = "/China/HuBei/" + devSNCode + "/DevRecv/cfg/req"
     message.destinationName = message_destinationName;
     client.send(message);
 }
@@ -403,7 +403,7 @@ function onMessageArrived(message) {
         // case "China/HuBei/HMITest001/cgf/req":
         //
         //     break;
-        case "China/HuBei/" + devSNCodeTest + "/cfg/ack":
+        case "China/HuBei/" + devSNCode + "/DevSend/cfg/ack":
             if(sendTime == 0){
                 analProtocol(message.payloadString);
                 sendTime++;

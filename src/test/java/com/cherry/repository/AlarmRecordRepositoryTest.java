@@ -31,12 +31,16 @@ public class AlarmRecordRepositoryTest {
     public void saveRecord() throws Exception {
         AlarmRecord record = new AlarmRecord();
         record.setId(KeyUtil.genUniqueKey());
-        record.setSnCode("1511962706665703659");
-        record.setProtocolVersion("yw123");
+        record.setSnCode("HMITest002");
+        record.setProtocolVersion("ywv1.1");
         record.setOffsetNumber(1);
-        record.setAlarmCode(2);
-        record.setHandleStatus(0);
+        record.setActualValue("28");
+        record.setDownThreshold("10");
+        record.setUpThreshold("20");
+        record.setAlarmCode(1);
         record.setAlarmTime(DateUtil.getDate());
+        record.setHandleStatus(0);
+        record.setHandleResult("无");
 
         AlarmRecord result = recordRepository.save(record);
 
@@ -47,12 +51,12 @@ public class AlarmRecordRepositoryTest {
     public void findBySnCodeAndAlarmTimeBetweenOrderByIdDesc() throws Exception {
 
         Date oldDate = DateUtil.convertString2Date("2017-01-01 00:00:00");
-        Date newDate = DateUtil.convertString2Date("2017-12-07 21:52:40");
+        Date newDate = DateUtil.convertString2Date("2017-12-16 21:52:40");
 
-        PageRequest request = new PageRequest(0, 5);
+        PageRequest request = new PageRequest(0, 2);
 
-        Page<AlarmRecord> result = recordRepository.findBySnCodeAndProtocolVersionAndAlarmTimeBetweenOrderByIdDesc("1510311999826615905",
-                "yw123",
+        Page<AlarmRecord> result = recordRepository.findBySnCodeAndProtocolVersionAndAlarmTimeBetweenOrderByIdDesc("HMITest002",
+                "ywv1.1",
                 oldDate,
                 newDate,
                 request);

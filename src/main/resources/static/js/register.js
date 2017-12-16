@@ -485,15 +485,16 @@ function initMap() {
     }
 
     function onConnect() {
+        devSNCode = $("#snCode").val();
         // Once a connection has been made, make a subscription and send a message.
         console.log("onConnect");
         // client.subscribe("/China/HuBei/#");
-        c_sub_topic = "/China/HuBei/HMITest001/#";
+        c_sub_topic = "/China/HuBei/"+devSNCode+"/#";
         client.subscribe(c_sub_topic);
         message_payloadString = "1";
         message = new Paho.MQTT.Message(message_payloadString);
-        devSNCode = "HMITest001";       //测试用
-        message_destinationName = "/China/HuBei/" + devSNCode + "/cfg/req"
+        // devSNCode = "HMITest001";       //测试用
+        message_destinationName = "/China/HuBei/" + devSNCode + "/DevRecv/cfg/req"
         message.destinationName = message_destinationName;
         client.send(message);
     }
@@ -507,11 +508,12 @@ function initMap() {
 
     // called when a message arrives
     function onMessageArrived(message) {
+        console.log(message.destinationName);
         switch(message.destinationName){
             // case "China/HuBei/HMITest001/cgf/req":
             //
             //     break;
-            case "China/HuBei/" + devSNCode + "/cfg/ack":
+            case "China/HuBei/" + devSNCode + "/DevSend/cfg/ack":
                 if(sendTime == 0){
                     analProtocol(message.payloadString);
                     if(isSynBtn) saveProtocol();

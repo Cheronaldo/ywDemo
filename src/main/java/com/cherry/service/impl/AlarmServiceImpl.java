@@ -2,12 +2,15 @@ package com.cherry.service.impl;
 
 import com.cherry.dataobject.AlarmMessage;
 import com.cherry.dataobject.AlarmRecord;
+import com.cherry.dataobject.AlarmRule;
 import com.cherry.dataobject.ProtocolDetail;
 import com.cherry.enums.AlarmHandleEnum;
 import com.cherry.form.AlarmQueryForm;
+import com.cherry.form.AlarmRuleAddForm;
 import com.cherry.form.AlarmUpdateForm;
 import com.cherry.repository.AlarmMessageRepository;
 import com.cherry.repository.AlarmRecordRepository;
+import com.cherry.repository.AlarmRuleRepository;
 import com.cherry.repository.ProtocolDetailRepository;
 import com.cherry.service.AlarmService;
 import com.cherry.util.DateUtil;
@@ -38,6 +41,9 @@ public class AlarmServiceImpl implements AlarmService{
     private ProtocolDetailRepository detailRepository;
 
     @Autowired
+    private AlarmRuleRepository alarmRuleRepository;
+
+    @Autowired
     private AlarmService alarmService;
 
     @Override
@@ -62,6 +68,7 @@ public class AlarmServiceImpl implements AlarmService{
             return map;
         }
 
+
         // 3.获取协议详情列表 用于获取本机数据名称
         List<ProtocolDetail> detailList = detailRepository.findListByProtocolVersion(form.getProtocolVersion());
 
@@ -75,14 +82,11 @@ public class AlarmServiceImpl implements AlarmService{
         for (AlarmRecord record : recordList){
 
             AlarmRecordVO recordVO = new AlarmRecordVO();
-            recordVO.setId(record.getId());
+            // 从record 获取 id 实际值 处理时间 处理结果
+            BeanUtils.copyProperties(record, recordVO);
+            // 处理recordVO 报警时间 数据名称 报警详情 处理状态
+            // 报警时间
             recordVO.setAlarmTime(DateUtil.convertDate2String(record.getAlarmTime()));
-            if (record.getHandleStatus() == 0){
-                recordVO.setHandleStatus(AlarmHandleEnum.ALARM_UNHANDLED.getMessage());
-            }
-            if (record.getHandleStatus() == 1){
-                recordVO.setHandleStatus(AlarmHandleEnum.ALARM_HANDLED.getMessage());
-            }
 
             // 获取数据名称
             for (ProtocolDetail protocolDetail : detailList ){
@@ -96,6 +100,14 @@ public class AlarmServiceImpl implements AlarmService{
                 if (alarmMessage.getAlarmCode() == record.getAlarmCode()){
                     recordVO.setAlarmInfo(alarmMessage.getAlarmInfo());
                 }
+            }
+
+            // 处理状态
+            if (record.getHandleStatus() == 0){
+                recordVO.setHandleStatus(AlarmHandleEnum.ALARM_UNHANDLED.getMessage());
+            }
+            if (record.getHandleStatus() == 1){
+                recordVO.setHandleStatus(AlarmHandleEnum.ALARM_HANDLED.getMessage());
             }
 
             recordVOList.add(recordVO);
@@ -122,9 +134,11 @@ public class AlarmServiceImpl implements AlarmService{
         boolean isHandled = form.getHandleStatus().equals(AlarmHandleEnum.ALARM_HANDLED.getMessage());
         if (isHandled){
             updateRecord.setHandleStatus(1);
+            updateRecord.setHandleTime(DateUtil.convertDate2String(DateUtil.getDate()));
         }else {
             updateRecord.setHandleStatus(0);
         }
+        updateRecord.setHandleResult(form.getHandleResult());
         recordRepository.save(updateRecord);
 
         // 3.查询分页对象
@@ -134,5 +148,37 @@ public class AlarmServiceImpl implements AlarmService{
         return alarmService.getRecordList(queryForm, pageable);
 
 
+    }
+
+    @Override
+    public Map<String, Object> getThresholdList(String snCode, String protocolVersion, Pageable pageable) {
+
+        // 1.查询报警规则 分页对象
+        Page<AlarmRule> rulePage = alarmRuleRepository.findBySnCodeAndProtocolVersionOrderByOffsetNumberAsc(snCode, protocolVersion, pageable);
+
+
+        // 2.封装为 报警规则视图对象 AlarmRuleVO
+
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getThresholdSingle(String id) {
+        return null;
+    }
+
+    @Override
+    public Integer updateThreshold(AlarmUpdateForm form) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getThresholdList(String protocolVersion) {
+        return null;
+    }
+
+    @Override
+    public Integer addThreshold(AlarmRuleAddForm form) {
+        return null;
     }
 }
