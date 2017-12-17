@@ -15,6 +15,8 @@ public class AlarmQueryForm {
     /**  终止时间 */
     private String newDate;
 
+    // TODO 添加是否 查询未处理报警
+
     public AlarmQueryForm(){}
 
     public String getSnCode() {

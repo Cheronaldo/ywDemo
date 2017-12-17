@@ -1,5 +1,6 @@
 package com.cherry.service.impl;
 
+import com.cherry.converter.AlarmRule2AlarmRuleVOConverter;
 import com.cherry.dataobject.AlarmMessage;
 import com.cherry.dataobject.AlarmRecord;
 import com.cherry.dataobject.AlarmRule;
@@ -15,6 +16,7 @@ import com.cherry.repository.ProtocolDetailRepository;
 import com.cherry.service.AlarmService;
 import com.cherry.util.DateUtil;
 import com.cherry.vo.AlarmRecordVO;
+import com.cherry.vo.AlarmRuleVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -114,11 +116,11 @@ public class AlarmServiceImpl implements AlarmService{
 
         }
 
-        map.put("code", 0);
-        map.put("msg", AlarmHandleEnum.GET_RECORD_SUCCESS.getMessage());
+//        map.put("code", 0);
+//        map.put("msg", AlarmHandleEnum.GET_RECORD_SUCCESS.getMessage());
         map.put("total", recordPage.getTotalPages());
         map.put("records", recordPage.getTotalElements());
-        map.put("data", recordVOList);
+        map.put("rows", recordVOList);
 
         return map;
     }
@@ -153,17 +155,48 @@ public class AlarmServiceImpl implements AlarmService{
     @Override
     public Map<String, Object> getThresholdList(String snCode, String protocolVersion, Pageable pageable) {
 
+        Map<String, Object> map = new HashMap<>();
         // 1.查询报警规则 分页对象
         Page<AlarmRule> rulePage = alarmRuleRepository.findBySnCodeAndProtocolVersionOrderByOffsetNumberAsc(snCode, protocolVersion, pageable);
 
 
+        if (rulePage.getContent() == null){
+            map.put("code", 1);
+            map.put("msg", AlarmHandleEnum.GET_THRESHOLD_FAIL.getMessage());
+
+            return map;
+        }
         // 2.封装为 报警规则视图对象 AlarmRuleVO
+        List<AlarmRuleVO> alarmRuleVOList = AlarmRule2AlarmRuleVOConverter.convert(rulePage.getContent());
+
+        List<ProtocolDetail> detailList = detailRepository.findListByProtocolVersion(protocolVersion);
+        // 3.获取 数据名称
+        for (AlarmRuleVO alarmRuleVO : alarmRuleVOList){
+
+            for (ProtocolDetail protocolDetail : detailList){
+                if (alarmRuleVO.getOffsetNumber() == protocolDetail.getOffsetNumber()){
+                    alarmRuleVO.setDataName(protocolDetail.getDataName());
+                }
+            }
+        }
+
+//        map.put("code", 0);
+//        map.put("msg", AlarmHandleEnum.GET_THRESHOLD_SUCCESS.getMessage());
+        map.put("total", rulePage.getTotalPages());
+        map.put("records", rulePage.getTotalElements());
+        map.put("rows", alarmRuleVOList);
 
         return null;
     }
 
     @Override
-    public Map<String, Object> getThresholdSingle(String id) {
+    public Map<String, Object> getThresholdSingle(String protocolVersion, Integer offsetNumber) {
+
+        // 1.查询相关协议详情记录
+       // ProtocolDetail protocolDetail = detailRepository.
+
+        // 2.返回 最大限 最小限
+
         return null;
     }
 

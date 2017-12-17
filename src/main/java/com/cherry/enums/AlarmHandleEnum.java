@@ -12,7 +12,9 @@ public enum AlarmHandleEnum {
     ALARM_HANDLED(3,"已处理"),
     QUERY_CRITERIA_ERROR(4,"查询参数错误！"),
     UPDATE_CRITERIA_ERROR(5,"修改测试错误！"),
-    UPDATE_SUCCESS(6, "修改成功！")
+    UPDATE_SUCCESS(6, "修改成功！"),
+    GET_THRESHOLD_FAIL(7, "未查询到相关阈值记录！"),
+    GET_THRESHOLD_SUCCESS(8, "查询成功！"),
     ;
 
 

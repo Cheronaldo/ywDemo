@@ -44,12 +44,13 @@ public interface AlarmService {
     Map<String, Object> getThresholdList(String snCode, String protocolVersion, Pageable pageable);
 
     /**
-     * 通过ID 获取单个子项 最大的上 下阈值
+     * 通过版本号 偏移值 获取单个子项 最大的上 下阈值
      * 协议详情表
-     * @param id
+     * @param protocolVersion
+     * @param offsetNumber
      * @return
      */
-    Map<String, Object> getThresholdSingle(String id);
+    Map<String, Object> getThresholdSingle(String protocolVersion, Integer offsetNumber);
 
     /**
      * 通过ID 更新一条报警规则
