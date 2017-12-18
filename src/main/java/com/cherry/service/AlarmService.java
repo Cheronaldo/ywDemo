@@ -2,6 +2,7 @@ package com.cherry.service;
 
 import com.cherry.form.AlarmQueryForm;
 import com.cherry.form.AlarmRuleAddForm;
+import com.cherry.form.AlarmRuleUpdateForm;
 import com.cherry.form.AlarmUpdateForm;
 import org.springframework.data.domain.Pageable;
 
@@ -57,7 +58,7 @@ public interface AlarmService {
      * @param form
      * @return
      */
-    Integer updateThreshold(AlarmUpdateForm form);
+    Map<String, Object> updateThreshold(AlarmRuleUpdateForm form, Pageable pageable);
 
     /**
      * 通过协议版本号 获取数据名称及对应阈值 最大 最小 限 列表
@@ -65,13 +66,13 @@ public interface AlarmService {
      * @param protocolVersion
      * @return
      */
-    Map<String, Object> getThresholdList(String protocolVersion);
+    Map<String, Object> getThresholdLimitList(String protocolVersion);
 
     /**
      * 添加一条报警规则
      * @param form
      * @return
      */
-    Integer addThreshold(AlarmRuleAddForm form);
+    Map<String, Object> addThreshold(AlarmRuleAddForm form, Pageable pageable);
 
 }

@@ -64,4 +64,13 @@ public class ProtocolDetailRepositoryTest {
 
     }
 
+    @Test
+    public void findByProtocolVersionAndOffsetNumber() throws Exception{
+
+        ProtocolDetail result = repository.findByProtocolVersionAndOffsetNumber("ywv1.1", 1);
+
+        Assert.assertNotNull(result);
+
+    }
+
 }

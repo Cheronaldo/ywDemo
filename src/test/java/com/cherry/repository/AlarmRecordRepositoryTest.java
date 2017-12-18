@@ -53,10 +53,11 @@ public class AlarmRecordRepositoryTest {
         Date oldDate = DateUtil.convertString2Date("2017-01-01 00:00:00");
         Date newDate = DateUtil.convertString2Date("2017-12-16 21:52:40");
 
-        PageRequest request = new PageRequest(0, 2);
+        PageRequest request = new PageRequest(0, 5);
 
-        Page<AlarmRecord> result = recordRepository.findBySnCodeAndProtocolVersionAndAlarmTimeBetweenOrderByIdDesc("HMITest002",
+        Page<AlarmRecord> result = recordRepository.findBySnCodeAndProtocolVersionAndHandleResultStartingWithAndAlarmTimeBetweenOrderByIdDesc("HMITest002",
                 "ywv1.1",
+                "无",
                 oldDate,
                 newDate,
                 request);

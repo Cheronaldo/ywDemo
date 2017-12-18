@@ -37,7 +37,7 @@ public class AlarmController {
      * @param size
      * @return
      */
-    @RequestMapping("/getList")
+    @RequestMapping("/getAlarmList")
     public Map<String, Object> getRecord(@Valid AlarmQueryForm form,
                                          BindingResult bindingResult,
                                          @RequestParam(value = "page", defaultValue = "1")  Integer page,
@@ -92,5 +92,7 @@ public class AlarmController {
         return map;
 
     }
+
+
 
 }

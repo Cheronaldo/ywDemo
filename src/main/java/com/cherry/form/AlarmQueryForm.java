@@ -10,12 +10,12 @@ public class AlarmQueryForm {
     private String snCode;
     /**  协议版本号 */
     private String protocolVersion;
+    /**  处理状态 用于判断是否只查询未解除报警 true表示 已勾选*/
+    private Boolean AlarmHandled;
     /**  起始时间 */
     private String oldDate;
     /**  终止时间 */
     private String newDate;
-
-    // TODO 添加是否 查询未处理报警
 
     public AlarmQueryForm(){}
 
@@ -33,6 +33,14 @@ public class AlarmQueryForm {
 
     public void setProtocolVersion(String protocolVersion) {
         this.protocolVersion = protocolVersion;
+    }
+
+    public Boolean getAlarmHandled() {
+        return AlarmHandled;
+    }
+
+    public void setAlarmHandled(Boolean alarmHandled) {
+        AlarmHandled = alarmHandled;
     }
 
     public String getOldDate() {
@@ -56,6 +64,7 @@ public class AlarmQueryForm {
         return "AlarmQueryForm{" +
                 "snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
+                ", AlarmHandled=" + AlarmHandled +
                 ", oldDate='" + oldDate + '\'' +
                 ", newDate='" + newDate + '\'' +
                 '}';

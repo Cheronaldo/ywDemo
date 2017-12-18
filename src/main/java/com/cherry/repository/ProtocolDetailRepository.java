@@ -33,4 +33,13 @@ public interface ProtocolDetailRepository extends JpaRepository<ProtocolDetail,S
      */
     List<ProtocolDetail> findListByProtocolVersion(String protocolVersion);
 
+    /**
+     * 通过协议版本号 偏移值 查询协议详情记录
+     * 1.获取单个数据的最大 最小 阈值
+     * @param protocolVersion
+     * @param offsetNumber
+     * @return
+     */
+    ProtocolDetail findByProtocolVersionAndOffsetNumber(String protocolVersion, Integer offsetNumber);
+
 }

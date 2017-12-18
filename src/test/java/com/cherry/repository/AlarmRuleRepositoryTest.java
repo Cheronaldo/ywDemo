@@ -28,11 +28,11 @@ public class AlarmRuleRepositoryTest {
     public void saveRule() throws Exception{
         AlarmRule rule = new AlarmRule();
         rule.setId(KeyUtil.genUniqueKey());
-        rule.setSnCode("HMITest001");
+        rule.setSnCode("HMITest002");
         rule.setProtocolVersion("ywv1.1");
-        rule.setOffsetNumber(1);
-        rule.setDownThreshold("50");
-        rule.setUpThreshold("60");
+        rule.setOffsetNumber(2);
+        rule.setDownThreshold("10");
+        rule.setUpThreshold("30");
 
         repository.save(rule);
     }
@@ -45,6 +45,19 @@ public class AlarmRuleRepositoryTest {
         Page<AlarmRule> result = repository.findBySnCodeAndProtocolVersionOrderByOffsetNumberAsc("HMITest002", "ywv1.1", request);
 
         Assert.assertNotEquals(0, result.getTotalElements());
+
+    }
+
+    @Test
+    public void findBySnCodeAndProtocolVersionAndOffsetNumberAndDownThresholdAndUpThreshold() throws Exception{
+
+        AlarmRule result = repository.findBySnCodeAndProtocolVersionAndOffsetNumberAndDownThresholdAndUpThreshold("HMITest002",
+                                                                                                                    "ywv1.1",
+                                                                                                                    2,
+                                                                                                                    "10",
+                                                                                                                    "30");
+
+        Assert.assertNotNull(result);
 
     }
 
