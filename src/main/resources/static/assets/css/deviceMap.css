@@ -7,3 +7,29 @@
     border: 1px solid gray;
     overflow:hidden;
 }
+a{
+    text-decoration: none;
+}
+.btn{
+    background-color: #ff8000;
+    width: 50%;
+    height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    margin: 5px auto;
+}
+.btn:hover{
+    background-color: #eccd03;
+    width: 50%;
+    height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    margin: 5px auto;
+}
+.btn > a{
+    height:30px;
+    line-height: 30px;
+    color: #000;
+}

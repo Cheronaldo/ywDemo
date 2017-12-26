@@ -8,8 +8,8 @@ var content;
 var url = "http://image.tupian114.com/20140419/09274112.png";
 var myIcon = new BMap.Icon(url, new BMap.Size(40,30));
 var opts = {
-				width : 250,     // 信息窗口宽度
-				height: 100,     // 信息窗口高度
+				width : 180,     // 信息窗口宽度
+				height: 130,     // 信息窗口高度
 				title : "信息窗口" , // 信息窗口标题
 				enableMessage:true//设置允许信息窗发送短息
 			   };
@@ -64,7 +64,12 @@ function sortMapSpot(data){
 function addSpots(){
 	for (var i = 0; i < mapSpots.length; i++) {
 		content = "";
-		content = "SN码：" + spotSNCodes[i] + "</br>设备状态：" + translateOnline(spotDevOnlines[i]) + "</br>设备型号：" + spotDevModels[i];
+		content = 	"<div><span>SN码：" + spotSNCodes[i] + "</span></br>" +
+						 "<span>设备状态：" + translateOnline(spotDevOnlines[i]) + "</span></br>" +
+						 "<span>设备型号：" + spotDevModels[i] + "</span></br>" +
+						 "<div class='btn'><a href='/deviceConfig?devSNCode=" + spotSNCodes[i] + "' target='fname'"
+						 + "'>设备配置</a></div>" +
+					"</div>";
 		if (spotDevOnlines[i] == 0) {var marker = new BMap.Marker(mapSpots[i]);}
 		else{var marker = new BMap.Marker(mapSpots[i],{icon:myIcon});}
 		map.addOverlay(marker);

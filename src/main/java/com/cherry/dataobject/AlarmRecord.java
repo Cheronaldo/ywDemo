@@ -35,6 +35,8 @@ public class AlarmRecord {
     private String handleResult;
     /**  报警处理时间 */
     private String handleTime;
+    /**  报警记录是否查看 1 表示查看 0 表示未查看 */
+    private Integer isChecked;
 
     public AlarmRecord(){}
 
@@ -134,6 +136,14 @@ public class AlarmRecord {
         this.handleTime = handleTime;
     }
 
+    public Integer getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(Integer isChecked) {
+        this.isChecked = isChecked;
+    }
+
     @Override
     public String toString() {
         return "AlarmRecord{" +
@@ -149,6 +159,7 @@ public class AlarmRecord {
                 ", handleStatus=" + handleStatus +
                 ", handleResult='" + handleResult + '\'' +
                 ", handleTime='" + handleTime + '\'' +
+                ", isChecked=" + isChecked +
                 '}';
     }
 }

@@ -69,42 +69,6 @@ $(function() {
                 isSynBtn = false;
             }
             else devregister();
-            // $.ajax({
-            //         type : "POST",
-            //         url : "/device/site/register",
-            //         data : {
-            //             "snCode" :  snCode,
-            //             "userName": userName,
-            //             "siteType" : siteType,
-            //             "siteName" : siteName,
-            //             "deviceAddress" : deviceAddress,
-            //             "deviceLongitude" : deviceLng,
-            //             "deviceLatitude": deviceLat,
-            //             "siteIcon": "/123456",
-            //             "isAdapt": isAsk,
-            //             "protocolVersion": protocolVersionDev,
-            //             "protocolContent": protocolContent
-            //         },
-            //         dataType : "json",
-            //         success : function(data) {
-            //             if (data.code == 0) {
-            //                 alert('设备注册成功！');
-            //                 document.getElementById("snCode").value = "";
-            //                 document.getElementById("suggestId").value = "";
-            //                 document.getElementById("jiaoyan").value = "";
-            //                 $("#query_").attr("disabled","disabled");
-            //                 $("#modify_").removeAttr("disabled");
-            //                 $("#suggestId").removeAttr("disabled");
-            //                 isSynBtn = false;
-            //                 isAsk = 0;
-            //             } else if(data.code == 1) {
-            //                 alert('设备注册失败');
-            //             }
-            //             $("#query_").attr("disabled","disabled");
-            //             $("#modify_").removeAttr("disabled");
-            //             $("#cancel_").removeAttr("disabled");
-            //         }
-            //     });
         });
         localSearch.search(keyword);
     });
@@ -489,12 +453,14 @@ function initMap() {
         // Once a connection has been made, make a subscription and send a message.
         console.log("onConnect");
         // client.subscribe("/China/HuBei/#");
-        c_sub_topic = "/China/HuBei/"+devSNCode+"/#";
+        // c_sub_topic = "/China/HuBei/"+devSNCode+"/#";
+        c_sub_topic = "/"+devSNCode+"/#";
         client.subscribe(c_sub_topic);
         message_payloadString = "1";
         message = new Paho.MQTT.Message(message_payloadString);
         // devSNCode = "HMITest001";       //测试用
-        message_destinationName = "/China/HuBei/" + devSNCode + "/DevRecv/cfg/req"
+        // message_destinationName = "/China/HuBei/" + devSNCode + "/DevRecv/cfg/req"
+        message_destinationName = "/"+devSNCode + "/DevRecv/cfg/req"
         message.destinationName = message_destinationName;
         client.send(message);
     }
@@ -513,7 +479,8 @@ function initMap() {
             // case "China/HuBei/HMITest001/cgf/req":
             //
             //     break;
-            case "China/HuBei/" + devSNCode + "/DevSend/cfg/ack":
+            // case "China/HuBei/" + devSNCode + "/DevSend/cfg/ack":
+            case devSNCode + "/DevSend/cfg/ack":
                 if(sendTime == 0){
                     analProtocol(message.payloadString);
                     if(isSynBtn) saveProtocol();

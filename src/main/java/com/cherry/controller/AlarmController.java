@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,7 @@ public class AlarmController {
      * @param size
      * @return
      */
-    @RequestMapping("/getAlarmList")
+    @PostMapping("/getAlarmList")
     public Map<String, Object> getRecord(@Valid AlarmQueryForm form,
                                          BindingResult bindingResult,
                                          @RequestParam(value = "page", defaultValue = "1")  Integer page,
@@ -67,7 +68,7 @@ public class AlarmController {
      * @param size
      * @return
      */
-    @RequestMapping("/updateRecord")
+    @PostMapping("/updateRecord")
     public Map<String, Object> updateRecord(@Valid AlarmUpdateForm form,
                                             BindingResult bindingResult,
                                             @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -90,6 +91,36 @@ public class AlarmController {
             map.put("msg", AlarmHandleEnum.UPDATE_SUCCESS.getMessage());
         }
         return map;
+
+    }
+
+    /**
+     * 查询用户名下 所有设备的报警记录
+     * @param userName
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/getAll")
+    public Map<String, Object> listGetAll(@RequestParam("userName") String userName,
+                                          @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                          @RequestParam(value = "size", defaultValue = "10") Integer size){
+
+
+
+        PageRequest request = new PageRequest(page - 1, size);
+        return alarmService.getAllDeviceAlarmRecord(userName, request);
+    }
+
+    /**
+     * 查看报警记录 修改查看状态
+     * @param id
+     * @return
+     */
+    @PostMapping("/decreaseNum")
+    public Map<String, Object> decreaseUncheckedNumber(@RequestParam("id") String id){
+
+        return alarmService.decreaseUncheckedNumber(id);
 
     }
 

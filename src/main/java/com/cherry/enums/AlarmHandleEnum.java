@@ -19,9 +19,11 @@ public enum AlarmHandleEnum {
     UPDATE_THRESHOLD_SUCCESS(10,"阈值修改成功！"),
     THRESHOLD_RECORD_EXIST(11,"该记录已存在！"),
     ADD_THRESHOLD_ENABLE(12,"无法添加记录！"),
-    ADD_THRESHOLD_SUCCESS(12,"添加成功！"),
-    ADD_THRESHOLD_FAIL(13, "添加失败！"),
-    ADD_CRITERIA_ERROR(5,"阈值添加参数错误！"),
+    ADD_THRESHOLD_SUCCESS(13,"添加成功！"),
+    ADD_THRESHOLD_FAIL(14, "添加失败！"),
+    ADD_CRITERIA_ERROR(15,"阈值添加参数错误！"),
+    RECORD_NOT_EXIST(16,"记录不存在！"),
+    CHECKED_SUCCESS(17,"查看成功！"),
     ;
 
 

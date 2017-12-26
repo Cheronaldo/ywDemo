@@ -75,4 +75,19 @@ public interface AlarmService {
      */
     Map<String, Object> addThreshold(AlarmRuleAddForm form, Pageable pageable);
 
+    /**
+     * 通过用户名 查询用户名下 所有设备的报警记录
+     * @param userName
+     * @param pageable
+     * @return
+     */
+    Map<String, Object> getAllDeviceAlarmRecord(String userName, Pageable pageable);
+
+    /**
+     * 修改 未查看记录
+     * @param id
+     * @return
+     */
+    Map<String, Object> decreaseUncheckedNumber(String id);
+
 }

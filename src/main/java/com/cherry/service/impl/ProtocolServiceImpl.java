@@ -300,7 +300,35 @@ public class ProtocolServiceImpl implements ProtocolService{
     public Integer protocolAdapt(ProtocolAdaptDTO adaptDTO) {
 
         // 接收要适配的协议内容
-        String[] arrayDataName = adaptDTO.getProtocolContent().split("_");
+        String[] protocolContent = adaptDTO.getProtocolContent().split("_");
+
+        // 分别获取 数据名称 数据单位 数据阈值下限 数据阈值上限
+        String[] arrayDataName = new String[protocolContent.length / 4];
+        String[] arrayDataUnit= new String[protocolContent.length / 4];
+        String[] arrayDataMinThreshold = new String[protocolContent.length / 4];
+        String[] arrayDataMaxThreshold = new String[protocolContent.length / 4];
+
+        for (int i = 0; i < protocolContent.length; i++){
+            // 取余数 对应不同的情况
+            int j = i % 4;
+            if (j == 0){
+                // 属于数据名称
+                arrayDataName[i / 4] = protocolContent[i];
+            }
+            if (j == 1){
+                // 属于时间单位
+                arrayDataUnit[i / 4] = protocolContent[i];
+            }
+            if (j == 2){
+                // 属于数据阈值下限
+                arrayDataMinThreshold[i / 4] = protocolContent[i];
+            }
+            if (j == 3){
+                // 属于数据阈值上限
+                arrayDataMaxThreshold[i / 4] = protocolContent[i];
+            }
+        }
+
         // 用于策略默认设置
         String strategyDefault = "";
 
@@ -446,6 +474,9 @@ public class ProtocolServiceImpl implements ProtocolService{
             detail.setProtocolVersion(adaptDTO.getProtocolVersion());
             detail.setOffsetNumber(i + 1);
             detail.setDataName(arrayDataName[i]);
+            detail.setDataUnit(arrayDataUnit[i]);
+            detail.setMinThreshold(arrayDataMinThreshold[i]);
+            detail.setMaxThreshold(arrayDataMaxThreshold[i]);
 
             detailRepository.save(detail);
         }

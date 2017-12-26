@@ -8,19 +8,19 @@
 	<title>亿维智能云平台设备列表页面</title>
 	<style type="text/css">
 		.dev{
-			border: 1px solid;
+			border: 1px solid grey;
 			border-bottom: 0; 
 			border-color: black;
 		}
 		.dev:last-child{
-			border-bottom: 1px solid;
+			border-bottom: 1px solid grey;
 		}
 		.siteName {
 			color: blue;
 		}
 		.siteImg{
-			width: 90px;
-			height: 60px;
+			width: 110px;
+			height: 75px;
 			margin:0 10px;
 			display: inline-block;
 		}
@@ -32,10 +32,15 @@
 		.siteInfo {
 			display: inline-block;
 			margin-bottom: 5px;
+			font-size: 1rem;
 		}
 		.dev-a{
 			text-decoration: none;
-			margin-left: 20px;
+			margin-right: 20px;
+		}
+		.dev-a:last-child{
+			text-decoration: none;
+			margin-right: 0;
 		}
 	</style>
 	<script type="text/javascript">
@@ -79,12 +84,16 @@
                 var strDevicetr = $("<div class='dev'><div class = 'siteImg'><img alt='现场图片暂无' src='" + data[item].siteIcon +
 											"' /></div><div class = 'siteInfo'><tr><span class='siteName'>" + data[item].siteName +
 											"</span></br><span>在线状态：</span>" + translate(data[item].isOnline) +
-											"<a href='/deviceConfig?devSNCode=" + data[item].snCode +
+											"</br><a href='/deviceConfig?devSNCode=" + data[item].snCode +
 											"' target='fname' style='color: #ffa700' class='devConfig dev-a'>配置</a>" +
 											"<a href='/deviceRealtimeData?devSNCode="+ data[item].snCode +
 											"' target='fname' style='color: #00abff' class='devInfo dev-a'>设备数据</a>" +
 											"<a href='/deviceHistory?devSNCode="+ data[item].snCode +
 											"' target='fname' style='color: #ff004d' class='devInfo dev-a'>历史数据</a>" +
+											"<a href='/deviceAlarm?devSNCode="+ data[item].snCode +
+											"' target='fname' style='color: #a8362a' class='devInfo dev-a'>报警信息</a>" +
+											"<a href='/deviceThreshold?devSNCode="+ data[item].snCode +
+											"' target='fname' style='color: #0008a3' class='devInfo dev-a'>阈值信息</a>" +
                     						"</span></br><span>设备地址：" + data[item].deviceAddress +
 											"</span></tr></div></div>");
 				$("#devList").append(strDevicetr);

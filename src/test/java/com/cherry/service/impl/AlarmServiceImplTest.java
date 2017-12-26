@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -127,6 +129,29 @@ public class AlarmServiceImplTest {
         Map<String, Object> result = service.addThreshold(form, request);
 
         Assert.assertNotNull(result.get("rows"));
+
+    }
+
+    @Test
+    public void getAllDeviceAlarmRecord() throws Exception{
+
+       // List<String> snCodeList = Arrays.asList("HMITest001","HMITest002");
+
+        PageRequest request = new PageRequest(0, 3);
+
+        Map<String, Object> result = service.getAllDeviceAlarmRecord("Test001", request);
+
+        Assert.assertNotEquals(0, result.get("unreadNum"));
+
+    }
+
+    @Test
+    public void decreaseUncheckedNumber() throws Exception{
+
+
+        Map<String, Object> map = service.decreaseUncheckedNumber("15142587331681329641");
+
+        Assert.assertNotNull(map);
 
     }
 

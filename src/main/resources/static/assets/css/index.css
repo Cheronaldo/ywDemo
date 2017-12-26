@@ -54,6 +54,7 @@ li{
 	border: 1px solid;
 	box-shadow: 1px 1px gray;
 	background-color: white;
+	z-index:999;
 }
 .dropdown>li{
 	box-sizing: border-box;

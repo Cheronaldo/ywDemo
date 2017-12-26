@@ -11,6 +11,8 @@ public class HistoricalDataProtocolVO {
     private Integer offsetNumber;
     /**  数据名称 */
     private String dataName;
+    /**  数据单位 */
+    private String dataUnit;
 
     public HistoricalDataProtocolVO(){}
 
@@ -30,11 +32,20 @@ public class HistoricalDataProtocolVO {
         this.dataName = dataName;
     }
 
+    public String getDataUnit() {
+        return dataUnit;
+    }
+
+    public void setDataUnit(String dataUnit) {
+        this.dataUnit = dataUnit;
+    }
+
     @Override
     public String toString() {
         return "HistoricalDataProtocolVO{" +
                 "offsetNumber=" + offsetNumber +
                 ", dataName='" + dataName + '\'' +
+                ", dataUnit='" + dataUnit + '\'' +
                 '}';
     }
 }

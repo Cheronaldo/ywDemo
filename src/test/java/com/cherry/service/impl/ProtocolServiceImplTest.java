@@ -78,10 +78,10 @@ public class ProtocolServiceImplTest {
     public void protocolAdapt() throws Exception {
 
         ProtocolAdaptDTO protocolAdaptDTO = new ProtocolAdaptDTO();
-        protocolAdaptDTO.setUserName("cherry123");
-        protocolAdaptDTO.setSnCode("3");
-        protocolAdaptDTO.setProtocolVersion("yw002");
-        protocolAdaptDTO.setProtocolContent("电压_PH值");
+        protocolAdaptDTO.setUserName("Test001");
+        protocolAdaptDTO.setSnCode("HMITest001");
+        protocolAdaptDTO.setProtocolVersion("ywv1.1");
+        protocolAdaptDTO.setProtocolContent("温度_℃_0_100_湿度_%_0_100_浓度_%_0_100");
 
         int result = service.protocolAdapt(protocolAdaptDTO);
 
@@ -91,14 +91,14 @@ public class ProtocolServiceImplTest {
 
     @Test
     public void listForRealTimeDisplay() throws Exception{
-        List<RealTimeProtocolVO> result = service.listForRealTimeDisplay("abc1234","1511962658712691673", "yw123");
+        List<RealTimeProtocolVO> result = service.listForRealTimeDisplay("Test001","HMITest001", "ywv1.1");
 
         Assert.assertNotEquals(0, result.size());
     }
 
     @Test
     public void listFindByProtocolVersion(){
-        List<HistoricalDataProtocolVO> result = service.listFindByProtocolVersion("yw123");
+        List<HistoricalDataProtocolVO> result = service.listFindByProtocolVersion("ywv1.1");
 
         Assert.assertNotEquals(0, result.size());
     }

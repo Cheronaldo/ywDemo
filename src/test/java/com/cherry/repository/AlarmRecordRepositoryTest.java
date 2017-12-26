@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +33,7 @@ public class AlarmRecordRepositoryTest {
     public void saveRecord() throws Exception {
         AlarmRecord record = new AlarmRecord();
         record.setId(KeyUtil.genUniqueKey());
-        record.setSnCode("HMITest002");
+        record.setSnCode("HMITest001");
         record.setProtocolVersion("ywv1.1");
         record.setOffsetNumber(1);
         record.setActualValue("28");
@@ -41,6 +43,7 @@ public class AlarmRecordRepositoryTest {
         record.setAlarmTime(DateUtil.getDate());
         record.setHandleStatus(0);
         record.setHandleResult("无");
+        record.setIsChecked(0);
 
         AlarmRecord result = recordRepository.save(record);
 
@@ -63,6 +66,31 @@ public class AlarmRecordRepositoryTest {
                 request);
 
         Assert.assertNotEquals(0, result.getTotalPages());
+
+    }
+
+    @Test
+    public void findBySnCodeInOrderByAlarmTimeDesc() throws Exception{
+
+        List<String> snCodeList = Arrays.asList("HMITest001","HMITest002");
+
+        PageRequest request = new PageRequest(0, 3);
+
+        Page<AlarmRecord> result = recordRepository.findBySnCodeInOrderByAlarmTimeDesc(snCodeList, request);
+
+        Assert.assertNotEquals(0, result.getTotalElements());
+
+
+    }
+
+    @Test
+    public void countBySnCodeInAndIsChecked() throws Exception{
+
+        List<String> snCodeList = Arrays.asList("HMITest001","HMITest002");
+
+        long number = recordRepository.countBySnCodeInAndIsChecked(snCodeList, 0);
+
+        Assert.assertNotEquals(0, number);
 
     }
 

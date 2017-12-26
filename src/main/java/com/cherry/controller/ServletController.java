@@ -92,4 +92,22 @@ public class ServletController {
         return "deviceHistory";
     }
 
+    /**
+     * 设备报警信息跳转
+     * @return
+     */
+    @GetMapping("/deviceAlarm")
+    public String deviceAlarm(){
+        return "deviceAlarm";
+    }
+
+    /**
+     * 设备阈值跳转
+     * @return
+     */
+    @GetMapping("/deviceThreshold")
+    public String deviceThreshold(){
+        return "deviceThreshold";
+    }
+
 }

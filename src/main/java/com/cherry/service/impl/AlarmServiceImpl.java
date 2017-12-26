@@ -2,22 +2,17 @@ package com.cherry.service.impl;
 
 import com.cherry.converter.AlarmRule2AlarmRuleVOConverter;
 import com.cherry.converter.ProtocolDetail2AlarmThresholdVOConverter;
-import com.cherry.dataobject.AlarmMessage;
-import com.cherry.dataobject.AlarmRecord;
-import com.cherry.dataobject.AlarmRule;
-import com.cherry.dataobject.ProtocolDetail;
+import com.cherry.dataobject.*;
 import com.cherry.enums.AlarmHandleEnum;
 import com.cherry.form.AlarmQueryForm;
 import com.cherry.form.AlarmRuleAddForm;
 import com.cherry.form.AlarmRuleUpdateForm;
 import com.cherry.form.AlarmUpdateForm;
-import com.cherry.repository.AlarmMessageRepository;
-import com.cherry.repository.AlarmRecordRepository;
-import com.cherry.repository.AlarmRuleRepository;
-import com.cherry.repository.ProtocolDetailRepository;
+import com.cherry.repository.*;
 import com.cherry.service.AlarmService;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
+import com.cherry.vo.AlarmRecordAllDeviceVO;
 import com.cherry.vo.AlarmRecordVO;
 import com.cherry.vo.AlarmRuleVO;
 import com.cherry.vo.AlarmThresholdVO;
@@ -29,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 设备报警service层实现
@@ -48,6 +44,9 @@ public class AlarmServiceImpl implements AlarmService{
 
     @Autowired
     private AlarmRuleRepository alarmRuleRepository;
+
+    @Autowired
+    private UserDeviceRelationshipRepository userDeviceRelationshipRepository;
 
     @Autowired
     private AlarmService alarmService;
@@ -339,6 +338,105 @@ public class AlarmServiceImpl implements AlarmService{
         }else {
             map.put("msg", AlarmHandleEnum.ADD_THRESHOLD_FAIL.getMessage());
         }
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> getAllDeviceAlarmRecord(String userName, Pageable pageable) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        // 1.查询用户启用的设备列表
+        List<UserDeviceRelationship> relationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsed(userName, 1);
+        if (relationshipList.size() == 0){
+            map.put("code", 1);
+            map.put("msg", AlarmHandleEnum.GET_RECORD_FAIL.getMessage());
+
+            return map;
+        }
+
+        List<String> snCodeList = relationshipList.stream()
+                .map(e -> e.getSnCode())
+                .collect(Collectors.toList());
+
+        // 2.查询报警记录列表
+        Page<AlarmRecord> alarmRecordPage = recordRepository.findBySnCodeInOrderByAlarmTimeDesc(snCodeList, pageable);
+
+        if (alarmRecordPage.getTotalElements() == 0){
+            map.put("code", 1);
+            map.put("msg", AlarmHandleEnum.GET_RECORD_FAIL.getMessage());
+
+            return map;
+        }
+
+        // 3.获取报警详情列表 用于获取报警详情
+        List<AlarmMessage> messageList = messageRepository.findAll();
+
+        // 4.数据封装
+        List<AlarmRecordAllDeviceVO> recordAllDeviceVOList = new ArrayList<>();
+
+        for (AlarmRecord alarmRecord : alarmRecordPage.getContent()){
+
+            AlarmRecordAllDeviceVO recordAllDeviceVO = new AlarmRecordAllDeviceVO();
+            // 4.1 从record 获取 id SN 实际值 处理时间 是否已查看
+            BeanUtils.copyProperties(alarmRecord, recordAllDeviceVO);
+
+            // 4.2 处理 报警时间 数据名称 报警详情
+            // 报警时间
+            recordAllDeviceVO.setAlarmTime(DateUtil.convertDate2String(alarmRecord.getAlarmTime()));
+
+            // 获取数据名称
+            ProtocolDetail protocolDetail = detailRepository.findByProtocolVersionAndOffsetNumber(alarmRecord.getProtocolVersion(), alarmRecord.getOffsetNumber());
+            recordAllDeviceVO.setDataName(protocolDetail.getDataName());
+
+
+            // 获取报警详情
+            for (AlarmMessage alarmMessage : messageList){
+                if (alarmMessage.getAlarmCode() == alarmRecord.getAlarmCode()){
+                    recordAllDeviceVO.setAlarmInfo(alarmMessage.getAlarmInfo());
+                }
+            }
+
+
+            recordAllDeviceVOList.add(recordAllDeviceVO);
+
+        }
+
+        // 5.记录未查看记录 数量
+        long unreadNum = 0;
+        unreadNum = recordRepository.countBySnCodeInAndIsChecked(snCodeList, 0);
+
+        map.put("code", 0);
+        map.put("msg", AlarmHandleEnum.GET_RECORD_SUCCESS.getMessage());
+        map.put("unreadNum", unreadNum);
+        map.put("total", alarmRecordPage.getTotalPages());
+        map.put("records", alarmRecordPage.getTotalElements());
+        map.put("data", recordAllDeviceVOList);
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> decreaseUncheckedNumber(String id) {
+        Map<String, Object> map = new HashMap<>();
+
+        // 1.查询记录
+        AlarmRecord alarmRecord = recordRepository.findOne(id);
+        if (alarmRecord == null){
+            map.put("code", 1);
+            map.put("msg", AlarmHandleEnum.RECORD_NOT_EXIST.getMessage());
+
+            return map;
+        }
+
+        // 2.修改为已查看
+        alarmRecord.setIsChecked(1);
+
+        recordRepository.save(alarmRecord);
+
+        map.put("code", 0);
+        map.put("msg", AlarmHandleEnum.CHECKED_SUCCESS.getMessage());
 
         return map;
     }

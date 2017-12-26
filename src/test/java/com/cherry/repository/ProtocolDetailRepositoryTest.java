@@ -32,8 +32,8 @@ public class ProtocolDetailRepositoryTest {
         ProtocolDetail detail = new ProtocolDetail();
         detail.setId(KeyUtil.genUniqueKey());
 //        detail.setSnCode("1511962706665703659");
-        detail.setProtocolVersion("yw1234");
-        detail.setOffsetNumber(2);
+        detail.setProtocolVersion("ywv1.1");
+        detail.setOffsetNumber(1);
         detail.setDataName("PH值");
         //detail.setAlarmThreshold("2");
 
