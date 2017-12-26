@@ -1,0 +1,91 @@
+body{
+	background-color: #eeede8;
+}
+.container {
+	width: 100%;
+}
+.equip-data {
+	margin: 50px auto;
+	width: 50%;
+}
+.protocol{
+	border: 3px solid;
+	border-bottom: 0; 
+	border-color: #ddd;
+	width: 650px;
+}
+.protocol:last-child{
+	border-bottom: 3px solid #ddd;
+}
+.protocol > div{
+	display: inline-block;
+}
+.dataIcon{
+	height: 100px;
+	margin:0 10px;
+}
+.dataIcon > img {
+	vertical-align: baseline;
+	height: 100%;
+}
+.qualitydiv{
+	position: relative;
+	bottom: 20px;
+}
+.datadiv{
+	margin-left: 50px;
+	position: relative;
+	bottom: 30px;
+	font-size: 40px;
+}
+.unit{
+	padding-left: 10px;
+	font-size: 20px;
+}
+.btndiv{
+	position: relative;
+	float: right;
+	margin: 40px 50px 0 0;
+
+}
+.tendencyBtn{
+	width: 90px;
+	height: 40px;
+	font-size: 15px;
+	border-radius: 5px;
+	color: #fff;
+	background-color: #226dee;
+	cursor: pointer;
+	border: 1px solid #226dee;
+}
+.icon-btn-chart{
+	width: 14px;
+    height: 14px;
+    background: url("/assets/images/chart_48.png") no-repeat center center;
+    display: inline-block;
+    vertical-align: -2px;
+    margin-right: 5px;
+}
+.hide{
+	display: none;
+}
+.showModal{
+	display: block;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: fixed;
+	opacity: 1;
+	z-index: 1050;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,.5);
+}
+.col-md-10 {
+	width: 100%;
+}
+.input-group-addon{
+	width: auto;
+	cursor: pointer;
+}
