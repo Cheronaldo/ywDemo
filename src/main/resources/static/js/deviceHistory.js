@@ -219,7 +219,7 @@ function displayHead(heads){
     var headStr = '<tr><th width="10%">采集时间</th>';
     for(var i=0;i<heads.length;i++){
         var head = heads[i];
-        headStr += '<th width="10%">'+head.dataName+unit(head.dataName)+'</th>';
+        headStr += '<th width="10%">'+head.dataName+head.dataUnit+'</th>';
     }
     headStr += '</tr>';
     $(".history_load_head").empty().append(headStr);
@@ -238,17 +238,17 @@ function displayHistoryData(list){
     }
     $(".history_load_list").empty().append(listStr);
 }
-//添加数据单位
-function unit(dataName){
-    switch (dataName){
-        case "温度":
-            return "°C";
-        case "浓度":
-        case "湿度":
-            return "%";
-        case "电场":
-            return "V/m";
-        default:
-            return "";
-    }
-}
+// //添加数据单位
+// function unit(dataName){
+//     switch (dataName){
+//         case "温度":
+//             return "°C";
+//         case "浓度":
+//         case "湿度":
+//             return "%";
+//         case "电场":
+//             return "V/m";
+//         default:
+//             return "";
+//     }
+// }

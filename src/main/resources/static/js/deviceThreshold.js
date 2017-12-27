@@ -9,6 +9,7 @@ var pageNow = 1;                                    //目前页数
 var sendTime = 0;
 var id;
 var thresholdFlag = false;
+var offsetNumber;
 
 $(function() {
     getprotocolVersionDb(devSNCode);
@@ -60,6 +61,7 @@ $(function() {
                         thresholdData = result.data;
                         displayData();
                         hideModal();
+                        sendDataToDev();
                     } else {
                         alert(result.msg);
                     }
@@ -127,7 +129,7 @@ function onConnect() {
     message = new Paho.MQTT.Message(message_payloadString);
     // devSNCodeTest = "HMITest001";       //测试用
     // message_destinationName = "/China/HuBei/" + devSNCode + "/DevRecv/cfg/req"
-    message_destinationName = "/" + devSNCode + "/DevRecv/cfg/req"
+    message_destinationName = "/" + devSNCode + "/DevRecv/cfg/req";
     message.destinationName = message_destinationName;
     client.send(message);
 }
@@ -174,7 +176,7 @@ function analProtocol(protocol) {
 
 //拿到报警数据
 function getThresholdData() {
-    protocolVersionDb = "ywv1.1";           //测试用
+    // protocolVersionDb = "ywv1.1";           //测试用
     $.ajax({
         type : "POST",
         url : "/threshold/getList",
@@ -202,7 +204,7 @@ function displayData(){
     var listStr = "";
     for(var i=0;i<thresholdData.length;i++){
         listStr += "<tr>";
-        listStr +=  "<td width='5%'>" + thresholdData[i].offsetNumber + "</td>" +
+        listStr +=  "<td width='5%' class='offsetNumber'>" + thresholdData[i].offsetNumber + "</td>" +
             "<td width='10%' class='dataName'>" + thresholdData[i].dataName + "</td>" +
             "<td width='10%' class='downThreshold'>" + thresholdData[i].downThreshold + "</td>" +
             "<td width='10%' class='upThreshold'>" + thresholdData[i].upThreshold + "</td>" +
@@ -212,6 +214,7 @@ function displayData(){
     $(".threshold_load_list").empty().append(listStr);
     $('.thresholdBtn').click(function(){
         id = this.id;
+        offsetNumber = $(this).parent().parent().children(".offsetNumber").html();
         let dataName = $(this).parent().parent().children(".dataName").html();
         let downThreshold = $(this).parent().parent().children(".downThreshold").html();
         let upThreshold = $(this).parent().parent().children(".upThreshold").html();
@@ -242,11 +245,26 @@ function checkInputRight() {
         thresholdFlag = false;
     }
     else{
-        let reg = /^[0-9]*$/;
+        let reg = /^\-?([1-9]\d*(\.\d{1})?|0\.\d{1})$|^0$/;
         if(!reg.test(downThreshold) || !reg.test(upThreshold)) {
-            alert("请输入数字");
+            alert("请输入整数或小数点后一位的小数");
             thresholdFlag = false;
         }
         else thresholdFlag = true;
     }
+}
+
+function sendDataToDev() {
+    var payload = devSNCode + "_" + protocolVersionDb + "_" + offsetNumber + "_";
+    for(let i in thresholdData){
+        if(thresholdData[i].offsetNumber == offsetNumber){
+            let str = thresholdData[i].downThreshold + "_" + thresholdData[i].upThreshold + "_";
+            payload += str;
+        }
+    }
+    payload += "jiaoyanhe";
+    var destinationName = "/" + devSNCode + "/DevRecv/ThresoldUpdata";
+    var message = new Paho.MQTT.Message(payload);
+    message.destinationName = destinationName;
+    client.send(message);
 }

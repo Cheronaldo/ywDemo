@@ -109,5 +109,14 @@ public class ServletController {
     public String deviceThreshold(){
         return "deviceThreshold";
     }
+	
+	/**
+     * 用户报警信息跳转
+     * @return
+     */
+    @GetMapping("/userAlarm")
+    public String userAlarm(){
+        return "userAlarm";
+    }
 
 }

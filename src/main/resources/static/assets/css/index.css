@@ -205,3 +205,20 @@ input:hover {
 	font-family: '微软雅黑';
 	cursor: pointer;
 }
+.alarmNum{
+	display: none;
+	position: absolute;
+	border-radius: 50%;
+	width: 16px;
+	height: 14px;
+	background-color: #C81623;
+	font-size: 12px;
+	line-height: 14px;
+	text-align: center;
+	color: #fff;
+	top: -4px;
+	right: 20px;
+}
+.leftsidebar_box dl {
+	position: relative;
+}

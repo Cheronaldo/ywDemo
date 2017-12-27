@@ -5,9 +5,13 @@ var mailFlag = false;
 var telFlag = false;
 var passwordEmptyFlag = false;
 var passwordFlag = false;
+var pageNow = 1;
+var alarmData;
+var unreadNum;
 $(".leftsidebar_box dt").css({"background-color":"#3992d0"});
 $(".leftsidebar_box dt img").attr("src","../static/assets/images/left/select_xl01.png");
 $(".leftsidebar_box dt img").attr("th:src","@{/assets/images/left/select_xl01.png}");
+
 $(function() {
 
 	$(".leftsidebar_box dd").hide();
@@ -112,6 +116,7 @@ $(function() {
     $("#cancelSavePassword").click(function () {
         hidePasswordModal();
     });
+    askAlarmNum();
 });
 
 function hideModal(){
@@ -239,4 +244,31 @@ function checkPassword(){
         passwordFlag = true;
     }
     else{passwordFlag = false;}
+}
+
+function askAlarmNum() {
+    $.ajax({
+        type : "POST",
+        url : "/alarm/getAll",
+        data:{
+            "userName" : userName,
+            "page": pageNow
+        },
+        dataType : "json",
+        success : function(result) {
+            if (result.code == "0") {
+                alert(result.msg);
+                alarmData = result.data;
+                unreadNum = result.unreadNum;
+                localStorage.setItem("unreadNum",unreadNum);
+                if(unreadNum != 0){
+                    $("#alarmNum").html(unreadNum);
+                    $("#alarmNum").css({"display":"block"});
+                }
+                else $("#alarmNum").css({"display":"none"});
+            } else {
+                alert(result.msg);
+            }
+        }
+    });
 }

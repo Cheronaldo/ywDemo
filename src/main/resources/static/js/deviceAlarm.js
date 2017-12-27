@@ -22,7 +22,7 @@ $(function() {
             pageNow = page;
             getAlarmData();
         }
-    }
+    };
     $('#page-right').bootstrapPaginator(options);
     // getAlarmData();
 

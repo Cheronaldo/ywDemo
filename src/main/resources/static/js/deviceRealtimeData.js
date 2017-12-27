@@ -5,7 +5,7 @@ var c_sub_topic;                                            //页面订阅的主
 var protocolVersionDev;                                     //从设备拿到的协议版本
 var client;                                                 //Mqtt客户端
 var offsetNumber;                                           //当前按钮对应属性偏移值
-var dataName;                                               //当前按钮对应属性名
+var dataUnit;                                               //当前按钮对应属性的单位
 var timeList;                                               //历史数据对应时间数组
 var dataList;                                               //历史数据数组
 var singData;                                               //从数据库取到的历史数据
@@ -325,9 +325,9 @@ function displayProtocol(){
                             "<div class='qualitydiv'><span class='quality'>" + protocolData[item].dataName + "</span></br></br>" +
                             "<span class='date'>" + new Date().Format("yyyy-MM-dd hh:mm:ss") + "</span></div>" +
                             "<div class='datadiv'><span id='data" + item + "' class='dataspan'>-</span>" +
-                            "<span id='uint' class='unit'>" + unit(protocolData[item].dataName) +
+                            "<span id='uint' class='unit'>" + protocolData[item].dataUnit +
                             "</span></div><div class='btndiv'><button class='tendencyBtn' id='offset=" + protocolData[item].offsetNumber +
-                            "&dataName=" + protocolData[item].dataName +
+                            "&dataName=" + protocolData[item].dataUnit +
                             "'><span class='icon-btn-chart'></span>趋势图</button>" +
                         "</div></div>");
         $("#equip-data").append(strProto);
@@ -335,7 +335,7 @@ function displayProtocol(){
 
     $(".tendencyBtn").click(function(){
         offsetNumber = this.id.substr(7,1);
-        dataName = this.id.substr(18,2);
+        dataUnit = this.id.substr(18,2);
         $("#beginDatetime").val("");
         $("#endDatetime").val("");
         getHistorySingleData();
@@ -427,7 +427,7 @@ function initEcharts(){
 
 
         title: {
-            subtext: '单位 / '+unit(dataName),
+            subtext: '单位 / '+dataUnit,
             left: 'left'
         },
         tooltip: {
