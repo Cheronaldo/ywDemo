@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" href="../static/assets/css/userAlarm.css" th:href="@{/assets/css/userAlarm.css}"/>
+	<script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
+	<title>index</title>
+	<style type="text/css">
+		
+	</style>
+	<script type="text/javascript">
+		$(function() {
+
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="list-border">
+			<table class="table table-hover table-striped">
+				<thead class="list-head alarm_load_head"><tr><th style="display: none">id</th><th width="15%">sn号</th><th width="15%">报警时间</th><th width="15%">报警解除时间</th><th width="10%">属性</th><th width="10%">报警值</th><th width="15%">报警详情</th></tr></thead>
+				<tbody class="alarm_load_list"></tbody>
+			</table>
+		</div>
+		<div class="list-footer clearfix">
+			<div class="pull-right">
+				<ul id="page-right" class="pagination pagination-margin-0 pagination-sm"></ul>
+			</div>
+		</div>
+	</div>
+
+
+	<script src="../static/assets/js/bootstrap-paginator.js" th:src="@{/assets/js/bootstrap-paginator.js}"></script>
+	<script src="../static/js/userAlarm.js" th:src="@{/js/userAlarm.js}"></script>
+</body>
+</html>
