@@ -66,11 +66,11 @@ public class AlarmServiceImpl implements AlarmService{
 
         // 2.获取报警记录分页对象
         Page<AlarmRecord> recordPage = recordRepository.findBySnCodeAndProtocolVersionAndHandleResultStartingWithAndAlarmTimeBetweenOrderByIdDesc(form.getSnCode(),
-                                                                                                                        form.getProtocolVersion(),
-                                                                                                                        alarmHandled,
-                                                                                                                        oldDate,
-                                                                                                                        newDate,
-                                                                                                                        pageable);
+                                                                                                                                                    form.getProtocolVersion(),
+                                                                                                                                                    alarmHandled,
+                                                                                                                                                    oldDate,
+                                                                                                                                                    newDate,
+                                                                                                                                                    pageable);
 
         if (recordPage.getTotalPages() == 0){
             // 未查询到相关记录

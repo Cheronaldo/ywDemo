@@ -28,7 +28,7 @@ public interface VisibleStrategyRepository extends JpaRepository<VisibleStrategy
      * @param visibleMask
      * @return
      */
-    VisibleStrategy findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask(String userName, String snCode, String protocolVersion, String visibleMask);
+    VisibleStrategy findByUserNameAndSnCodeAndProtocolVersionAndVisibleMaskAndAlarmMask(String userName, String snCode, String protocolVersion, String visibleMask, String alarmMask);
 
     /**
      * 通过用户名 SN 获取用户对应设备当前启用的策略

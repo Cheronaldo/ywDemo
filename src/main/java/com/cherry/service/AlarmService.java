@@ -84,7 +84,7 @@ public interface AlarmService {
     Map<String, Object> getAllDeviceAlarmRecord(String userName, Pageable pageable);
 
     /**
-     * 修改 未查看记录
+     * 修改 报警记录中的未查看记录
      * @param id
      * @return
      */

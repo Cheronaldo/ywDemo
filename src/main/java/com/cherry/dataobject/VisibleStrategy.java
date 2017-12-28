@@ -21,6 +21,8 @@ public class VisibleStrategy {
     private String protocolVersion;
     /**  数据可见掩码 */
     private String visibleMask;
+    /**  数据报警掩码 */
+    private String alarmMask;
     /**  是否启用该策略 */
     private Integer isUsed;
     /**  启用时间 */
@@ -70,6 +72,14 @@ public class VisibleStrategy {
         this.visibleMask = visibleMask;
     }
 
+    public String getAlarmMask() {
+        return alarmMask;
+    }
+
+    public void setAlarmMask(String alarmMask) {
+        this.alarmMask = alarmMask;
+    }
+
     public Integer getIsUsed() {
         return isUsed;
     }
@@ -102,6 +112,7 @@ public class VisibleStrategy {
                 ", snCode='" + snCode + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", visibleMask='" + visibleMask + '\'' +
+                ", alarmMask='" + alarmMask + '\'' +
                 ", isUsed=" + isUsed +
                 ", usedTime=" + usedTime +
                 ", spareField='" + spareField + '\'' +

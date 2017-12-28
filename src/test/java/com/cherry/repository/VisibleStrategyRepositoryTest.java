@@ -50,9 +50,9 @@ public class VisibleStrategyRepositoryTest {
     }
 
     @Test
-    public void findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask() throws Exception{
+    public void findByUserNameAndSnCodeAndProtocolVersionAndVisibleMaskAndAlarmMask() throws Exception{
 
-        VisibleStrategy result = repository.findByUserNameAndSnCodeAndProtocolVersionAndVisibleMask("abc1234","1511962658712691673","yw123","101");
+        VisibleStrategy result = repository.findByUserNameAndSnCodeAndProtocolVersionAndVisibleMaskAndAlarmMask("Test001","HMITest002","ywv1.1","111", "111");
 
         Assert.assertNotNull(result);
 
