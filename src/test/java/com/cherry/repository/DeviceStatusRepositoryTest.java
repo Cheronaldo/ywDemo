@@ -28,7 +28,7 @@ public class DeviceStatusRepositoryTest {
     @Test
     public void addStatus(){
         DeviceStatus deviceStatus = new DeviceStatus();
-        deviceStatus.setSnCode("1510543259454686637");
+        deviceStatus.setSnCode("HMITest012");
         deviceStatus.setIsOnline(0);
         deviceStatus.setHeartTime(DateUtil.getDate());
 

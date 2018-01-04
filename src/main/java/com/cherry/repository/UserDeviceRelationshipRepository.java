@@ -1,6 +1,8 @@
 package com.cherry.repository;
 
 import com.cherry.dataobject.UserDeviceRelationship;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -25,6 +27,24 @@ public interface UserDeviceRelationshipRepository extends JpaRepository<UserDevi
      * @param isUsed
      * @return
      */
-    // TODO 待优化： userName 的区分度更高，应该在索引的前面
     List<UserDeviceRelationship> findByUserNameAndIsUsed(String userName,Integer isUsed);
+
+    /**
+     * 通过 现场用户名获取 设备列表分页对象
+     * SN码 分页对象
+     * @param userName
+     * @param isUsed
+     * @param pageable
+     * @return
+     */
+    Page<UserDeviceRelationship> findByUserNameAndIsUsed(String userName, Integer isUsed, Pageable pageable);
+
+    /**
+     * 通过 经销商用户名和启用标志 获取 经销商名下 且对应现场用户 未绑定的  用户设备关系记录列表
+     * @param userName
+     * @param isUsed
+     * @param snCodeList
+     * @return
+     */
+    Page<UserDeviceRelationship> findByUserNameAndIsUsedAndSnCodeNotIn(String userName, Integer isUsed, List<String> snCodeList, Pageable pageable);
 }

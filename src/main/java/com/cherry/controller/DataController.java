@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,10 @@ public class DataController {
      * @return
      */
     @PostMapping("/getProtocolVersion")
-    public ResultVO getRealTimeProtocolVersion (@RequestParam("snCode") String snCode){
+    public ResultVO getRealTimeProtocolVersion (@RequestParam("snCode") String snCode,
+                                                HttpServletResponse response){
+
+        response.setHeader("Access-Control-Allow-Origin","*");
 
         String protocolVersion = protocolService.getProtocolVersionBySnCode(snCode);
         if (StringUtils.isEmpty(protocolVersion)){
@@ -103,7 +107,10 @@ public class DataController {
     @PostMapping("/getProtocol/realTime")
     public ResultVO getRealTimeProtocol(@RequestParam("userName") String userName,
                                         @RequestParam("snCode") String snCode,
-                                        @RequestParam("protocolVersion") String protocolVersion){
+                                        @RequestParam("protocolVersion") String protocolVersion,
+                                        HttpServletResponse response){
+
+        response.setHeader("Access-Control-Allow-Origin","*");
 
         // 1.查询需要显示的协议详情列表
         List<RealTimeProtocolVO> protocolVOList = protocolService.listForRealTimeDisplay(userName, snCode, protocolVersion);

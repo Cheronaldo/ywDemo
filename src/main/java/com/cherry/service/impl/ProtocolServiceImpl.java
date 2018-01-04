@@ -77,6 +77,7 @@ public class ProtocolServiceImpl implements ProtocolService{
         // 2.查询设备已启用的设备版本号
         DeviceProtocolRelationship relationship = deviceProtocolRelationshipRepository.findBySnCodeAndIsUsed(queryForm.getSnCode(), 1);
         if (relationship == null){
+            // 适配未成功
             return null;
         }
         String protocolVersion = relationship.getProtocolVersion();

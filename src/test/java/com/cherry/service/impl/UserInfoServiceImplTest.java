@@ -9,7 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -83,6 +86,46 @@ public class UserInfoServiceImplTest {
         int result = userInfoService.updateUserPassword("abc1234","abc1234");
 
         Assert.assertEquals(0,result);
+    }
+
+    @Test
+    public void getSiteUserList() throws Exception{
+
+        PageRequest request = new PageRequest(0, 3);
+
+        Map<String, Object> result = userInfoService.getSiteUserList("Test001", request);
+
+        Assert.assertNotNull(result.get("data"));
+
+    }
+
+    @Test
+    public void addSiteUser() throws Exception{
+
+        UserInfoForm form = new UserInfoForm();
+        form.setUserName("marry");
+        form.setUserPassword("abc123456");
+        form.setUserPost("经理");
+        form.setUserMail("123@qq.com");
+        form.setUserCompany("深圳亿维自动化");
+        form.setUserTelephone("15927061684");
+        form.setRealName("jack");
+        form.setUserAddress("友谊大道");
+        form.setIndustryType("电子通信");
+
+        int result = userInfoService.addSiteUser(form, "Test001");
+
+        Assert.assertEquals(0, result);
+
+    }
+
+    @Test
+    public void unbindSiteUser() throws Exception{
+
+        int result = userInfoService.unbindSiteUser("marry");
+
+        Assert.assertEquals(0, result);
+
     }
 
 }

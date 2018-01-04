@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -229,10 +231,14 @@ public class DeviceController {
      * @return
      */
     @PostMapping("/site/mapList")
-    public ResultVO querySiteMapList(@RequestParam("userName") String userName){
+    public ResultVO querySiteMapList(@RequestParam("userName") String userName,
+                                     HttpServletResponse response){
 
         //1.查询设备列表
         List<DeviceInfo> deviceInfoList = new ArrayList<DeviceInfo>();
+
+        response.setHeader("Access-Control-Allow-Origin","*");
+
         try {
             deviceInfoList = deviceService.listFindByUser(userName);
         }catch (DeviceException e){

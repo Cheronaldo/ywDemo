@@ -8,8 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -29,10 +32,10 @@ public class UserDeviceRelationshipRepositoryTest {
     public void addRelationship(){
         UserDeviceRelationship relationship = new UserDeviceRelationship();
         relationship.setId(KeyUtil.genUniqueKey());
-        relationship.setSnCode(KeyUtil.genUniqueKey());
-        relationship.setUserName("abc1234");
+        relationship.setSnCode("HMITest003");
+        relationship.setUserName("abc");
         relationship.setRegisterTime(DateUtil.getDate());
-        relationship.setIsUsed(0);
+        relationship.setIsUsed(1);
 
         UserDeviceRelationship result = relationshipRepository.save(relationship);
         Assert.assertNotNull(result);
@@ -51,6 +54,18 @@ public class UserDeviceRelationshipRepositoryTest {
         List<UserDeviceRelationship> result = relationshipRepository.findByUserNameAndIsUsed("cherry1",1);
 
         Assert.assertNotEquals(0,result.size());
+    }
+
+    @Test
+    public void findByUserNameAndIsUsedAndSnCodeNotIn() throws Exception{
+
+        List<String> snCodeList = Arrays.asList("");
+        PageRequest request = new PageRequest(0, 3);
+
+        Page<UserDeviceRelationship> result = relationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn("Test001", 1, snCodeList, request);
+
+        Assert.assertNotNull(result.getContent());
+
     }
 
 }

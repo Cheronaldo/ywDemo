@@ -5,6 +5,9 @@ import com.cherry.dataobject.UserLevel;
 import com.cherry.form.UserInfoForm;
 import com.cherry.form.UserUpdateForm;
 import com.cherry.vo.UserInfoVO;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Map;
 
 /**
  * 用户信息服务接口
@@ -13,7 +16,7 @@ import com.cherry.vo.UserInfoVO;
 public interface UserInfoService {
 
     /**
-     * 用户信息注册
+     * 用户信息注册 (经销商)
      * 包括储存密码
      * @param userInfoForm
      * @return
@@ -60,4 +63,29 @@ public interface UserInfoService {
      * @return
      */
     Integer updateUserPassword(String userName, String userPassword);
+
+    /**
+     * 通过经销商用户名 查询所有启用的 现场用户信息
+     * 分页查询
+     * @param userName
+     * @param pageable
+     * @return
+     */
+    Map<String, Object> getSiteUserList(String userName, Pageable pageable);
+
+    /**
+     * 经销商 注册 现场用户
+     * @param form
+     * @param agencyName
+     * @return
+     */
+    Integer addSiteUser(UserInfoForm form, String agencyName);
+
+    /**
+     * 经销商 注销 现场用户
+     * @param userName
+     * @return
+     */
+    Integer unbindSiteUser(String userName);
+
 }

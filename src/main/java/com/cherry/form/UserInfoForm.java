@@ -23,6 +23,13 @@ public class UserInfoForm {
     private String userCompany;
     /**  用户手机号 */
     private String userTelephone;
+    /**  用户真实姓名 */
+    private String realName;
+    /**  用户地址 */
+    private String userAddress;
+    /**  现场类型 */
+    private String industryType;
+
 
     public String getUserName() {
         return userName;
@@ -80,6 +87,30 @@ public class UserInfoForm {
         this.userTelephone = userTelephone;
     }
 
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public String getIndustryType() {
+        return industryType;
+    }
+
+    public void setIndustryType(String industryType) {
+        this.industryType = industryType;
+    }
+
     @Override
     public String toString() {
         return "UserInfoForm{" +
@@ -90,6 +121,9 @@ public class UserInfoForm {
                 ", userMail='" + userMail + '\'' +
                 ", userCompany='" + userCompany + '\'' +
                 ", userTelephone='" + userTelephone + '\'' +
+                ", realName='" + realName + '\'' +
+                ", userAddress='" + userAddress + '\'' +
+                ", industryType='" + industryType + '\'' +
                 '}';
     }
 }

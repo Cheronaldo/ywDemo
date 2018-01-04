@@ -29,7 +29,7 @@ public class DeviceInfoRepositoryTest {
     @Test
     public void saveDevice(){
         DeviceInfo deviceInfo = new DeviceInfo();
-        deviceInfo.setSnCode("3");
+        deviceInfo.setSnCode("HMITest012");
         deviceInfo.setDeviceMac(KeyUtil.genUniqueKey());
         deviceInfo.setDeviceType(1);
         deviceInfo.setDeviceModel("HMI0275");

@@ -22,6 +22,8 @@ public enum UserEnum {
     USER_UPDATE_FAIL(14,"基本信息修改失败"),
     PASSWORD_UPDATE_FAIL(15,"密码修改失败"),
     PASSWORD_UPDATE_SUCCESS(16,"密码修改成功"),
+    NO_RECORDS_FOUND(17, "未查询到相关记录！"),
+    GET_RECORDS_SUCCESS(18,"查询成功！"),
     ;
 
 

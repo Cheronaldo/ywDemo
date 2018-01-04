@@ -18,6 +18,8 @@ import com.cherry.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -240,5 +242,113 @@ public class DeviceServiceImpl implements DeviceService{
     public Integer getStatusBySnCode(String snCode) {
 
         return deviceStatusRepository.findOne(snCode).getIsOnline();
+    }
+
+    @Override
+    public Map<String, Object> pageSiteGet(String userName, Pageable pageable) {
+
+        Map<String, Object> map = new HashMap<>();
+        // 1.由现场用户名获取 已绑定的设备列表  分页
+        Page<UserDeviceRelationship> relationshipPage = userDeviceRelationshipRepository.findByUserNameAndIsUsed(userName, 1, pageable);
+        if (relationshipPage.getContent() == null){
+            // 未查询到记录
+            map.put("code", 1);
+            map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());
+
+            return map;
+        }
+
+        // 2.返回SN列表 分页
+        List<String> snCodeList = relationshipPage.getContent().stream().map(e ->
+                e.getSnCode()
+        ).collect(Collectors.toList());
+
+        map.put("code", 0);
+        map.put("msg", DeviceHandleEnum.GET_RECORDS_SUCCESS.getMessage());
+        map.put("total", relationshipPage.getTotalPages());
+        map.put("records", relationshipPage.getTotalElements());
+        map.put("data", snCodeList);
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> pageAgencyGet(String agencyName, String siteName, Pageable pageable) {
+
+        Map<String, Object> map = new HashMap<>();
+        // 1.由现场用户名获取 已绑定的设备列表
+        List<UserDeviceRelationship> relationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsed(siteName, 1);
+
+        List<String> snCodeList = relationshipList.stream().map(e ->
+                e.getSnCode()
+        ).collect(Collectors.toList());
+
+        // 2.获取经销商名下 且现场未绑定的设备列表 分页
+        // TODO 注意 snCodeList 为空的情况？？？？？？？？？？？？？？
+        Page<UserDeviceRelationship> relationshipPage = userDeviceRelationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn(agencyName, 1, snCodeList, pageable);
+        if (relationshipPage.getContent() == null){
+            // 未查询到记录
+            map.put("code", 1);
+            map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());
+
+            return map;
+        }
+
+        // 3.返回SN列表
+        List<String> snCodeListAgency = relationshipPage.getContent().stream().map(e ->
+                e.getSnCode()
+        ).collect(Collectors.toList());
+
+        map.put("code", 0);
+        map.put("msg", DeviceHandleEnum.GET_RECORDS_SUCCESS.getMessage());
+        map.put("total", relationshipPage.getTotalPages());
+        map.put("records", relationshipPage.getTotalElements());
+        map.put("data", snCodeListAgency);
+
+        return map;
+    }
+
+    @Override
+    public Integer siteDeviceBind(String userName, String snCode) {
+
+        // 1.看关系记录是否存在
+        UserDeviceRelationship relationshipOld = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
+        // 2.添加关系记录
+        if (relationshipOld != null){
+            // 记录存在 重新启用
+            relationshipOld.setIsUsed(1);
+            relationshipOld.setRegisterTime(DateUtil.getDate());
+
+            userDeviceRelationshipRepository.save(relationshipOld);
+
+            return 0;
+        }
+
+        // 记录不存在 添加记录
+        UserDeviceRelationship relationshipNew = new UserDeviceRelationship();
+        relationshipNew.setId(KeyUtil.genUniqueKey());
+        relationshipNew.setSnCode(snCode);
+        relationshipNew.setUserName(userName);
+        relationshipNew.setIsUsed(1);
+        relationshipNew.setRegisterTime(DateUtil.getDate());
+
+        userDeviceRelationshipRepository.save(relationshipNew);
+
+        return 0;
+    }
+
+    @Override
+    public Integer siteDeviceUnbind(String userName, String snCode) {
+
+        // 1.看关系记录是否存在
+        UserDeviceRelationship relationshipOld = userDeviceRelationshipRepository.findBySnCodeAndUserName(snCode, userName);
+        // 2.置启用标志位
+        if (relationshipOld != null){
+            relationshipOld.setIsUsed(0);
+
+            userDeviceRelationshipRepository.save(relationshipOld);
+        }
+
+        return 0;
     }
 }

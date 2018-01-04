@@ -77,6 +77,9 @@ public class UserInfoController {
         String userName = request.getParameter("userName");
         String userPassword = request.getParameter("userPassword");
         int result = userInfoService.userLogin(userName, userPassword);
+
+        response.setHeader("Access-Control-Allow-Origin","*");
+
         if (result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
         }
@@ -93,6 +96,8 @@ public class UserInfoController {
 
         // 4.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
         int userClass = userInfoService.getUserInfoByUserName(userName).getUserClass();
+
+
 
         // 5.返回结果
         return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage(),userClass);

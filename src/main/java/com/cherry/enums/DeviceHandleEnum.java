@@ -23,6 +23,8 @@ public enum DeviceHandleEnum {
     UPDATE_FAIL(16,"修改失败"),
     DEVICE_UNBIND_FAIL(17,"设备注销失败"),
     FIND_NO_DEVICE(18,"未查询到设备信息"),
+    NO_RECORDS_FOUND(19,"未查询到相关记录"),
+    GET_RECORDS_SUCCESS(20,"查询成功！"),
     ;
 
 
