@@ -10,7 +10,7 @@ public enum UserEnum {
     USER_INFORMATION_ERROR(3,"用户信息错误"),
     USER_REGISTER_SUCCESS(4,"注册成功"),
     USER_LOGIN_FAIL(5,"登录失败"),
-    USER_LOGIN_SUCCESS(6,"登录成功"),
+    USER_LOGIN_SUCCESS(6,"登录成功！"),
     USER_GET_FAIL(7,"用户信息获取失败"),
     USER_GET_SUCCESS(8,"用户信息获取成功"),
     USER_UPDATE_SUCCESS(9,"基本信息修改成功"),
@@ -24,6 +24,10 @@ public enum UserEnum {
     PASSWORD_UPDATE_SUCCESS(16,"密码修改成功"),
     NO_RECORDS_FOUND(17, "未查询到相关记录！"),
     GET_RECORDS_SUCCESS(18,"查询成功！"),
+    ADD_SITE_USER_SUCCESS(19,"添加成功！"),
+    ADD_SITE_USER_FAIL(20,"添加失败！"),
+    DELETE_SITE_USER_SUCCESS(21,"删除成功！"),
+    DELETE_SITE_USER_FAIL(22,"删除失败！"),
     ;
 
 

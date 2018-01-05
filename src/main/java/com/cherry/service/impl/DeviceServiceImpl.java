@@ -24,9 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -250,7 +248,7 @@ public class DeviceServiceImpl implements DeviceService{
         Map<String, Object> map = new HashMap<>();
         // 1.由现场用户名获取 已绑定的设备列表  分页
         Page<UserDeviceRelationship> relationshipPage = userDeviceRelationshipRepository.findByUserNameAndIsUsed(userName, 1, pageable);
-        if (relationshipPage.getContent() == null){
+        if (relationshipPage.getTotalElements() == 0){
             // 未查询到记录
             map.put("code", 1);
             map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());
@@ -278,15 +276,21 @@ public class DeviceServiceImpl implements DeviceService{
         Map<String, Object> map = new HashMap<>();
         // 1.由现场用户名获取 已绑定的设备列表
         List<UserDeviceRelationship> relationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsed(siteName, 1);
+        // 注意 snCodeList 为空的情况
+        List<String> snCodeList = new ArrayList<>();
+        if (relationshipList.size() != 0){
 
-        List<String> snCodeList = relationshipList.stream().map(e ->
-                e.getSnCode()
-        ).collect(Collectors.toList());
+            snCodeList = relationshipList.stream().map(e ->
+                    e.getSnCode()
+            ).collect(Collectors.toList());
+
+        } else {
+            snCodeList = Arrays.asList("");
+        }
 
         // 2.获取经销商名下 且现场未绑定的设备列表 分页
-        // TODO 注意 snCodeList 为空的情况？？？？？？？？？？？？？？
         Page<UserDeviceRelationship> relationshipPage = userDeviceRelationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn(agencyName, 1, snCodeList, pageable);
-        if (relationshipPage.getContent() == null){
+        if (relationshipPage.getTotalElements() == 0){
             // 未查询到记录
             map.put("code", 1);
             map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());

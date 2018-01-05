@@ -134,6 +134,12 @@
 			<version>1.9.22</version>
 		</dependency>
 
+		<!--mail依赖-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

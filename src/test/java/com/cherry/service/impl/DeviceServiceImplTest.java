@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.awt.image.Kernel;
@@ -114,6 +115,44 @@ public class DeviceServiceImplTest {
 
         Assert.assertEquals(0,result);
 
+    }
+
+    @Test
+    public void pageSiteGet() throws Exception{
+
+        PageRequest request = new PageRequest(0, 2);
+
+        Map<String, Object> result = service.pageSiteGet("abc", request);
+
+        Assert.assertNotNull(result.get("data"));
+
+    }
+
+    @Test
+    public void pageAgencyGet() throws Exception{
+
+        PageRequest request = new PageRequest(0, 2);
+
+        Map<String, Object> result = service.pageAgencyGet("Test001", "abc123", request);
+
+        Assert.assertNotNull(result.get("data"));
+
+    }
+
+    @Test
+    public void siteDeviceBind() throws Exception{
+
+        int result = service.siteDeviceBind("abc123", "HMITest001");
+
+        Assert.assertEquals(0, result);
+
+    }
+
+    @Test
+    public void siteDeviceUnbind() throws Exception{
+        int result = service.siteDeviceUnbind("abc123", "HMITest001");
+
+        Assert.assertEquals(0, result);
     }
 
 }

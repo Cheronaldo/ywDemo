@@ -13,7 +13,7 @@ public enum DeviceHandleEnum {
     SAVE_SUCCESS(6,"信息保存成功"),
     REGISTER_ENABLE(7,"经销商未对此设备进行注册"),
     USER_DEVICE_RELATIONSHIP_HANDLE_SUCCESS(8,"用户与设备关系操作成功"),
-    DEVICE_UNBIND_SUCCESS(9,"设备注销成功"),
+    DEVICE_UNBIND_SUCCESS(9,"设备注销成功!"),
     FIND_DEVICE_LIST_SUCCESS(10,"查询设备列表成功"),
     FIND_DEVICE_LIST_FAIL(11,"查询设备列表失败"),
     DEVICE_INFO_ERROR(12,"设备信息错误"),
@@ -21,10 +21,12 @@ public enum DeviceHandleEnum {
     REGISTER_FAIL(14,"注册失败"),
     UPDATE_SUCCESS(15,"修改成功！"),
     UPDATE_FAIL(16,"修改失败"),
-    DEVICE_UNBIND_FAIL(17,"设备注销失败"),
+    DEVICE_UNBIND_FAIL(17,"设备注销失败!"),
     FIND_NO_DEVICE(18,"未查询到设备信息"),
     NO_RECORDS_FOUND(19,"未查询到相关记录"),
     GET_RECORDS_SUCCESS(20,"查询成功！"),
+    DEVICE_BIND_SUCCESS(21,"设备绑定成功！"),
+    DEVICE_BIND_FAIL(22,"设备绑定失败！"),
     ;
 
 

@@ -12,6 +12,7 @@ import com.cherry.repository.UserLevelRepository;
 import com.cherry.service.UserInfoService;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
+import com.cherry.util.MailUtil;
 import com.cherry.vo.SiteUserInfoVO;
 import com.cherry.vo.UserInfoVO;
 import org.springframework.beans.BeanUtils;
@@ -181,11 +182,19 @@ public class UserInfoServiceImpl implements UserInfoService{
             return 1;
         }
 
-        // 2.添加用户信息表记录
+        // TODO 通过邮箱发送用户名和密码
+        // 2.生成6位随机码
+        String initCode = KeyUtil.genRandomCode();
+
+        // 3.MD5加密
+        String encryptCode = KeyUtil.genMD5Code(initCode);
+
+        // 4.添加用户信息表记录
         UserInfo userInfoOld = repository.findOne(form.getUserName());
         if (userInfoOld != null){
             // 用户名存在 修改信息 重新启用
             BeanUtils.copyProperties(form, userInfoOld);
+            userInfoOld.setUserPassword(encryptCode);
             userInfoOld.setIsUsed(1);
             userInfoOld.setUserClass(3);
             repository.save(userInfoOld);
@@ -193,12 +202,13 @@ public class UserInfoServiceImpl implements UserInfoService{
             // 用户名不存在 添加用户信息表
             UserInfo userInfoNew = new UserInfo();
             BeanUtils.copyProperties(form, userInfoNew);
+            userInfoNew.setUserPassword(encryptCode);
             userInfoNew.setIsUsed(1);
             userInfoNew.setUserClass(3);
             repository.save(userInfoNew);
         }
 
-        // 3.添加经销商 现场 用户关系表 记录
+        // 5.添加经销商 现场 用户关系表 记录
         AgencySiteRelationship relationship = relationshipRepository.findBySiteUserName(form.getUserName());
         if (relationship != null){
             // 关系记录存在 修改信息 重新启用
@@ -207,20 +217,22 @@ public class UserInfoServiceImpl implements UserInfoService{
             relationship.setRegisterTime(DateUtil.getDate());
             relationshipRepository.save(relationship);
 
-            return 0;
+        } else {
+            // 关系记录不存在 添加记录
+            AgencySiteRelationship relationshipAdd = new AgencySiteRelationship();
+            relationshipAdd.setId(KeyUtil.genUniqueKey());
+            relationshipAdd.setSiteUserName(form.getUserName());
+            relationshipAdd.setAgencyUserName(agencyName);
+            relationshipAdd.setIsUsed(1);
+            relationshipAdd.setRegisterTime(DateUtil.getDate());
+
+            relationshipRepository.save(relationshipAdd);
         }
 
-        // 关系记录不存在 添加记录
-        AgencySiteRelationship relationshipAdd = new AgencySiteRelationship();
-        relationshipAdd.setId(KeyUtil.genUniqueKey());
-        relationshipAdd.setSiteUserName(form.getUserName());
-        relationshipAdd.setAgencyUserName(agencyName);
-        relationshipAdd.setIsUsed(1);
-        relationshipAdd.setRegisterTime(DateUtil.getDate());
+        // 6. 邮件发送用户名及初始密码
+        int sendResult = MailUtil.sendMail(form.getUserMail(), form.getUserName(), initCode);
 
-        relationshipRepository.save(relationshipAdd);
-
-        return 0;
+        return sendResult;
     }
 
     @Override

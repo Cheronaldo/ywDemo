@@ -22,6 +22,7 @@ import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,12 @@ public class DeviceController {
     @Autowired
     private ProtocolService protocolService;
 
+    /**
+     * 模拟经销商注册设备
+     * 用于测试
+     * @param snCode
+     * @return
+     */
     @PostMapping("/addRegister")
     public ResultVO addAgencyRegister(@RequestParam("snCode") String snCode){
 
@@ -264,5 +271,87 @@ public class DeviceController {
 
     }
 
+
+    /**
+     * 获取现场用户所有设备列表
+     * 分页
+     * @param userName
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/site/getAll")
+    public Map<String, Object> pageSiteGet(@RequestParam("userName") String userName,
+                                           @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                           @RequestParam(value = "size", defaultValue = "10") Integer size){
+
+        // 1.封装分页参数
+        PageRequest request = new PageRequest(page - 1, size);
+        // 2.返回分页结果
+
+        return deviceService.pageSiteGet(userName, request);
+
+    }
+
+    /**
+     * 获取经销商名下 且现场用户未绑定的设备列表 分页
+     * @param agencyName
+     * @param siteName
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/agency/getAll")
+    public Map<String, Object> pageAgencyGet(@RequestParam("agencyName") String agencyName,
+                                             @RequestParam("siteName") String siteName,
+                                             @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                             @RequestParam(value = "size", defaultValue = "10") Integer size){
+
+        // 1.封装分页参数
+        PageRequest request = new PageRequest(page - 1, size);
+        // 2.返回分页结果
+
+        return deviceService.pageAgencyGet(agencyName, siteName, request);
+    }
+
+    /**
+     * 现场用户与设备绑定
+     * @param userName
+     * @param snCode
+     * @return
+     */
+    @PostMapping("/site/bindDevice")
+    public ResultVO siteDeviceBind(@RequestParam("userName") String userName,
+                                   @RequestParam("snCode") String snCode){
+
+        int result = deviceService.siteDeviceBind(userName, snCode);
+
+        if (result ==  1){
+            log.error("设备绑定失败！");
+            return ResultVOUtil.error(1, DeviceHandleEnum.DEVICE_BIND_FAIL.getMessage());
+        }
+
+        return ResultVOUtil.success(DeviceHandleEnum.DEVICE_BIND_SUCCESS.getMessage());
+    }
+
+    /**
+     * 现场用户注销设备
+     * @param userName
+     * @param snCode
+     * @return
+     */
+    @PostMapping("/site/unbind")
+    public ResultVO siteDeviceUnbind(@RequestParam("userName") String userName,
+                                     @RequestParam("snCode") String snCode){
+
+        int result = deviceService.siteDeviceUnbind(userName, snCode);
+
+        if (result == 1){
+            log.error("设备注销失败！");
+            return ResultVOUtil.error(1, DeviceHandleEnum.DEVICE_UNBIND_FAIL.getMessage());
+        }
+
+        return ResultVOUtil.success(DeviceHandleEnum.DEVICE_UNBIND_SUCCESS.getMessage());
+    }
 
 }

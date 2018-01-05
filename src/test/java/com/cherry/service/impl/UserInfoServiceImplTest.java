@@ -4,6 +4,7 @@ import com.cherry.dataobject.UserInfo;
 import com.cherry.form.UserInfoForm;
 import com.cherry.form.UserUpdateForm;
 import com.cherry.vo.UserInfoVO;
+import com.sun.mail.util.MailSSLSocketFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Date;
 import java.util.Map;
+import java.util.Properties;
 
 import static org.junit.Assert.*;
 
@@ -103,14 +112,11 @@ public class UserInfoServiceImplTest {
     public void addSiteUser() throws Exception{
 
         UserInfoForm form = new UserInfoForm();
-        form.setUserName("marry");
-        form.setUserPassword("abc123456");
-        form.setUserPost("经理");
-        form.setUserMail("123@qq.com");
+        form.setUserName("rose");
+        form.setUserMail("601585410@qq.com");
         form.setUserCompany("深圳亿维自动化");
         form.setUserTelephone("15927061684");
         form.setRealName("jack");
-        form.setUserAddress("友谊大道");
         form.setIndustryType("电子通信");
 
         int result = userInfoService.addSiteUser(form, "Test001");
@@ -127,5 +133,6 @@ public class UserInfoServiceImplTest {
         Assert.assertEquals(0, result);
 
     }
+
 
 }

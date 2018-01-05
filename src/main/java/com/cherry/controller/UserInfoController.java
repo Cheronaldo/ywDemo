@@ -13,6 +13,7 @@ import com.cherry.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -177,6 +178,11 @@ public class UserInfoController {
 
     }
 
+    /**
+     * 经销商用户注册 获取手机验证码
+     * @param userTelephone
+     * @return
+     */
     @PostMapping("/askCode")
     public ResultVO sendCheckCode(@RequestParam("userTelephone") String userTelephone){
         //TODO 向用户和页面发送 短信校验码 修改返回参数（因为会对应多种情况 如：多次注册）
@@ -197,6 +203,72 @@ public class UserInfoController {
         }
 
        return ResultVOUtil.error(1,UserEnum.SEND_CODE_FAIL.getMessage());
+    }
+
+    /**
+     * 经销商获取名下所有现场用户信息列表
+     * 分页
+     * @param userName
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/getAll")
+    public Map<String, Object> getSiteUserList(@RequestParam("userName") String userName,
+                                               @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                               @RequestParam(value = "size", defaultValue = "10") Integer size){
+
+        // 1.封装分页条件
+        PageRequest request = new PageRequest(page - 1, size);
+
+        // 2.返回结果
+        return userInfoService.getSiteUserList(userName, request);
+
+    }
+
+    /**
+     * 添加现场用户
+     * @param form
+     * @param bindingResult
+     * @param agencyName
+     * @return
+     */
+    @PostMapping("/site/add")
+    public ResultVO addSiteUser(@Valid UserInfoForm form,
+                                BindingResult bindingResult,
+                                @RequestParam("agencyName") String agencyName){
+
+        if (bindingResult.hasErrors()){
+            log.error("用户信息填写错误");
+            throw  new UserException((UserEnum.USER_INFORMATION_ERROR));
+        }
+
+        int result = userInfoService.addSiteUser(form, agencyName);
+
+        if (result == 1){
+            return ResultVOUtil.error(1,UserEnum.USER_ALREADY_EXIST.getMessage());
+        }
+
+        return ResultVOUtil.success(UserEnum.ADD_SITE_USER_SUCCESS.getMessage());
+
+    }
+
+    /**
+     * 现场用户注销
+     * @param userName
+     * @return
+     */
+    @PostMapping("/site/unbind")
+    public ResultVO unbindSiteUser(@RequestParam("userName") String userName){
+
+        int result = userInfoService.unbindSiteUser(userName);
+
+        if (result == 1){
+            return ResultVOUtil.error(1, UserEnum.DELETE_SITE_USER_FAIL.getMessage());
+        }
+
+        return ResultVOUtil.success(UserEnum.DELETE_SITE_USER_SUCCESS.getMessage());
+
     }
 
 }
