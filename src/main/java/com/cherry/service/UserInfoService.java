@@ -1,5 +1,6 @@
 package com.cherry.service;
 
+import com.cherry.dataobject.IpStatus;
 import com.cherry.dataobject.UserInfo;
 import com.cherry.dataobject.UserLevel;
 import com.cherry.form.UserInfoForm;
@@ -87,5 +88,22 @@ public interface UserInfoService {
      * @return
      */
     Integer unbindSiteUser(String userName);
+
+    /**
+     * 完成新用户的 IP信息录入
+     * 异地IP用户的 踢人操作
+     * @param userName
+     * @param userIp
+     * @return
+     */
+    Integer ipHandle(String userName, String userIp);
+
+    /**
+     * 通过获取用户名 用户IP 获取IP状态记录
+     * @param userName
+     * @param userIp
+     * @return
+     */
+    Integer getIpStatus(String userName, String userIp);
 
 }

@@ -109,6 +109,17 @@ public class DeviceServiceImplTest {
     }
 
     @Test
+    public void pageGetByUser() throws Exception{
+
+        PageRequest request = new PageRequest(0, 3);
+
+        Map<String, Object> result = service.pageGetByUser("Test001", request);
+
+        Assert.assertNotNull(result.get("data"));
+
+    }
+
+    @Test
     public void getStatusBySnCode() throws Exception {
 
         int result = service.getStatusBySnCode("1510543259454686637");
@@ -131,9 +142,9 @@ public class DeviceServiceImplTest {
     @Test
     public void pageAgencyGet() throws Exception{
 
-        PageRequest request = new PageRequest(0, 2);
+        //PageRequest request = new PageRequest(0, 2);
 
-        Map<String, Object> result = service.pageAgencyGet("Test001", "abc123", request);
+        Map<String, Object> result = service.listAgencyGet("Test001", "abc123");
 
         Assert.assertNotNull(result.get("data"));
 

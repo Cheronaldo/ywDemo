@@ -230,6 +230,27 @@ public class DeviceController {
 
     }
 
+    /**
+     * 获取用户设备列表
+     * 网页接口
+     * @param userName
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/getPage")
+    public Map<String, Object> pageGetByUser(@RequestParam("userName") String userName,
+                                             @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                             @RequestParam(value = "size", defaultValue = "4") Integer size){
+
+        // 1.封装分页查询条件
+        PageRequest request = new PageRequest(page - 1, size);
+
+        // 2.返回数据
+        return deviceService.pageGetByUser(userName, request);
+
+    }
+
 
     /**
      * 现场用户通过用户名查询 所有启用设备
@@ -303,15 +324,11 @@ public class DeviceController {
      */
     @PostMapping("/agency/getAll")
     public Map<String, Object> pageAgencyGet(@RequestParam("agencyName") String agencyName,
-                                             @RequestParam("siteName") String siteName,
-                                             @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                             @RequestParam(value = "size", defaultValue = "10") Integer size){
+                                             @RequestParam("siteName") String siteName){
 
-        // 1.封装分页参数
-        PageRequest request = new PageRequest(page - 1, size);
-        // 2.返回分页结果
+        // 1.返回分页结果
 
-        return deviceService.pageAgencyGet(agencyName, siteName, request);
+        return deviceService.listAgencyGet(agencyName, siteName);
     }
 
     /**

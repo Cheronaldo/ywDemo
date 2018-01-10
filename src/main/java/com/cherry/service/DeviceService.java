@@ -3,6 +3,7 @@ package com.cherry.service;
 import com.cherry.dataobject.DeviceInfo;
 import com.cherry.dto.SiteDeviceInfoDTO;
 import com.cherry.form.SiteDeviceForm;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;
@@ -58,10 +59,21 @@ public interface DeviceService {
     /**
      * 通过用户名查询 该用户启用是所有设备
      * 用于主页面列表及地图查询列表显示
+     * APP接口
      * @param userName
      * @return
      */
     List<DeviceInfo> listFindByUser(String userName);
+
+    /**
+     * 通过用户名查询 设备列表
+     * 分页
+     * 网页接口
+     * @param userName
+     * @param pageable
+     * @return
+     */
+    Map<String, Object> pageGetByUser(String userName, Pageable pageable);
 
     /**
      * 通过SN码 获取设备状态
@@ -82,10 +94,9 @@ public interface DeviceService {
      * 获取经销商名下 且现场未绑定的 设备列表
      * @param agencyName
      * @param siteName
-     * @param pageable
      * @return
      */
-    Map<String, Object> pageAgencyGet(String agencyName, String siteName, Pageable pageable);
+    Map<String, Object> listAgencyGet(String agencyName, String siteName);
 
     /**
      * 现场用户 与设备 绑定

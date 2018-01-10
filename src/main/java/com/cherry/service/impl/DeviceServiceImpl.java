@@ -1,12 +1,14 @@
 package com.cherry.service.impl;
 
 import com.cherry.converter.DeviceInfo2SiteDeviceInfoDTOConverter;
+import com.cherry.converter.DeviceInfo2SiteDeviceListDTOConverter;
 import com.cherry.dataobject.DeviceInfo;
 import com.cherry.dataobject.DeviceVerify;
 import com.cherry.dataobject.ProtocolConfigMaster;
 import com.cherry.dataobject.UserDeviceRelationship;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.dto.SiteDeviceInfoDTO;
+import com.cherry.dto.SiteDeviceListDTO;
 import com.cherry.enums.DeviceHandleEnum;
 import com.cherry.exception.DeviceException;
 import com.cherry.form.SiteDeviceForm;
@@ -237,6 +239,54 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
+    public Map<String, Object> pageGetByUser(String userName, Pageable pageable) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        // 1.通过 用户名 和已启用 获取用户设备启用关系列表
+        List<UserDeviceRelationship> userDeviceRelationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsed(userName, 1);
+
+        // 2.获取SN码查询列表
+        List<String> snCodeList = userDeviceRelationshipList.stream()
+                .map(e -> e.getSnCode())
+                .collect(Collectors.toList());
+
+        if (snCodeList.size() == 0 ){
+            map.put("code", 1);
+            map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());
+
+            return map;
+        }
+
+        // 3.获取分页对象
+        Page<DeviceInfo> deviceInfoPage = deviceInfoRepository.findBySnCodeIn(snCodeList, pageable);
+        if (deviceInfoPage.getTotalElements() == 0){
+            map.put("code", 1);
+            map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());
+
+            return map;
+        }
+
+        // 4.封装为 SiteDeviceListDTO
+        List<SiteDeviceListDTO> siteDeviceListDTOList = DeviceInfo2SiteDeviceListDTOConverter.convert(deviceInfoPage.getContent());
+
+        // 5.获取设备状态
+        for (SiteDeviceListDTO siteDeviceListDTO : siteDeviceListDTOList){
+            // TODO 改进：通过sn list查询到对应设备状态记录的list 再进行取值处理，一般不在for循环中操作数据库
+            siteDeviceListDTO.setIsOnline(deviceService.getStatusBySnCode(siteDeviceListDTO.getSnCode()));
+            //TODO 若需要返回给前端 设备类型 则也在此处进行转换 取值
+        }
+
+        map.put("code", 0);
+        map.put("msg", DeviceHandleEnum.GET_RECORDS_SUCCESS.getMessage());
+        map.put("total", deviceInfoPage.getTotalPages());
+        map.put("records", deviceInfoPage.getTotalElements());
+        map.put("data", siteDeviceListDTOList);
+
+        return map;
+    }
+
+    @Override
     public Integer getStatusBySnCode(String snCode) {
 
         return deviceStatusRepository.findOne(snCode).getIsOnline();
@@ -271,7 +321,7 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public Map<String, Object> pageAgencyGet(String agencyName, String siteName, Pageable pageable) {
+    public Map<String, Object> listAgencyGet(String agencyName, String siteName) {
 
         Map<String, Object> map = new HashMap<>();
         // 1.由现场用户名获取 已绑定的设备列表
@@ -289,8 +339,8 @@ public class DeviceServiceImpl implements DeviceService{
         }
 
         // 2.获取经销商名下 且现场未绑定的设备列表 分页
-        Page<UserDeviceRelationship> relationshipPage = userDeviceRelationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn(agencyName, 1, snCodeList, pageable);
-        if (relationshipPage.getTotalElements() == 0){
+        List<UserDeviceRelationship> agencyRelationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn(agencyName, 1, snCodeList);
+        if (agencyRelationshipList.size() == 0){
             // 未查询到记录
             map.put("code", 1);
             map.put("msg", DeviceHandleEnum.NO_RECORDS_FOUND.getMessage());
@@ -299,14 +349,13 @@ public class DeviceServiceImpl implements DeviceService{
         }
 
         // 3.返回SN列表
-        List<String> snCodeListAgency = relationshipPage.getContent().stream().map(e ->
+        List<String> snCodeListAgency = agencyRelationshipList.stream().map(e ->
                 e.getSnCode()
         ).collect(Collectors.toList());
 
         map.put("code", 0);
         map.put("msg", DeviceHandleEnum.GET_RECORDS_SUCCESS.getMessage());
-        map.put("total", relationshipPage.getTotalPages());
-        map.put("records", relationshipPage.getTotalElements());
+        map.put("records", snCodeListAgency.size());
         map.put("data", snCodeListAgency);
 
         return map;

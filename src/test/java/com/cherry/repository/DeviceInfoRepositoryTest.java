@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -52,6 +54,19 @@ public class DeviceInfoRepositoryTest {
         List<DeviceInfo> result = repository.findBySnCodeIn(list);
 
         Assert.assertNotEquals(0,result.size());
+    }
+
+    @Test
+    public void getPage() throws Exception {
+
+        PageRequest request = new PageRequest(1, 2);
+
+        List<String> snCodeList = Arrays.asList("HMITest001","HMITest002","HMITest003","HMITest004");
+
+        Page<DeviceInfo> result = repository.findBySnCodeIn(snCodeList, request);
+
+        Assert.assertNotEquals(0, result.getTotalElements());
+
     }
 
 }

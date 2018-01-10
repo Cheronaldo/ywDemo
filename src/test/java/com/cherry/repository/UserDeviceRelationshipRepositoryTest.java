@@ -60,11 +60,13 @@ public class UserDeviceRelationshipRepositoryTest {
     public void findByUserNameAndIsUsedAndSnCodeNotIn() throws Exception{
 
         List<String> snCodeList = Arrays.asList("");
-        PageRequest request = new PageRequest(0, 3);
+//        PageRequest request = new PageRequest(0, 3);
+//
+//        Page<UserDeviceRelationship> result = relationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn("Test001", 1, snCodeList, request);
 
-        Page<UserDeviceRelationship> result = relationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn("Test001", 1, snCodeList, request);
+        List<UserDeviceRelationship> result = relationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn("Test001", 1, snCodeList);
 
-        Assert.assertNotNull(result.getContent());
+        Assert.assertNotNull(result.size());
 
     }
 

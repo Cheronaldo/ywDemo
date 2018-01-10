@@ -46,5 +46,5 @@ public interface UserDeviceRelationshipRepository extends JpaRepository<UserDevi
      * @param snCodeList
      * @return
      */
-    Page<UserDeviceRelationship> findByUserNameAndIsUsedAndSnCodeNotIn(String userName, Integer isUsed, List<String> snCodeList, Pageable pageable);
+    List<UserDeviceRelationship> findByUserNameAndIsUsedAndSnCodeNotIn(String userName, Integer isUsed, List<String> snCodeList);
 }

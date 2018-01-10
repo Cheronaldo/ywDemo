@@ -2,11 +2,13 @@ package com.cherry.service.impl;
 
 import com.cherry.converter.UserInfo2SiteUserInfoVOConverter;
 import com.cherry.dataobject.AgencySiteRelationship;
+import com.cherry.dataobject.IpStatus;
 import com.cherry.dataobject.UserInfo;
 import com.cherry.enums.UserEnum;
 import com.cherry.form.UserInfoForm;
 import com.cherry.form.UserUpdateForm;
 import com.cherry.repository.AgencySiteRelationshipRepository;
+import com.cherry.repository.IpStatusRepository;
 import com.cherry.repository.UserInfoRepository;
 import com.cherry.repository.UserLevelRepository;
 import com.cherry.service.UserInfoService;
@@ -41,6 +43,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private AgencySiteRelationshipRepository relationshipRepository;
+
+    @Autowired
+    private IpStatusRepository ipStatusRepository;
 
     @Override
     public Integer saveUser(UserInfoForm userInfoForm) {
@@ -253,6 +258,69 @@ public class UserInfoServiceImpl implements UserInfoService{
             userInfo.setIsUsed(0);
 
             repository.save(userInfo);
+        }
+
+        return 0;
+    }
+
+    @Override
+    @Transactional
+    public Integer ipHandle(String userName, String userIp) {
+
+        // 1.获取用户当前启用的IP记录
+        IpStatus statusOld = ipStatusRepository.findByUserNameAndIsUsed(userName, 1);
+        // 2.将已登录的用户踢下
+        if (statusOld != null){
+            // 2.1 判断IP是否相同
+            if (statusOld.getUserIp().equals(userIp)){
+                // 直接返回
+                return 0;
+            }else {
+                // IP信息置位 （踢人操作）
+                statusOld.setIsUsed(0);
+                ipStatusRepository.save(statusOld);
+            }
+        }
+
+        // 3.将新登陆的IP信息启用
+        // 3.1 判断用户和IP 信息是否存在
+        IpStatus statusNew = ipStatusRepository.findByUserNameAndUserIp(userName, userIp);
+        if (statusNew != null){
+            // 记录存在 重新启用
+            statusNew.setIsUsed(1);
+            statusNew.setLoginTime(DateUtil.getDate());
+
+            ipStatusRepository.save(statusNew);
+
+            return 0;
+        }
+
+        // 3.2不存在 添加新纪录
+        IpStatus statusAdd = new IpStatus();
+        statusAdd.setId(KeyUtil.genUniqueKey());
+        statusAdd.setUserName(userName);
+        statusAdd.setUserIp(userIp);
+        statusAdd.setIsUsed(1);
+        statusAdd.setLoginTime(DateUtil.getDate());
+
+        ipStatusRepository.save(statusAdd);
+
+        return 0;
+    }
+
+    @Override
+    public Integer getIpStatus(String userName, String userIp) {
+
+        // 1.获取记录
+        IpStatus status = ipStatusRepository.findByUserNameAndUserIp(userName, userIp);
+
+        // 2.获取状态
+        if (status == null){
+            return 0;
+        }
+
+        if (status.getIsUsed() == 1){
+            return 1;
         }
 
         return 0;

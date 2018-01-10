@@ -1,11 +1,15 @@
 package com.cherry.controller;
 
+import com.cherry.constant.CookieConstant;
+import com.cherry.constant.RedisConstant;
 import com.cherry.dataobject.UserInfo;
 import com.cherry.enums.UserEnum;
 import com.cherry.exception.UserException;
 import com.cherry.form.UserInfoForm;
 import com.cherry.form.UserUpdateForm;
 import com.cherry.service.UserInfoService;
+import com.cherry.util.CookieUtil;
+import com.cherry.util.IpUtil;
 import com.cherry.util.ResultVOUtil;
 import com.cherry.util.ShortMessagingServiceUtil;
 import com.cherry.vo.ResultVO;
@@ -14,13 +18,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户操作API层
@@ -33,6 +41,9 @@ public class UserInfoController {
 
     @Autowired
     private UserInfoService userInfoService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 用户注册校验用户是否已存在
@@ -52,6 +63,7 @@ public class UserInfoController {
 
     /**
      * 用户注册 储存用户信息
+     * 经销商注册
      * @param form
      * @param bindingResult
      * @return
@@ -84,23 +96,30 @@ public class UserInfoController {
         if (result == 1){
             return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
         }
-        // 2.验证IP，是否异地登录
-        //TODO 后期做ip检测 防止异地登录
 
+        // 2.设置token用户信息添加至 redis
+        String token = UUID.randomUUID().toString();
+        Integer expire = RedisConstant.EXPIRE;
 
-        // 3.将用户信息添加至 session
-        //TODO 后期使用 redis
-        request.getSession().setAttribute("userName", userName);
-        request.getSession().setAttribute("userPassword", userPassword);
+        redisTemplate.opsForValue().set(String.format(RedisConstant.TOKEN_PREFIX, token), userName, expire, TimeUnit.SECONDS);
 
-        log.info((String)request.getSession().getAttribute("userName"));
+        // 3.设置token至cookie
+        CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
 
-        // 4.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
+        // 4.验证IP，是否异地登录
+        // 4.1 获取用户ip
+        String userIp = IpUtil.getRealIp(request);
+        // 4.2 IP验证 操作
+        Integer ipHandleResult = userInfoService.ipHandle(userName, userIp);
+        if (ipHandleResult != 0){
+            // 操作失败
+            return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
+        }
+
+        // 5.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
         int userClass = userInfoService.getUserInfoByUserName(userName).getUserClass();
 
-
-
-        // 5.返回结果
+        // 6.返回结果
         return ResultVOUtil.success(UserEnum.USER_LOGIN_SUCCESS.getMessage(),userClass);
     }
 
@@ -171,9 +190,17 @@ public class UserInfoController {
     @GetMapping("/logout")
     public ResultVO userLogout(HttpServletRequest request, HttpServletResponse response){
 
-        request.getSession().removeAttribute("userName");
-        request.getSession().removeAttribute("userPassword");
-        log.info((String)request.getSession().getAttribute("userName"));
+        // 1.从cookie中查询
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        if (cookie != null){
+            // 2.清除redis
+            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            // 3.清除cookie
+            CookieUtil.set(response, CookieConstant.TOKEN, null, 0);
+        }
+
+        // 4.ip不需要置位，该用户再次登录的时候会处理 IP状态
+
         return ResultVOUtil.success(UserEnum.USER_LOGOUT_SUCCESS.getMessage());
 
     }

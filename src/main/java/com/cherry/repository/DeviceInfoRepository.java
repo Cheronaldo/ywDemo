@@ -1,6 +1,8 @@
 package com.cherry.repository;
 
 import com.cherry.dataobject.DeviceInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -18,5 +20,12 @@ public interface DeviceInfoRepository extends JpaRepository<DeviceInfo,String>{
      */
     List<DeviceInfo> findBySnCodeIn(List<String> snCodeList);
 
+    /**
+     * 由SN码列表获取设备列表
+     * @param snCodeList
+     * @param pageable
+     * @return
+     */
+    Page<DeviceInfo> findBySnCodeIn(List<String> snCodeList, Pageable pageable);
 
 }
