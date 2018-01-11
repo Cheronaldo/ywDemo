@@ -13,8 +13,11 @@ spring:
     default-property-inclusion: non_null
   thymeleaf:
     mode: LEGACYHTML5
-#  redis:
-#    host: 47.93.11.243
-#    port: 6379
+  redis:
+    host: 47.93.11.243
+    port: 6379
 server:
   port: 8081
+
+projectUrl:
+  ywDemo: http://127.0.0.1:8081/login
