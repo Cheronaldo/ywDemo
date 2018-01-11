@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -53,6 +55,15 @@ public class IpStatusRepositoryTest {
     public void findByUserNameAndUserIp() throws Exception {
 
         IpStatus result = repository.findByUserNameAndUserIp("Test001", "127.0.0.1");
+
+        Assert.assertNotNull(result);
+
+    }
+
+    @Test
+    public void findByUserIpAndIsUsed() throws Exception{
+
+        List<IpStatus> result = repository.findByUserIpAndIsUsed("127.0.0.1", 1);
 
         Assert.assertNotNull(result);
 

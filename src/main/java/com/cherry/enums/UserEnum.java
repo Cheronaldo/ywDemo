@@ -14,8 +14,8 @@ public enum UserEnum {
     USER_GET_FAIL(7,"用户信息获取失败"),
     USER_GET_SUCCESS(8,"用户信息获取成功"),
     USER_UPDATE_SUCCESS(9,"基本信息修改成功"),
-    USER_LOGOUT_SUCCESS(10,"注销成功"),
-    SEND_CODE_SUCCESS(11,"验证码发送成功"),
+    USER_LOGOUT_SUCCESS(10,"注销成功！"),
+    SEND_CODE_SUCCESS(11,"验证码发送成功！"),
     SEND_CODE_FAIL(12,"验证码发送失败,请重试"),
     REQUEST_TOO_FREQUENT(13,"请求过于频繁，稍后再试"),
     USER_REGISTER_FAIL(13,"注册失败"),
@@ -28,6 +28,8 @@ public enum UserEnum {
     ADD_SITE_USER_FAIL(20,"添加失败！"),
     DELETE_SITE_USER_SUCCESS(21,"删除成功！"),
     DELETE_SITE_USER_FAIL(22,"删除失败！"),
+    USER_LOGOUT_FAIL(23,"注销失败！"),
+    USER_LOGIN_EXIST(24,"已存在登录用户!")
     ;
 
 

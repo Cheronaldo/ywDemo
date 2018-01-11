@@ -97,24 +97,24 @@ public class UserInfoController {
             return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
         }
 
-        // 2.设置token用户信息添加至 redis
+        // 2.验证IP，是否异地登录
+        // 2.1 获取用户ip
+        String userIp = IpUtil.getRealIp(request);
+        // 2.2 IP验证 操作
+        Integer ipHandleResult = userInfoService.ipHandle(userName, userIp, request, response);
+        if (ipHandleResult != 0){
+            // 操作失败
+            return ResultVOUtil.error(1,UserEnum.USER_LOGIN_EXIST.getMessage());
+        }
+
+        // 3.设置token用户信息添加至 redis
         String token = UUID.randomUUID().toString();
         Integer expire = RedisConstant.EXPIRE;
 
         redisTemplate.opsForValue().set(String.format(RedisConstant.TOKEN_PREFIX, token), userName, expire, TimeUnit.SECONDS);
 
-        // 3.设置token至cookie
+        // 4.设置token至cookie
         CookieUtil.set(response, CookieConstant.TOKEN, token, expire);
-
-        // 4.验证IP，是否异地登录
-        // 4.1 获取用户ip
-        String userIp = IpUtil.getRealIp(request);
-        // 4.2 IP验证 操作
-        Integer ipHandleResult = userInfoService.ipHandle(userName, userIp);
-        if (ipHandleResult != 0){
-            // 操作失败
-            return ResultVOUtil.error(1,UserEnum.USER_LOGIN_FAIL.getMessage());
-        }
 
         // 5.根据用户的等级 跳转至不同的首页 查询用户的等级直接将等级码作为 data 传给界面
         int userClass = userInfoService.getUserInfoByUserName(userName).getUserClass();
@@ -188,18 +188,26 @@ public class UserInfoController {
      * @return
      */
     @GetMapping("/logout")
-    public ResultVO userLogout(HttpServletRequest request, HttpServletResponse response){
+    public ResultVO userLogout(HttpServletRequest request,
+                               HttpServletResponse response,
+                               @RequestParam("userName") String userName){
 
-        // 1.从cookie中查询
-        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
-        if (cookie != null){
-            // 2.清除redis
-            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
-            // 3.清除cookie
-            CookieUtil.set(response, CookieConstant.TOKEN, null, 0);
+        // 1.ip置位，防止该ip地址再次登录的时候会出现异常
+        String userIp = IpUtil.getRealIp(request);
+        int resetResult = userInfoService.ipReset(userName, userIp);
+        if (resetResult != 0){
+            // 登出失败
+            return ResultVOUtil.error(1, UserEnum.USER_LOGOUT_FAIL.getMessage());
         }
 
-        // 4.ip不需要置位，该用户再次登录的时候会处理 IP状态
+        // 2.从cookie中查询
+        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+        if (cookie != null){
+            // 3.清除redis
+            redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+            // 4.清除cookie
+            CookieUtil.set(response, CookieConstant.TOKEN, null, 0);
+        }
 
         return ResultVOUtil.success(UserEnum.USER_LOGOUT_SUCCESS.getMessage());
 

@@ -8,6 +8,8 @@ import com.cherry.form.UserUpdateForm;
 import com.cherry.vo.UserInfoVO;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -96,7 +98,7 @@ public interface UserInfoService {
      * @param userIp
      * @return
      */
-    Integer ipHandle(String userName, String userIp);
+    Integer ipHandle(String userName, String userIp, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 通过获取用户名 用户IP 获取IP状态记录
@@ -105,5 +107,13 @@ public interface UserInfoService {
      * @return
      */
     Integer getIpStatus(String userName, String userIp);
+
+    /**
+     * 用户退出时将 IP置位
+     * @param userName
+     * @param userIp
+     * @return
+     */
+    Integer ipReset(String userName, String userIp);
 
 }

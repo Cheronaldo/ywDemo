@@ -105,4 +105,23 @@ public class DateUtil {
         return DateUtil.convertString2Date(newDateString + ":00");
     }
 
+    /**
+     * 判断登录时间是否超过2小时
+     * @param date
+     * @return
+     */
+    public static boolean ifLoginValid(Date date){
+
+        boolean b = false;
+
+        Long oldTime = date.getTime();
+        Long currentTime = System.currentTimeMillis();
+        if(currentTime - oldTime <= 7200000){
+            b = true;
+        }
+
+        return b;
+
+    }
+
 }

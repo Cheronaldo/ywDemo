@@ -1,5 +1,7 @@
 package com.cherry.service.impl;
 
+import com.cherry.constant.CookieConstant;
+import com.cherry.constant.RedisConstant;
 import com.cherry.converter.UserInfo2SiteUserInfoVOConverter;
 import com.cherry.dataobject.AgencySiteRelationship;
 import com.cherry.dataobject.IpStatus;
@@ -12,6 +14,7 @@ import com.cherry.repository.IpStatusRepository;
 import com.cherry.repository.UserInfoRepository;
 import com.cherry.repository.UserLevelRepository;
 import com.cherry.service.UserInfoService;
+import com.cherry.util.CookieUtil;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
 import com.cherry.util.MailUtil;
@@ -21,9 +24,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +53,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Autowired
     private IpStatusRepository ipStatusRepository;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     public Integer saveUser(UserInfoForm userInfoForm) {
@@ -265,15 +275,46 @@ public class UserInfoServiceImpl implements UserInfoService{
 
     @Override
     @Transactional
-    public Integer ipHandle(String userName, String userIp) {
+    public Integer ipHandle(String userName, String userIp, HttpServletRequest request, HttpServletResponse response) {
 
-        // 1.获取用户当前启用的IP记录
+        // 1.获取当前ip 是否存在已登录用户(即一个用户同一时间只允许使用一个IP登录)
+        //   同一浏览器同一时间只允许一个用户登录
+        //   同一IP的不同的浏览器可以登录多个用户
+        List<IpStatus> ipStatus = ipStatusRepository.findByUserIpAndIsUsed(userIp, 1);
+        if (ipStatus != null){
+            // ip存在已登录用户
+            // 1.1 判断cookie是否存在
+            Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+
+            if (cookie != null){
+                // 1.2 再判断cookie中的用户是否登录（可能是被踢下的过期用户）
+                String tokenValue = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+                // 判断cookie中的用户是否在线
+                IpStatus cookieStatus= ipStatusRepository.findByUserNameAndUserIpAndIsUsed(tokenValue, userIp,1);
+                if (cookieStatus != null){
+                    // 该浏览器已存在登录用户
+                    return 1;
+                }else {
+                    // 该用户的cookie无效 清除掉 redis及 cookie
+                    // 1.3 清除redis
+                    redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+                    // 1.4 清除cookie
+                    CookieUtil.set(response, CookieConstant.TOKEN, null, 0);
+
+                }
+
+            }
+            // 1.5 cookie不存在 可能是其他为登录用户的浏览器或用户清除cookie(允许登录)
+
+        }
+
+        // 2.获取用户当前启用的IP记录 是否在其他地方已登录
         IpStatus statusOld = ipStatusRepository.findByUserNameAndIsUsed(userName, 1);
-        // 2.将已登录的用户踢下
+        // 3.将已登录的用户踢下
         if (statusOld != null){
             // 2.1 判断IP是否相同
             if (statusOld.getUserIp().equals(userIp)){
-                // 直接返回
+                // 同一IP的不同浏览器（或缓存已清） 允许登录
                 return 0;
             }else {
                 // IP信息置位 （踢人操作）
@@ -282,8 +323,8 @@ public class UserInfoServiceImpl implements UserInfoService{
             }
         }
 
-        // 3.将新登陆的IP信息启用
-        // 3.1 判断用户和IP 信息是否存在
+        // 4.将新登陆的IP信息启用
+        // 4.1 判断用户和IP 信息是否存在
         IpStatus statusNew = ipStatusRepository.findByUserNameAndUserIp(userName, userIp);
         if (statusNew != null){
             // 记录存在 重新启用
@@ -295,7 +336,7 @@ public class UserInfoServiceImpl implements UserInfoService{
             return 0;
         }
 
-        // 3.2不存在 添加新纪录
+        // 4.2不存在 添加新纪录
         IpStatus statusAdd = new IpStatus();
         statusAdd.setId(KeyUtil.genUniqueKey());
         statusAdd.setUserName(userName);
@@ -321,6 +362,21 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         if (status.getIsUsed() == 1){
             return 1;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public Integer ipReset(String userName, String userIp) {
+
+        // 1.获取IP 启用记录
+        IpStatus status = ipStatusRepository.findByUserNameAndUserIpAndIsUsed(userName,userIp, 1);
+
+        // 2.IP置位
+        if (status != null){
+            status.setIsUsed(0);
+            ipStatusRepository.save(status);
         }
 
         return 0;
