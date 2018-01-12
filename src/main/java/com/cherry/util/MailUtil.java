@@ -1,5 +1,6 @@
 package com.cherry.util;
 
+import com.cherry.constant.MailConstant;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 import javax.mail.Address;
@@ -17,6 +18,7 @@ import java.util.Properties;
  */
 public class MailUtil {
 
+
     /**
      * 现场用户注册 发送用户名及初始密码
      * @param mail
@@ -29,10 +31,10 @@ public class MailUtil {
         try {
 
             //这里使用的是qq邮箱发送
-            String email="601585410@qq.com";
-            String pwd="nmrzdrlqopfybdgj";//非QQ邮箱密码；是qq邮箱安全码
+            String email = MailConstant.FROM_EMAIL;
+            String pwd = MailConstant.MAIL_PASSWORD;//非QQ邮箱密码；是qq邮箱安全码
 
-            String toemail=mail;//接收的邮箱
+            String toEmail = mail;//接收的邮箱
 
             Properties props = new Properties();
 
@@ -72,7 +74,7 @@ public class MailUtil {
             Transport transport = session.getTransport();
             transport.connect("smtp.qq.com", email, pwd);
 
-            transport.sendMessage(msg, new Address[] { new InternetAddress(toemail) });//"**接收人的邮箱地址**"
+            transport.sendMessage(msg, new Address[] { new InternetAddress(toEmail) });//"**接收人的邮箱地址**"
             transport.close();
 
         } catch (Exception e) {

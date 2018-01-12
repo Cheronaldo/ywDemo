@@ -15,7 +15,6 @@ import com.cherry.util.ShortMessagingServiceUtil;
 import com.cherry.vo.ResultVO;
 import com.cherry.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;

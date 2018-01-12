@@ -17,6 +17,7 @@ public class UserAuthorizeExceptionHandler {
     @Autowired
     private ProjectUrlConfig projectUrlConfig;
 
+
     /**
      * 拦截异常登录
      * @return
