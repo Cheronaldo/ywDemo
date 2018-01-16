@@ -73,4 +73,13 @@ public class ProtocolDetailRepositoryTest {
 
     }
 
+    @Test
+    public void findListByProtocolVersion() throws Exception{
+
+        List<ProtocolDetail> result = repository.findListByProtocolVersion("ywv1.1");
+
+        Assert.assertNotEquals(0, result.size());
+
+    }
+
 }

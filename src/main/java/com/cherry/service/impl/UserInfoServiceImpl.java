@@ -57,6 +57,7 @@ public class UserInfoServiceImpl implements UserInfoService{
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+
     @Override
     public Integer saveUser(UserInfoForm userInfoForm) {
 
@@ -197,7 +198,6 @@ public class UserInfoServiceImpl implements UserInfoService{
             return 1;
         }
 
-        // TODO 通过邮箱发送用户名和密码
         // 2.生成6位随机码
         String initCode = KeyUtil.genRandomCode();
 

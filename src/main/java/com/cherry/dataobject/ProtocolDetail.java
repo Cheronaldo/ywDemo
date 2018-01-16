@@ -22,6 +22,12 @@ public class ProtocolDetail {
     private String dataName;
     /**  数据单位 */
     private String dataUnit;
+    /**  数据格式 */
+    private String dataType;
+    /**  数据是否可读 */
+    private String isRead;
+    /**  数据是否可写 */
+    private String isWrite;
     /**  数据阈值上限 */
     private String maxThreshold;
     /**  数据阈值下限 */
@@ -79,6 +85,30 @@ public class ProtocolDetail {
         this.dataUnit = dataUnit;
     }
 
+    public String getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+    }
+
+    public String getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(String isRead) {
+        this.isRead = isRead;
+    }
+
+    public String getIsWrite() {
+        return isWrite;
+    }
+
+    public void setIsWrite(String isWrite) {
+        this.isWrite = isWrite;
+    }
+
     public String getMaxThreshold() {
         return maxThreshold;
     }
@@ -111,6 +141,9 @@ public class ProtocolDetail {
                 ", offsetNumber=" + offsetNumber +
                 ", dataName='" + dataName + '\'' +
                 ", dataUnit='" + dataUnit + '\'' +
+                ", dataType='" + dataType + '\'' +
+                ", isRead='" + isRead + '\'' +
+                ", isWrite='" + isWrite + '\'' +
                 ", maxThreshold='" + maxThreshold + '\'' +
                 ", minThreshold='" + minThreshold + '\'' +
                 ", deleted='" + deleted + '\'' +

@@ -8,6 +8,7 @@ import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolQueryForm;
 import com.cherry.service.ProtocolService;
 import com.cherry.util.ResultVOUtil;
+import com.cherry.vo.DataReadWriteProtocolVO;
 import com.cherry.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -135,5 +136,23 @@ public class ProtocolController {
 
     }
 
+    /**
+     * 获取数据读写协议
+     * @param protocolVersion
+     * @return
+     */
+    @PostMapping("/data/readWrite")
+    public ResultVO getProtocolForDataReadWrite(@RequestParam("protocolVersion") String protocolVersion){
+
+        List<DataReadWriteProtocolVO> readWriteProtocolVOList = protocolService.listForDataReadWrite(protocolVersion);
+
+        if (readWriteProtocolVOList == null){
+            log.error("未查询到相关协议！");
+            throw new ProtocolException(ProtocolEnum.GET_PROTOCOL_FAIL);
+        }
+
+        return ResultVOUtil.success(ProtocolEnum.GET_PROTOCOL_SUCCESS.getMessage(), readWriteProtocolVOList);
+
+    }
 
 }

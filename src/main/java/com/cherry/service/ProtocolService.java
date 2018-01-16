@@ -5,6 +5,7 @@ import com.cherry.dataobject.ProtocolDetail;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolQueryForm;
+import com.cherry.vo.DataReadWriteProtocolVO;
 import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.RealTimeProtocolVO;
 import org.springframework.data.domain.Page;
@@ -72,5 +73,12 @@ public interface ProtocolService {
      * @return
      */
     List<HistoricalDataProtocolVO> listFindByProtocolVersion(String protocolVersion);
+
+    /**
+     * 通过协议版本号获取 数据读写 协议详情列表
+     * @param protocolVersion
+     * @return
+     */
+    List<DataReadWriteProtocolVO> listForDataReadWrite(String protocolVersion);
 
 }

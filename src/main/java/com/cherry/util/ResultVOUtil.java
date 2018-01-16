@@ -1,7 +1,6 @@
 package com.cherry.util;
 
 import com.cherry.vo.ResultVO;
-
 /**
  * 拼装返回对象VO
  * Created by Administrator on 2017/11/07.
@@ -14,6 +13,7 @@ public class ResultVOUtil {
      * @return
      */
     public static ResultVO success(String msg, Object object){
+
         ResultVO resultVO = new ResultVO();
         resultVO.setData(object);
         resultVO.setCode(0);

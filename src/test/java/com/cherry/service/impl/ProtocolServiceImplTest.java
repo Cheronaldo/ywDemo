@@ -6,6 +6,7 @@ import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.form.ProtocolDetailForm;
 import com.cherry.form.ProtocolQueryForm;
 import com.cherry.util.KeyUtil;
+import com.cherry.vo.DataReadWriteProtocolVO;
 import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.RealTimeProtocolVO;
 import org.junit.Assert;
@@ -81,7 +82,7 @@ public class ProtocolServiceImplTest {
         protocolAdaptDTO.setUserName("Test001");
         protocolAdaptDTO.setSnCode("HMITest001");
         protocolAdaptDTO.setProtocolVersion("ywv1.1");
-        protocolAdaptDTO.setProtocolContent("温度_℃_0_100_湿度_%_0_100_浓度_%_0_100");
+        protocolAdaptDTO.setProtocolContent("温度_℃_3_1_0_0_100_湿度_%_3_1_0_0_100_浓度_μM_3_1_1_0_100");
 
         int result = service.protocolAdapt(protocolAdaptDTO);
 
@@ -101,6 +102,15 @@ public class ProtocolServiceImplTest {
         List<HistoricalDataProtocolVO> result = service.listFindByProtocolVersion("ywv1.1");
 
         Assert.assertNotEquals(0, result.size());
+    }
+
+    @Test
+    public void listForDataReadWrite() throws Exception{
+
+        List<DataReadWriteProtocolVO> result = service.listForDataReadWrite("ywv1.1");
+
+        Assert.assertNotEquals(0, result.size());
+
     }
 
 }

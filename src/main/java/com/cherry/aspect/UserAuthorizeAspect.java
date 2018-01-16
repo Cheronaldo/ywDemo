@@ -31,51 +31,51 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class UserAuthorizeAspect {
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-    @Autowired
-    private UserInfoService userInfoService;
-
-    @Pointcut("execution(public * com.cherry.controller.*Controller.*(..))" +
-    "&& !execution(public * com.cherry.controller.ServletController.userLogin())" +
-    "&& !execution(public * com.cherry.controller.ServletController.userRegister())" +
-    "&& !execution(public * com.cherry.controller.UserInfoController.userCheck(..))" +
-    "&& !execution(public * com.cherry.controller.UserInfoController.userRegister(..))" +
-    "&& !execution(public * com.cherry.controller.UserInfoController.userLogin(..))" +
-    "&& !execution(public * com.cherry.controller.UserInfoController.userLogout(..))" +
-    "&& !execution(public * com.cherry.controller.UserInfoController.sendCheckCode(..))")
-    public void verify(){}
-
-    @Before("verify()")
-    public void doVerify(){
-
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-
-        // 1.查询cookie
-        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
-
-        if (cookie == null){
-            log.warn("cookie中查不到token!");
-            throw new UserAuthorizeException();
-        }
-        // 2.查询redis   tokenValue中存的就是userName
-        String tokenValue = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
-        if (StringUtils.isEmpty(tokenValue)){
-            log.warn("redis中查不到token!");
-            throw new UserAuthorizeException();
-        }
-
-        // 3.校验ip
-        // 3.1 获取ip
-        String userIp = IpUtil.getRealIp(request);
-        int ipStatus = userInfoService.getIpStatus(tokenValue, userIp);
-        if (ipStatus == 0){
-            log.warn("您已被迫下线!");
-            throw new UserAuthorizeException();
-        }
-
-    }
+//    @Autowired
+//    private StringRedisTemplate redisTemplate;
+//
+//    @Autowired
+//    private UserInfoService userInfoService;
+//
+//    @Pointcut("execution(public * com.cherry.controller.*Controller.*(..))" +
+//    "&& !execution(public * com.cherry.controller.ServletController.userLogin())" +
+//    "&& !execution(public * com.cherry.controller.ServletController.userRegister())" +
+//    "&& !execution(public * com.cherry.controller.UserInfoController.userCheck(..))" +
+//    "&& !execution(public * com.cherry.controller.UserInfoController.userRegister(..))" +
+//    "&& !execution(public * com.cherry.controller.UserInfoController.userLogin(..))" +
+//    "&& !execution(public * com.cherry.controller.UserInfoController.userLogout(..))" +
+//    "&& !execution(public * com.cherry.controller.UserInfoController.sendCheckCode(..))")
+//    public void verify(){}
+//
+//    @Before("verify()")
+//    public void doVerify(){
+//
+//        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//        HttpServletRequest request = attributes.getRequest();
+//
+//        // 1.查询cookie
+//        Cookie cookie = CookieUtil.get(request, CookieConstant.TOKEN);
+//
+//        if (cookie == null){
+//            log.warn("cookie中查不到token!");
+//            throw new UserAuthorizeException();
+//        }
+//        // 2.查询redis   tokenValue中存的就是userName
+//        String tokenValue = redisTemplate.opsForValue().get(String.format(RedisConstant.TOKEN_PREFIX, cookie.getValue()));
+//        if (StringUtils.isEmpty(tokenValue)){
+//            log.warn("redis中查不到token!");
+//            throw new UserAuthorizeException();
+//        }
+//
+//        // 3.校验ip
+//        // 3.1 获取ip
+//        String userIp = IpUtil.getRealIp(request);
+//        int ipStatus = userInfoService.getIpStatus(tokenValue, userIp);
+//        if (ipStatus == 0){
+//            log.warn("您已被迫下线!");
+//            throw new UserAuthorizeException();
+//        }
+//
+//    }
 
 }

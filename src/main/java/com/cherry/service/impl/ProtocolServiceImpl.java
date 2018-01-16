@@ -1,9 +1,6 @@
 package com.cherry.service.impl;
 
-import com.cherry.converter.ProtocolConfigDetail2RealTimeProtocolVOConverter;
-import com.cherry.converter.ProtocolDetail2HistoricalDataProtocolVO;
-import com.cherry.converter.ProtocolDetail2ProtocolDetailVO;
-import com.cherry.converter.ProtocolDetail2RealTimeProtocolVO;
+import com.cherry.converter.*;
 import com.cherry.dataobject.*;
 import com.cherry.dto.ProtocolAdaptDTO;
 import com.cherry.dto.ProtocolStrategyDTO;
@@ -18,6 +15,7 @@ import com.cherry.util.BeanUtil;
 import com.cherry.util.DateUtil;
 import com.cherry.util.KeyUtil;
 import com.cherry.util.StringUtil;
+import com.cherry.vo.DataReadWriteProtocolVO;
 import com.cherry.vo.HistoricalDataProtocolVO;
 import com.cherry.vo.ProtocolDetailVO;
 import com.cherry.vo.RealTimeProtocolVO;
@@ -249,31 +247,53 @@ public class ProtocolServiceImpl implements ProtocolService{
         // 接收要适配的协议内容
         String[] protocolContent = adaptDTO.getProtocolContent().split("_");
 
-        // 分别获取 数据名称 数据单位 数据阈值下限 数据阈值上限
-        String[] arrayDataName = new String[protocolContent.length / 4];
-        String[] arrayDataUnit= new String[protocolContent.length / 4];
-        String[] arrayDataMinThreshold = new String[protocolContent.length / 4];
-        String[] arrayDataMaxThreshold = new String[protocolContent.length / 4];
+        // 分别获取 数据名称 数据单位 数据格式 数据是否可读 数据是否可写 数据阈值下限 数据阈值上限
+
+        int arrayLength = protocolContent.length / 7;
+        String[] arrayDataName = new String[arrayLength];
+        String[] arrayDataUnit= new String[arrayLength];
+        String[] arrayDataType = new String[arrayLength];
+        String[] arrayIsRead = new String[arrayLength];
+        String[] arrayIsWrite = new String[arrayLength];
+        String[] arrayDataMinThreshold = new String[arrayLength];
+        String[] arrayDataMaxThreshold = new String[arrayLength];
 
         for (int i = 0; i < protocolContent.length; i++){
             // 取余数 对应不同的情况
-            int j = i % 4;
-            if (j == 0){
-                // 属于数据名称
-                arrayDataName[i / 4] = protocolContent[i];
+            int j = i % 7;
+            switch (j){
+                case 0:
+                    // 属于数据名称
+                    arrayDataName[i / 7] = protocolContent[i];
+                    break;
+                case 1:
+                    // 属于数据单位
+                    arrayDataUnit[i / 7] = protocolContent[i];
+                    break;
+                case 2:
+                    // 属于数据格式
+                    arrayDataType[i / 7] = protocolContent[i];
+                    break;
+                case 3:
+                    // 属于数据是否可读
+                    arrayIsRead[i / 7] = protocolContent[i];
+                    break;
+                case 4:
+                    // 属于数据是否可写
+                    arrayIsWrite[i / 7] = protocolContent[i];
+                    break;
+                case 5:
+                    // 属于数据阈值下限
+                    arrayDataMinThreshold[i / 7] = protocolContent[i];
+                    break;
+                case 6:
+                    // 属于数据阈值上限
+                    arrayDataMaxThreshold[i / 7] = protocolContent[i];
+                    break;
+                default: break;
+
             }
-            if (j == 1){
-                // 属于时间单位
-                arrayDataUnit[i / 4] = protocolContent[i];
-            }
-            if (j == 2){
-                // 属于数据阈值下限
-                arrayDataMinThreshold[i / 4] = protocolContent[i];
-            }
-            if (j == 3){
-                // 属于数据阈值上限
-                arrayDataMaxThreshold[i / 4] = protocolContent[i];
-            }
+
         }
 
         // 用于策略默认设置
@@ -383,6 +403,9 @@ public class ProtocolServiceImpl implements ProtocolService{
             detail.setOffsetNumber(i + 1);
             detail.setDataName(arrayDataName[i]);
             detail.setDataUnit(arrayDataUnit[i]);
+            detail.setDataType(arrayDataType[i]);
+            detail.setIsRead(arrayIsRead[i]);
+            detail.setIsWrite(arrayIsWrite[i]);
             detail.setMinThreshold(arrayDataMinThreshold[i]);
             detail.setMaxThreshold(arrayDataMaxThreshold[i]);
 
@@ -411,7 +434,6 @@ public class ProtocolServiceImpl implements ProtocolService{
         }
 
         // 2.获取需显示ProtocolDetail 对象列表
-        // TODO 这里也要考虑用户的可视策略不存在的情况  设置为默认
         // 2.1 获取可视策略记录
         String visibleMask = "";
         String alarmMask = "";
@@ -481,5 +503,18 @@ public class ProtocolServiceImpl implements ProtocolService{
         List<HistoricalDataProtocolVO> protocolVOList = ProtocolDetail2HistoricalDataProtocolVO.convert(detailList);
 
         return protocolVOList;
+    }
+
+    @Override
+    public List<DataReadWriteProtocolVO> listForDataReadWrite(String protocolVersion) {
+
+        // 1.获取协议详情列表
+        List<ProtocolDetail> detailList = detailRepository.findListByProtocolVersion(protocolVersion);
+        if (detailList.size() == 0){
+            return null;
+        }
+        // 2.封装为 DataReadWriteProtocolVO 列表
+        return ProtocolDetail2DataReadWriteProtocolVOConverter.convert(detailList);
+
     }
 }
