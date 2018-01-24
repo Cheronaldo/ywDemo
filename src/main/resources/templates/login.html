@@ -155,6 +155,7 @@ a:hover {
 	                },
 	                success: function(result){
 	                    if(result.code == 0){
+	                        localStorage.setItem("userClass",result.data);
 	                    	window.location.href ="/index?username="+username;
 	                    }else{
 	                        alert(result.msg);

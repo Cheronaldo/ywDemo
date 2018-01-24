@@ -189,7 +189,6 @@
 
 
         function register(){
-            var user_class = $('#user_class').val();
             var username = $('#username').val();
             var passwd = $('#passwd').val();
             passwd = $.md5(passwd);
@@ -202,7 +201,6 @@
                 cache: false,
                 dataType:'json',
                 data : {
-                    "userClass":user_class,
                     "userName":username,///----
                     "userPassword":passwd,
                     "userPost": post,
@@ -343,14 +341,14 @@
 <div class="login">
     <h1>欢迎来到亿维智能云平台</h1>
     <form class="modal-form" role="form">
-        <div class="form_content">
-            <label class="user_class">用户类别：</label>
-            <select id="user_class" class="input_control" placeholder="经销商" >
-                <option value="(空)">(空)</option>
-                <option value="经销商">经销商</option>
-                <option value="现场用户">现场用户</option>
-            </select>
-        </div>
+        <!--<div class="form_content">-->
+            <!--<label class="user_class">用户类别：</label>-->
+            <!--<select id="user_class" class="input_control" placeholder="经销商" >-->
+                <!--<option value="(空)">(空)</option>-->
+                <!--<option value="经销商">经销商</option>-->
+                <!--<option value="现场用户">现场用户</option>-->
+            <!--</select>-->
+        <!--</div>-->
         <div class="form_content">
             <label for="username">用户名：</label>
             <input id="username" type="text" class="input_control" placeholder="必填" />

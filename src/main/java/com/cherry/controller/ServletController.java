@@ -119,4 +119,32 @@ public class ServletController {
         return "userAlarm";
     }
 
+    /**
+     * 用户信息跳转
+     * @return
+     */
+    @GetMapping("/userInfo")
+    public String userInfo(){
+        return "userInfo";
+    }
+
+    /**
+     * 现场用户设备页面跳转
+     * @return
+     */
+    @GetMapping("/localUserDevList")
+    public String localUserDevList(){
+        return "localUserDevList";
+    }
+
+    /**
+     * 设备读写页面跳转
+     * @return
+     */
+    @GetMapping("/deviceReadWrite")
+    public String deviceReadWrite(){
+        return "deviceReadWrite";
+    }
+
+
 }

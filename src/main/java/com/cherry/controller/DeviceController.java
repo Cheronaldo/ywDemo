@@ -318,8 +318,6 @@ public class DeviceController {
      * 获取经销商名下 且现场用户未绑定的设备列表 分页
      * @param agencyName
      * @param siteName
-     * @param page
-     * @param size
      * @return
      */
     @PostMapping("/agency/getAll")

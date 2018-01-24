@@ -72,6 +72,7 @@ public class UserAuthorizeAspect {
 //        String userIp = IpUtil.getRealIp(request);
 //        int ipStatus = userInfoService.getIpStatus(tokenValue, userIp);
 //        if (ipStatus == 0){
+//            // ip记录不存在 或 状态为0
 //            log.warn("您已被迫下线!");
 //            throw new UserAuthorizeException();
 //        }

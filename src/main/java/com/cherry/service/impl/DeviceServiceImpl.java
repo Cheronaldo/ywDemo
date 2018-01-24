@@ -80,6 +80,7 @@ public class DeviceServiceImpl implements DeviceService{
         }
 
         // 3.经销商是否已注册该设备
+        // TODO 后期修改是由 从设备获取 出货号等基本信息；经销商进行设备 部署信息的补充
         DeviceInfo deviceInfo = deviceInfoRepository.findOne(snCode);
         if (deviceInfo == null){
             // 经销商未注册
@@ -338,7 +339,7 @@ public class DeviceServiceImpl implements DeviceService{
             snCodeList = Arrays.asList("");
         }
 
-        // 2.获取经销商名下 且现场未绑定的设备列表 分页
+        // 2.获取经销商名下 且现场未绑定的设备列表
         List<UserDeviceRelationship> agencyRelationshipList = userDeviceRelationshipRepository.findByUserNameAndIsUsedAndSnCodeNotIn(agencyName, 1, snCodeList);
         if (agencyRelationshipList.size() == 0){
             // 未查询到记录

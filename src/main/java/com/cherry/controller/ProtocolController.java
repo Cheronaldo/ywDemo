@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +143,10 @@ public class ProtocolController {
      * @return
      */
     @PostMapping("/data/readWrite")
-    public ResultVO getProtocolForDataReadWrite(@RequestParam("protocolVersion") String protocolVersion){
+    public ResultVO getProtocolForDataReadWrite(@RequestParam("protocolVersion") String protocolVersion,
+                                                HttpServletResponse response){
+
+        response.setHeader("Access-Control-Allow-Origin","*");
 
         List<DataReadWriteProtocolVO> readWriteProtocolVOList = protocolService.listForDataReadWrite(protocolVersion);
 

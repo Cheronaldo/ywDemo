@@ -50,36 +50,36 @@
 				<dl class="system_log">
 					<dt>设备监控<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>
 					<dd class="first_dd" >
-						<a target="fname" href="device.html">设备注册</a>
+						<a target="fname" href="devList.html">设备列表</a>
 					</dd>
-					<dd><a href="devList.html" target="fname">设备列表</a></dd>
+					<dd class="realUser"><a href="device.html" target="fname">设备注册</a></dd>
 					<dd><a href="deviceMap.html" target="fname">设备地图</a></dd>
-					<dd><a href="#">预留</a></dd>
-				</dl>
-
-				<dl class="custom">
-					<dt>报警情况<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>
-					<dd class="first_dd"><a href="userAlarm.html" target="fname">报警设备</a></dd><span class="alarmNum" id="alarmNum"></span>
-					<dd><a href="#">2</a></dd>
-					<dd><a href="#">3</a></dd>
-					<dd><a href="#">4</a></dd>
+					<!--<dd><a href="#">预留</a></dd>-->
 				</dl>
 
 				<dl class="channel">
-					<dt>预留字段2<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>
-					<dd class="first_dd"><a href="#">1</a></dd>
-					<dd><a href="#">2</a></dd>
-					<dd><a href="#">3</a></dd>
-					<dd><a href="#">4</a></dd>
-					<dd><a href="#">5</a></dd>
+					<dt>报警情况<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>
+					<dd class="first_dd"><a href="userAlarm.html" target="fname">报警设备</a></dd><span class="alarmNum" id="alarmNum"></span>
+					<!--<dd><a href="#">2</a></dd>-->
+					<!--<dd><a href="#">3</a></dd>-->
+					<!--<dd><a href="#">4</a></dd>-->
 				</dl>
 
-				<dl class="app">
-					<dt>预留字段3<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>
-					<dd class="first_dd"><a href="#">1</a></dd>
-					<dd><a href="#">2</a></dd>
-					<dd><a href="#">3</a></dd>
+				<dl class="custom realUser">
+					<dt>用户管理<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>
+					<dd class="first_dd"><a href="userInfo.html" target="fname">现场用户信息</a></dd>
+					<!--<dd><a href="#">2</a></dd>-->
+					<!--<dd><a href="#">3</a></dd>-->
+					<!--<dd><a href="#">4</a></dd>-->
+					<!--<dd><a href="#">5</a></dd>-->
 				</dl>
+
+				<!--<dl class="app">-->
+					<!--<dt>预留字段3<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>-->
+					<!--<dd class="first_dd"><a href="#">1</a></dd>-->
+					<!--<dd><a href="#">2</a></dd>-->
+					<!--<dd><a href="#">3</a></dd>-->
+				<!--</dl>-->
 
 				<!--<dl class="cloud">-->
 					<!--<dt>预留字段4<img src="../static/assets/images/left/select_xl01.png" th:src="@{/assets/images/left/select_xl01.png}"></dt>-->
@@ -113,7 +113,7 @@
 			</div>
 		</div>
 		<div class="fdiv">
-			<iframe id="fname" name="fname" src="device.html" class="fname" scrolling="no"></iframe>
+			<iframe id="fname" name="fname" src="devList.html" class="fname" scrolling="no"></iframe>
 		</div>
 	</nav>
 	<footer></footer>

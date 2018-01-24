@@ -63,9 +63,16 @@ public class UserInfoServiceImpl implements UserInfoService{
 
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(userInfoForm, userInfo);
-        // 注意将用户类型转换为对应的 类型码再储存 否则userInfo中 userClass为 null
-        int userClass = levelRepository.findByClassInfo(userInfoForm.getUserClass()).getUserClass();
-        userInfo.setUserClass(userClass);
+        if (userInfo.getUserClass() == null){
+            // 说明是 经销商注册 默认为 级别是经销商
+            userInfo.setUserClass(2);
+        }else {
+            // 说明是 用户修改
+            //注意将用户类型转换为对应的 类型码再储存 否则userInfo中 userClass为 null
+            int userClass = levelRepository.findByClassInfo(userInfoForm.getUserClass()).getUserClass();
+            userInfo.setUserClass(userClass);
+        }
+
 
         try {
             repository.save(userInfo);

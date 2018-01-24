@@ -3,24 +3,26 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}"/>
 	<script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
     <!-- <script src="../static/assets/js/jQuery.md5.js" th:src="@{/assets/js/jQuery.md5.js}"></script> -->
 	<title>亿维智能云平台设备列表页面</title>
 	<style type="text/css">
 		.dev{
-			border: 1px solid grey;
+			border: 1px solid black;
 			border-bottom: 0; 
 			border-color: black;
 		}
 		.dev:last-child{
-			border-bottom: 1px solid grey;
+			border-bottom: 1px solid black;
 		}
 		.siteName {
 			color: blue;
 		}
 		.siteImg{
-			width: 110px;
-			height: 75px;
+			padding: 10px 0;
+			width: 11rem;
+			height: 9rem;
 			margin:0 10px;
 			display: inline-block;
 		}
@@ -33,6 +35,7 @@
 			display: inline-block;
 			margin-bottom: 5px;
 			font-size: 1rem;
+			vertical-align: middle;
 		}
 		.dev-a{
 			text-decoration: none;
@@ -46,16 +49,31 @@
 	<script type="text/javascript">
         var getUrl = window.parent.location.search;
         var userName = getUrl.substring(10);
+        var pageNow = 1;
 		$(function() {
 			askList();
+			//导航栏
+            var options = {
+                bootstrapMajorVersion: 3,
+                currentPage: 1,
+                totalPages: 5,
+                size:"small",
+                alignment:"right",
+                onPageClicked: function(e,originalEvent,type,page){
+                    pageNow = page;
+                    askList();
+                }
+            }
+            $('#page-right').bootstrapPaginator(options);
 		});
 		function askList(){
 			$.ajax({
-	                url: "/device/site/deviceList",
+	                url: "/device/getPage",
 	                cache: false,
 	                dataType:'json',
 	                data : {
 	                    "userName":userName,
+						"page": pageNow
 	                },
 	                type : 'post',
 	                beforeSend: function () {
@@ -80,8 +98,9 @@
 		}
 
 		function append(data){
+            var strDevicetr = "";
 			for (var item in data) {
-                var strDevicetr = $("<div class='dev'><div class = 'siteImg'><img alt='现场图片暂无' src='" + data[item].siteIcon +
+                strDevicetr += "<div class='dev'><div class = 'siteImg'><img alt='现场图片暂无' src='" + data[item].siteIcon +
 											"' /></div><div class = 'siteInfo'><tr><span class='siteName'>" + data[item].siteName +
 											"</span></br><span>在线状态：</span>" + translate(data[item].isOnline) +
 											"</br><a href='/deviceConfig?devSNCode=" + data[item].snCode +
@@ -94,10 +113,12 @@
 											"' target='fname' style='color: #a8362a' class='devInfo dev-a'>报警信息</a>" +
 											"<a href='/deviceThreshold?devSNCode="+ data[item].snCode +
 											"' target='fname' style='color: #0008a3' class='devInfo dev-a'>阈值信息</a>" +
-                    						"</span></br><span>设备地址：" + data[item].deviceAddress +
-											"</span></tr></div></div>");
-				$("#devList").append(strDevicetr);
+											"<a href='/deviceReadWrite?devSNCode="+ data[item].snCode +
+											"' target='fname' style='color: #a37d93' class='devInfo dev-a'>设备读写</a>" +
+                    						"</span></br><span>设备地址：" + checkAddress(data[item].deviceAddress) +
+											"</span></tr></div></div>";
 			}
+            $("#devList").empty().append(strDevicetr);
 		}
 		function translate(code){
 			if (code == 1) {return "<span style='color: #35c813'>在线";}
@@ -106,9 +127,22 @@
 					return "<span style='color: red'>error";
 				}
 		}
+		function checkAddress(address) {
+			if(!address){
+			    return "(空)";
+			}
+			else return address;
+        }
 	</script>
 </head>
 <body>
 	<div class="devList" id="devList"></div>
+	<div class="list-footer clearfix">
+		<div class="pull-right">
+			<ul id="page-right" class="pagination pagination-margin-0 pagination-sm"></ul>
+		</div>
+	</div>
 </body>
+
+<script src="../static/assets/js/bootstrap-paginator.js" th:src="@{/assets/js/bootstrap-paginator.js}"></script>
 </html>

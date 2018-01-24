@@ -64,7 +64,7 @@
         var getUrl = window.location.search;
         var devSNCode = getUrl.substring(11);
 	</script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+	<script src="../static/assets/js/mqttws31.min.js" th:src="@{/assets/js/mqttws31.min.js}"></script>
 	<script src="../static/assets/js/bootstrap-paginator.js" th:src="@{/assets/js/bootstrap-paginator.js}"></script>
 	<script src="../static/js/deviceThreshold.js" th:src="@{/js/deviceThreshold.js}"></script>
 </body>

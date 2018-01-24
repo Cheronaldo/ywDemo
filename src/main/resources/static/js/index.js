@@ -8,6 +8,7 @@ var passwordFlag = false;
 var pageNow = 1;
 var alarmData;
 var unreadNum;
+var userClass = localStorage.getItem("userClass");
 $(".leftsidebar_box dt").css({"background-color":"#3992d0"});
 $(".leftsidebar_box dt img").attr("src","../static/assets/images/left/select_xl01.png");
 $(".leftsidebar_box dt img").attr("th:src","@{/assets/images/left/select_xl01.png}");
@@ -27,6 +28,8 @@ $(function() {
         $(this).parent().find('dd').slideToggle();
         $(this).parent().find('dd').addClass("menu_chioce");
     });
+    if(userClass === "3") $(".realUser").addClass("hide");
+    else $(".realUser").removeClass("hide");
 
 	$("#logout").click(function () {
 		$.ajax({
@@ -34,6 +37,9 @@ $(function() {
             cache: false,
             url : "/user/logout",
             dataType : "json",
+            data: {
+                "userName" :userName
+            },
             success : function(result) {
                 if (result.code == "0") {
                     alert(result.msg);
@@ -45,6 +51,23 @@ $(function() {
         });
 	});
 
+    $(window).unload(function(){
+        $.ajax({
+            type : "GET",
+            cache: false,
+            url : "/user/logout",
+            dataType : "json",
+            data: {
+                "userName" :userName
+            },
+            success : function(result) {
+                if (result.code == "0") {
+                } else {
+                }
+            }
+        });
+    });
+
     $("#userDropdownBtn").click(function () {
         if ($("#userDropdown").css("display") == "none") {
             $("#userDropdown").css("display","block");
@@ -55,10 +78,12 @@ $(function() {
     });
 
 	$("#modifyAdmin").click(function () {
+        $("#userDropdown").css("display","none");
 		getUserInfo();
 	});
 
     $("#modifyPassword").click(function () {
+        $("#userDropdown").css("display","none");
         clearPasswdInput();
         showPasswordModal();
     });

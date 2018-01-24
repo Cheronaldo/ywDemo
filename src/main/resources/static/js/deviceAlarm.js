@@ -64,7 +64,7 @@ $(function() {
             dataType : "json",
             success : function(result) {
                 if (result.code == "0") {
-                    alert(result.msg);
+                    // alert(result.msg);
                     totalPage = result.total;
                     totalRecords = result.records;
                     alarmData = result.rows;
@@ -107,12 +107,12 @@ function getprotocolVersionDb(devSNCode){
         },
         success: function(result){
             if(result.code == 0){
-                alert(result.msg);
+                // alert(result.msg);
                 protocolVersionDb = result.data;
                 initMqtt();
             }
             else {
-                alert(result.msg);
+                // alert(result.msg);
             }
         },
         complete: function () {
@@ -216,13 +216,13 @@ function getAlarmData() {
         dataType : "json",
         success : function(result) {
             if (result.code == "0") {
-                alert(result.msg);
+                // alert(result.msg);
                 totalPage = result.total;
                 totalRecords = result.records;
                 alarmData = result.rows;
                 displayData();
             } else {
-                alert(result.msg);
+                // alert(result.msg);
             }
         }
     });
