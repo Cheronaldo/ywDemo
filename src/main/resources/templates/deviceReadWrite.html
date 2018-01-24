@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../static/assets/css/deviceReadWrite.css" th:href="@{/assets/css/deviceReadWrite.css}"/>
+	<link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}"/>
+	<script src="../static/assets/js/mqttws31.min.js" th:src="@{/assets/js/mqttws31.min.js}"></script>
+	<script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
+	<title>亿维智能云平台设备读写页面</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<div class='container'>
+		<div class="row RWList">
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+        var getUrl = window.location.search;
+        var devSNCode = getUrl.substring(11);
+	</script>
+	<script src="../static/js/deviceReadWrite.js" th:src="@{/js/deviceReadWrite.js}"></script>
+</body>
+</html>

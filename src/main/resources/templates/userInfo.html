@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<link rel="stylesheet" href="../static/assets/css/userInfo.css" th:href="@{/assets/css/userInfo.css}"/>
+	<link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" th:href="@{/assets/css/bootstrap.min.css}"/>
+	<script src="../static/assets/js/jquery-2.0.3.min.js" th:src="@{/assets/js/jquery-2.0.3.min.js}"></script>
+	<title>亿维智能云用户信息页面</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="list-border">
+			<table class="table table-hover table-striped">
+				<thead class="list-head userInfo_load_head"><tr><th width="10%">用户名</th><th width="10%">真实姓名</th><th width="15%">手机号码</th><th width="15%">邮箱</th><th width="15%">公司</th><th width="10%">行业类型</th><th width="10%"></th></tr></thead>
+				<tbody class="userInfo_load_list"></tbody>
+			</table>
+			<!--<div class="row">-->
+				<!--<span class="btn btn-primary glyphicon glyphicon-plus">新增</span>-->
+			<!--</div>-->
+		</div>
+		<div class="list-footer clearfix">
+			<span class="btn btn-primary glyphicon glyphicon-plus" id="addLocalUser">新增</span>
+			<div class="pull-right">
+				<ul id="page-right" class="pagination pagination-margin-0 pagination-sm"></ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="addModal" tabindex="-1" class="addModal hide">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" id="close-modal"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">添加现场用户</h4>
+				</div>
+				<div class="modal-body">
+					<form class="modal-form" role="form">
+
+						<div class="form-group">
+							<span>用户名：</span>
+							<input id="localUserName" type="text" class="form-control" />
+						</div>
+						<div class="form-group">
+							<span>真实姓名：</span>
+							<input id="localRealName" type="text" class="form-control" />
+						</div>
+						<div class="form-group" >
+							<span>邮箱：</span>
+							<input id="localMail" type="text" class="form-control" />
+						</div>
+						<div class="form-group">
+							<span>公司名称：</span>
+							<input id="localCompany" type="text" class="form-control" />
+						</div>
+						<div class="form-group">
+							<span>联系方式：</span>
+							<input id="localTel" type="text" class="form-control" />
+						</div>
+						<div class="form-group">
+							<span>行业类型：</span>
+							<input id="industryType" type="text" class="form-control" />
+						</div>
+
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="saveUserInfoBtn" class="btn btn-success radius">&nbsp;保&nbsp;&nbsp;存&nbsp;</button>
+					<button type="button" id="cancelSave" class="btn btn-danger radius">&nbsp;取&nbsp;&nbsp;消&nbsp;</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="devModal" tabindex="-2" class="addModal hide">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" id="close-devModal"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">现场用户设备</h4>
+				</div>
+				<div class="modal-body">
+					<form class="modal-form" role="form">
+						<ul class="devList"></ul>
+						<span>新增设备sn码：</span>
+						<select class="addInput" id="addList"></select>
+						<select class="pull-right" name="numSelect" id="numSelect"></select>
+						<span class="pull-right">页数：</span>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="addDevBtn" class="btn btn-info radius pull-left">&nbsp;添&nbsp;&nbsp;加&nbsp;</button>
+					<button type="button" id="closeDevBtn" class="btn btn-danger radius">&nbsp;关&nbsp;&nbsp;闭&nbsp;</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+	</script>
+	<script src="../static/assets/js/bootstrap-paginator.js" th:src="@{/assets/js/bootstrap-paginator.js}"></script>
+	<script src="../static/js/userInfo.js" th:src="@{/js/userInfo.js}"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+.attrName {
+    height: 30px;
+    line-height: 30px;
+    font-size: 18px;
+    font-weight: bolder;
+}
+.col-md-5 {
+    margin-right: 80px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.radio-inline span {
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
+}
+img {
+    width: 80px;
+    height: 80px;
+}
+.unit {
+    font-size: 14px;
+    font-weight: normal;
+    height: 20px;
+    line-height: 20px;
+}
+.glyphicon {
+    padding-right: 10px;
+}
+.dataInfo {
+    margin-left: 40px;
+}
+.infoInput {
+    margin-top: 20px;
+}
+.radio-inline input {
+    height: 22px;
+}
+.btn {
+    min-width: 100px;
+}
+.btn-read {
+    margin-bottom: 10px;
+}
+.btn-write {
+    margin-top: 10px;
+}
+.inputText{
+    width: 80px;
+}
+.hide {
+    display: none;
+}
