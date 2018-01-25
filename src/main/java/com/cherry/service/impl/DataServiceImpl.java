@@ -1,13 +1,16 @@
 package com.cherry.service.impl;
 
 import com.cherry.converter.HistoricalData2HistoricalDataVO;
+import com.cherry.converter.HistoricalData2HistoryDataDTOConverter;
 import com.cherry.dataobject.HistoricalData;
+import com.cherry.dto.HistoryDataDTO;
 import com.cherry.enums.DataHandleEnum;
 import com.cherry.form.AllDataQueryForm;
 import com.cherry.form.SingleDataQueryForm;
 import com.cherry.repository.HistoricalDataRepository;
 import com.cherry.service.DataService;
 import com.cherry.util.DateUtil;
+import com.cherry.util.ExportExcel;
 import com.cherry.vo.HistoricalDataVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -88,5 +91,31 @@ public class DataServiceImpl implements DataService{
         }
 
         return historicalDataVOList;
+    }
+
+    @Override
+    public String exportExcel(AllDataQueryForm form, String headers, String userName) {
+
+        // 1.查询数据列表
+        // 1.判断页面时间参数是否为 null
+        Date oldDate = DateUtil.oldDateHandle(form.getOldDate());
+        Date newDate = DateUtil.newDateHandle(form.getNewDate());
+
+        // 2.获取历史数据记录列表
+        List<HistoricalData> historicalDataList = dataRepository.findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc(form.getSnCode(),
+                form.getProtocolVersion(),
+                oldDate,
+                newDate);
+
+        if (historicalDataList.size() == 0){
+            return null;
+        }
+
+        // 2.封装至 HistoryDataDTO 对象
+        List<HistoryDataDTO> dataDTOList = HistoricalData2HistoryDataDTOConverter.convert(historicalDataList);
+
+        // 3.数据导出
+        return ExportExcel.exportExcel(dataDTOList, headers, userName, form.getSnCode());
+
     }
 }

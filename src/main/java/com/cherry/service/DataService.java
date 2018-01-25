@@ -32,4 +32,14 @@ public interface DataService {
      */
     List<HistoricalDataVO> listGetOne(SingleDataQueryForm form);
 
+    /**
+     *  动态导出历史数据至excel表
+     * 返回 生成的excel表 储存路径
+     * @param form
+     * @param headers
+     * @param userName
+     * @return
+     */
+    String exportExcel(AllDataQueryForm form, String headers, String userName);
+
 }

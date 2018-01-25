@@ -141,6 +141,20 @@
 			<version>1.5.7.RELEASE</version>
 		</dependency>
 
+		<!--动态添加对象属性 依赖-->
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+
+		<!--动态导出excel表格-->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.9</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -9,6 +9,8 @@ public enum DataHandleEnum {
     GET_DATA_SUCCESS(1,"数据查询成功！"),
     GET_DATA_FAIL(2,"未查询到相关数据！"),
     QUERY_CRITERIA_ERROR(3,"查询条件异常"),
+    DATA_EXPORT_FAIL(4,"数据导出失败！"),
+    DATA_EXPORT_SUCCESS(5,"数据导出成功！")
     ;
 
 

@@ -93,4 +93,17 @@ public class HistoricalDataRepositoryTest {
 
     }
 
+
+    @Test
+    public void findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDescForExportExcel() throws Exception{
+
+        Date oldDate = DateUtil.convertString2Date("2017-12-01 21:51:30");
+        Date newDate = DateUtil.convertString2Date("2017-12-22 21:52:35");
+
+        List<HistoricalData> result = repository.findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc("HMITest002", "ywv1.1", oldDate, newDate);
+
+        Assert.assertNotEquals(0, result.size());
+
+    }
+
 }

@@ -20,4 +20,5 @@ server:
   port: 8081
 
 projectUrl:
-  ywDemo: http://127.0.0.1:8081/login
+#  ywDemo: http://127.0.0.1:8081/login
+  ywDemo: http://47.93.11.243:8081/login

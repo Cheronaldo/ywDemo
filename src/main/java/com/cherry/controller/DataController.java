@@ -23,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -196,6 +193,43 @@ public class DataController {
         }
 
         return map;
+    }
+
+    /**
+     * 数据导出至 excel
+     * @param form
+     * @param bindingResult
+     * @param userName
+     * @param headers
+     * @return
+     */
+    @PostMapping("/exportExcel")
+    public ResultVO exportExcel(@Valid AllDataQueryForm form,
+                                BindingResult bindingResult,
+                                @RequestParam("userName") String userName,
+                                @RequestParam("headers") String headers){
+
+        // 1.表单参数校验
+        if (bindingResult.hasErrors()){
+            log.error("查询条件异常！");
+            throw new DataException(DataHandleEnum.QUERY_CRITERIA_ERROR);
+        }
+
+        headers = "温度℃_湿度%_浓度μM";
+
+//        headers = "温度℃_湿度%";
+
+        String result = dataService.exportExcel(form, headers, userName);
+
+        // 2.返回导出结果
+        if (result == null){
+
+            log.error("未查询到相关数据记录！");
+            throw new DataException(DataHandleEnum.DATA_EXPORT_FAIL);
+        }
+
+        return ResultVOUtil.success(DataHandleEnum.DATA_EXPORT_SUCCESS.getMessage(), result);
+
     }
 
 }

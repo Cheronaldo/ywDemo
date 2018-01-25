@@ -20,6 +20,7 @@ public interface HistoricalDataRepository extends JpaRepository<HistoricalData,S
      * 通过SN 协议版本 查询一段时间内的数据记录
      * 分页
      * 所有项历史数据
+     * 此方法已被 不需sql语句的方法取代
      * @param snCode
      * @param protocolVersion
      * @param oldDate
@@ -57,5 +58,16 @@ public interface HistoricalDataRepository extends JpaRepository<HistoricalData,S
      * @return
      */
     List<HistoricalData> findBySnCodeAndProtocolVersionAndDataTimeBetween(String snCode, String protocolVersion, Date oldDate, Date newDate);
+
+    /**
+     * 通过SN 协议版本 查询一段时间内的数据记录
+     * 历史数据导出
+     * @param snCode
+     * @param protocolVersion
+     * @param oldDate
+     * @param newDate
+     * @return
+     */
+    List<HistoricalData> findBySnCodeAndProtocolVersionAndDataTimeBetweenOrderByIdDesc(String snCode, String protocolVersion, Date oldDate, Date newDate);
 
 }

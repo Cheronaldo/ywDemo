@@ -63,4 +63,22 @@ public class DataServiceImplTest {
         Assert.assertNotEquals(0, result.size());
     }
 
+
+    @Test
+    public void exportExcel() throws Exception{
+
+        AllDataQueryForm form = new AllDataQueryForm();
+        form.setSnCode("HMITest003");
+        form.setProtocolVersion("ywv1.1");
+        form.setOldDate("2017-12-20 15:09:00");
+        form.setNewDate("2017-12-24 15:09:00");
+
+        String headers = "温度℃_湿度%";
+
+        String result = service.exportExcel(form, headers, "Test001");
+
+        Assert.assertNotNull(result);
+
+    }
+
 }
